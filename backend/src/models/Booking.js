@@ -8,7 +8,7 @@ const bookingSchema = new mongoose.Schema(
       required: true,
     },
     tableNumber: {
-      type: Number,
+      type: mongoose.Schema.Types.ObjectId,
       required: true,
     },
     bookingTime: {
