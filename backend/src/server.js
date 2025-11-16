@@ -2,10 +2,16 @@ import express from "express";
 import path from "path";
 import { ENV } from "./lib/env.js";
 import { connectDB } from "./lib/db.js";
+import authRoutes from "./routes/auth.route.js";
 
 const PORT = ENV.PORT || 3000;
 
+const __dirname = path.resolve();
+
 const app = express();
+
+app.use(express.json());
+app.use("/auth", authRoutes);
 
 if (ENV.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
