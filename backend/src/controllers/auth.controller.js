@@ -23,8 +23,8 @@ export const signup = async (req, res) => {
 
     if (user) return res.status(400).json({ message: "User already exists" });
 
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
+    const salt = await bcryptjs.genSalt(10);
+    const hashedPassword = await bcryptjs.hash(password, salt);
 
     const newUser = new User({
       fullName,
@@ -73,4 +73,9 @@ export const login = async (req, res) => {
     console.error("error in login controller", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
+};
+
+export const logout = (_, res) => {
+  res.cookie("jwt", "", { maxAge: 0 });
+  res.status(200).json({ message: "Logged out" });
 };
