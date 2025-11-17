@@ -139,3 +139,50 @@ export const getUserBookings = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const updateBooking = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { bookingTime } = req.body;
+
+    const booking = await Booking.findById(id);
+    if (!booking) {
+      res.status(404).json({ message: "Booking not found" });
+    }
+
+    if (bookingTime) {
+      if (new Date(bookingTime.end) <= new Date(bookingTime.start)) {
+        return res
+          .status(400)
+          .json({ message: "End time must be after start time" });
+      }
+    }
+
+    const overlappingBooking = await Booking.findOne({
+      _id: { $ne: id },
+      tableNumber: booking.tableNumber,
+      "bookingTime.start": { $lt: new Date(bookingTime.end) },
+      "bookingTime.end": { $gt: new Date(bookingTime.start) },
+    });
+
+    if (overlappingBooking) {
+      return res
+        .status(409)
+        .json({ message: "Table is already booked for this time slot" });
+    }
+
+    booking.bookingTime = bookingTime;
+
+    await booking.save();
+    await booking.populate("user", "name email");
+    await booking.populate("tableNumber", "number capacity");
+
+    res.status(200).json({
+      message: "Booking updated successfully",
+      booking,
+    });
+  } catch (error) {
+    console.error("Error updating booking", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
