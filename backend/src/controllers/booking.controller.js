@@ -105,7 +105,10 @@ export const getBookingQrCode = async (req, res) => {
       qrCode: qrCodeImage,
       booking,
     });
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error getting QR code", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
 
 export const cancelBooking = async (req, res) => {
