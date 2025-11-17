@@ -124,3 +124,18 @@ export const cancelBooking = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const getUserBookings = async (req, res) => {
+  try {
+    const userId = req.user._id;
+
+    const bookings = await Booking.find({ user: userId })
+      .populate("tableNumber", "number capacity")
+      .sort({ "bookingTime.start": -1 });
+
+    res.status(200).json(bookings);
+  } catch (error) {
+    console.error("Error getting bookings", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
