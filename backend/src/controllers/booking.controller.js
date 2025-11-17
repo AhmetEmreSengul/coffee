@@ -81,3 +81,29 @@ export const createBooking = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const getBookingQrCode = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const booking = await Booking.findById(id);
+
+    if (!booking) {
+      return res.status(404).json({ message: "Booking not found" });
+    }
+
+    const qrData = JSON.stringify({
+      bookingId: booking._id,
+      tokeen: booking.qrToken,
+      tableNumber: booking.tableNumber,
+      start: booking.bookingTime.start,
+      end: booking.bookingTime.end,
+    });
+
+    const qrCodeImage = await qrcode.toDataURL(qrData);
+
+    res.status(200).json({
+      qrCode: qrCodeImage,
+      booking,
+    });
+  } catch (error) {}
+};
