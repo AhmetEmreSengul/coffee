@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "table" : "node src/lib/seedTables.js",
+    "table": "node src/script/seedTables.js",
     "start": "node src/server.js"
   },
   "keywords": [],

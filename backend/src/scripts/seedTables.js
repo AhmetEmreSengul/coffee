@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import Table from "../models/Table.js";
-import { ENV } from "./env.js";
+import { ENV } from "../lib/env.js";
 
 const tables = [
   { number: 1, capacity: 2, status: "active" },
