@@ -9,6 +9,7 @@ const bookingSchema = new mongoose.Schema(
     },
     tableNumber: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "Table",
       required: true,
     },
     bookingTime: {

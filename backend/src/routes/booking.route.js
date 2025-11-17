@@ -1,9 +1,10 @@
 import express from "express";
-import { getTable } from "../controllers/booking.controller.js";
+import { getTable, createBooking } from "../controllers/booking.controller.js";
+import { protectRoute } from "../middleware/auth.middleware.js";
 
 const router = express.Router();
 
 router.get("/available-tables", getTable);
-/* router.post("/book", bookTable) */
+router.post("/createBooking", protectRoute, createBooking);
 
 export default router;

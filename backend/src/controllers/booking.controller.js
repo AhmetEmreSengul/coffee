@@ -1,4 +1,8 @@
+import Booking from "../models/Booking.js";
 import Table from "../models/Table.js";
+
+import crypto from "crypto";
+import qrcode from "qrcode";
 
 export const getTable = async (_, res) => {
   try {
@@ -11,6 +15,69 @@ export const getTable = async (_, res) => {
     res.status(200).json(tables);
   } catch (error) {
     console.error("Error getting tables", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const createBooking = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const { tableNumber, bookingTime } = req.body;
+
+    if (!tableNumber || !bookingTime.start || !bookingTime.end) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    if (new Date(bookingTime.end) <= new Date(bookingTime.start)) {
+      return res
+        .status(400)
+        .json({ message: "End time must be after start time" });
+    }
+
+    const table = await Table.findById(tableNumber);
+
+    if (!table) {
+      return res.status(404).json({ message: "Table not found" });
+    }
+    if (table.status !== "active") {
+      return res
+        .status(400)
+        .json({ message: "Table not available for booking at the moment" });
+    }
+
+    const overlappingBooking = await Booking.findOne({
+      tableNumber,
+      $or: [
+        {
+          "bookingTime.start": { $lt: new Date(bookingTime.end) },
+          "bookingTime.end": { $gt: new Date(bookingTime.start) },
+        },
+      ],
+    });
+
+    if (overlappingBooking) {
+      return res
+        .status(409)
+        .json({ message: "Table is already booked for this time" });
+    }
+
+    const qrToken = crypto.randomBytes(32).toString("hex");
+
+    const booking = new Booking({
+      user: userId,
+      tableNumber,
+      bookingTime,
+      qrToken,
+    });
+
+    await booking.save();
+
+    await booking.populate("user", "name email");
+    await booking.populate("tableNumber", "number capacity");
+
+    res.status(201).json(booking);
+  } catch (error) {
+    console.error("Error booking table", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
