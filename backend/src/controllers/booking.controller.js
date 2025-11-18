@@ -6,7 +6,7 @@ import qrcode from "qrcode";
 
 export const getTable = async (_, res) => {
   try {
-    const tables = await Table.find({ status: "active" });
+    const tables = await Table.find();
 
     if (tables.length === 0) {
       return res.status(404).json({ message: "No available tables" });
