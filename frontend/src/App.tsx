@@ -5,22 +5,42 @@ import LandingPage from "./pages/LandingPage";
 import Menu from "./pages/Menu";
 import BookTable from "./pages/BookTable";
 import { useAuthStore } from "./store/useAuthStore";
+import { useEffect } from "react";
+import { ToastContainer } from "react-toastify";
 
 const App = () => {
-  const { auth, isLoading, login } = useAuthStore();
+  const { authUser, checkAuth } = useAuthStore();
 
-  console.log(auth, isLoading);
+  useEffect(() => {
+    checkAuth();
+  }, [checkAuth]);
 
   return (
     <div>
-      <button onClick={login}>Click</button>
-
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
+        <Route path="/login" element={authUser ? <LandingPage /> : <Login />} />
+        <Route
+          path="/signup"
+          element={authUser ? <LandingPage /> : <Signup />}
+        />
         <Route path="/menu" element={<Menu />} />
-        <Route path="/book-table" element={<BookTable />} />
+        <Route
+          path="/book-table"
+          element={authUser ? <BookTable /> : <LandingPage />}
+        />
       </Routes>
     </div>
   );

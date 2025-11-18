@@ -2,7 +2,9 @@
 
 const BookTable = () => {
   return (
-    <div>BookTable</div>
+    <div>
+      
+    </div>
   )
 }
 
