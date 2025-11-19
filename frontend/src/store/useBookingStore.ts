@@ -73,4 +73,14 @@ export const useBookingStore = create((set) => ({
       toast.error(error?.response?.data?.message || "Failed to update booking");
     }
   },
+
+  deleteUserBooking: async (id) => {
+    try {
+      await axiosInstance.delete(`/book/cancelBooking/${id}`);
+      toast.success("Cancelled booking");
+    } catch (error) {
+      console.error("Error deleting booking");
+      toast.error(error?.response?.data?.message || "Failed to delete booking");
+    }
+  },
 }));

@@ -9,6 +9,7 @@ const UserBookings = () => {
     bookingQR,
     getQRCode,
     updateUserBooking,
+    deleteUserBooking,
   } = useBookingStore();
   const [updateOpen, setUpdateOpen] = useState(false);
   const [formData, setFormData] = useState({
@@ -18,6 +19,7 @@ const UserBookings = () => {
       end: "",
     },
   });
+  const [deleteId, setDeleteId] = useState("");
 
   useEffect(() => {
     getUserBookings();
@@ -67,6 +69,7 @@ const UserBookings = () => {
           >
             Update
           </button>
+          <button onClick={() => {setDeleteId(booking._id), deleteUserBooking(deleteId)}}>Delete</button>
           {updateOpen && (
             <div className="fixed inset-0 h-screen w-screen flex items-center justify-center ">
               <div className="size-90 bg-white/5 rounded-xl relative backdrop-blur-sm">
