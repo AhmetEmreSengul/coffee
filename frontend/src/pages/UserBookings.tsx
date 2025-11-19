@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { useBookingStore } from "../store/useBookingStore";
 import { toast } from "react-toastify";
 
@@ -30,7 +30,7 @@ const UserBookings = () => {
       myBookings.forEach((b) => getQRCode(b._id));
     }
   }, [myBookings]);
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     if (
@@ -51,8 +51,6 @@ const UserBookings = () => {
     setUpdateOpen(false);
   };
 
-  console.log(formData);
-
   return (
     <div>
       {myBookings.map((booking) => (
@@ -69,7 +67,13 @@ const UserBookings = () => {
           >
             Update
           </button>
-          <button onClick={() => {setDeleteId(booking._id), deleteUserBooking(deleteId)}}>Delete</button>
+          <button
+            onClick={() => {
+              setDeleteId(booking._id), deleteUserBooking(deleteId);
+            }}
+          >
+            Delete
+          </button>
           {updateOpen && (
             <div className="fixed inset-0 h-screen w-screen flex items-center justify-center ">
               <div className="size-90 bg-white/5 rounded-xl relative backdrop-blur-sm">
