@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 
 export const useBookingStore = create((set) => ({
   tables: [],
-  bookings: [],
   myBookings: [],
   bookingQR: [],
 
@@ -20,15 +19,11 @@ export const useBookingStore = create((set) => ({
 
   createBooking: async (data) => {
     try {
-      const res = await axiosInstance.post("/book/createBooking", data);
-      set({ tables: res.data });
+      await axiosInstance.post("/book/createBooking", data);
       toast.success("Booking created");
     } catch (error) {
       console.error("Error creating booking", error?.response?.data?.message);
       toast.error(error?.response?.data?.message);
-      set({ tables: [] });
-    } finally {
-      set({ tables: [] });
     }
   },
 
@@ -60,6 +55,22 @@ export const useBookingStore = create((set) => ({
     } catch (error) {
       console.error("Error fetching QR", error);
       toast.error(error?.response?.data?.message);
+    }
+  },
+
+  updateUserBooking: async (id, startTime, endTime) => {
+    try {
+      const res = await axiosInstance.put(`/book/updateBooking/${id}`, {
+        bookingTime: {
+          start: startTime,
+          end: endTime,
+        },
+      });
+
+      toast.success("Booking updated successfully");
+    } catch (error) {
+      console.error("Error updating booking", error);
+      toast.error(error?.response?.data?.message || "Failed to update booking");
     }
   },
 }));

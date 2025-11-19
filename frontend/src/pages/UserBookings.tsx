@@ -1,9 +1,23 @@
 import { useEffect, useState } from "react";
 import { useBookingStore } from "../store/useBookingStore";
+import { toast } from "react-toastify";
 
 const UserBookings = () => {
-  const { getUserBookings, myBookings, bookingQR, getQRCode } =
-    useBookingStore();
+  const {
+    getUserBookings,
+    myBookings,
+    bookingQR,
+    getQRCode,
+    updateUserBooking,
+  } = useBookingStore();
+  const [updateOpen, setUpdateOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    bookingId: "",
+    bookingTime: {
+      start: "",
+      end: "",
+    },
+  });
 
   useEffect(() => {
     getUserBookings();
@@ -14,6 +28,28 @@ const UserBookings = () => {
       myBookings.forEach((b) => getQRCode(b._id));
     }
   }, [myBookings]);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (
+      !formData.bookingId ||
+      !formData.bookingTime.start ||
+      !formData.bookingTime.end
+    ) {
+      toast.error("Please fill in both start and end times");
+      return;
+    }
+
+    updateUserBooking(
+      formData.bookingId,
+      formData.bookingTime.start,
+      formData.bookingTime.end
+    );
+
+    setUpdateOpen(false);
+  };
+
+  console.log(formData);
 
   return (
     <div>
@@ -23,6 +59,60 @@ const UserBookings = () => {
           <p>
             {booking.bookingTime.start} {booking.bookingTime.end}
           </p>
+          <button
+            onClick={() => {
+              setUpdateOpen(true),
+                setFormData({ ...formData, bookingId: booking._id });
+            }}
+          >
+            Update
+          </button>
+          {updateOpen && (
+            <div className="fixed inset-0 h-screen w-screen flex items-center justify-center ">
+              <div className="size-90 bg-white/5 rounded-xl relative backdrop-blur-sm">
+                <p
+                  onClick={() => setUpdateOpen(false)}
+                  className="absolute right-0 size-5 text-2xl"
+                >
+                  X
+                </p>
+                <form>
+                  <div className="flex flex-col items-center justify-center gap-3">
+                    <input
+                      type="datetime-local"
+                      value={formData.bookingTime.start}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          bookingTime: {
+                            ...formData.bookingTime,
+                            start: e.target.value,
+                          },
+                        })
+                      }
+                    />
+                    <input
+                      type="datetime-local"
+                      value={formData.bookingTime.end}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          bookingTime: {
+                            ...formData.bookingTime,
+                            end: e.target.value,
+                          },
+                        })
+                      }
+                    />
+                  </div>
+                  <div>
+                    <button onClick={handleSubmit}>Update</button>
+                    <button onClick={() => setUpdateOpen(false)}>Cancel</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          )}
         </div>
       ))}
 
