@@ -1,5 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useBookingStore } from "../store/useBookingStore";
+import TableCard from "../components/TableCard";
+import DateTimeInput from "../components/DateInput";
 
 const BookTable = () => {
   const { tables, getTables, createBooking } = useBookingStore();
@@ -25,51 +27,33 @@ const BookTable = () => {
       <h1 className="text-xl font-bold mb-4">Select a Table</h1>
 
       <form onSubmit={handleSubmit}>
-        <div className="grid grid-cols-5 gap-4">
-          {tables.map((table) => (
-            <div
-              key={table._id}
-              data-tableid={table._id}
-              onClick={(e) => {
-                const target = e.currentTarget as HTMLDivElement;
-                setFormData({
-                  ...formData,
-                  tableNumber: target.dataset.tableid || "",
-                });
-              }}
-              className={`w-20 h-20 flex items-center justify-center rounded-lg ${
-                table.status === "active" ? "bg-green-300" : "bg-gray-100"
-              }`}
-            >
-              {table.number}
-            </div>
-          ))}
+        <div>
+          <TableCard
+            tableInfo={tables}
+            formData={formData}
+            setFormData={setFormData}
+          />
         </div>
         <div>
-          <input
-            type="datetime-local"
+          <DateTimeInput
+            label="Start Time"
             value={formData.bookingTime.start}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                bookingTime: {
-                  ...formData.bookingTime,
-                  start: e.target.value,
-                },
-              })
+            onChange={(value) =>
+              setFormData((prev) => ({
+                ...prev,
+                bookingTime: { ...prev.bookingTime, start: value },
+              }))
             }
           />
-          <input
-            type="datetime-local"
+
+          <DateTimeInput
+            label="End Time"
             value={formData.bookingTime.end}
-            onChange={(e) =>
-              setFormData({
-                ...formData,
-                bookingTime: {
-                  ...formData.bookingTime,
-                  end: e.target.value,
-                },
-              })
+            onChange={(value) =>
+              setFormData((prev) => ({
+                ...prev,
+                bookingTime: { ...prev.bookingTime, end: value },
+              }))
             }
           />
         </div>

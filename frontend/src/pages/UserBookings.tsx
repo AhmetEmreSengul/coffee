@@ -30,6 +30,7 @@ const UserBookings = () => {
       myBookings.forEach((b) => getQRCode(b._id));
     }
   }, [myBookings]);
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
