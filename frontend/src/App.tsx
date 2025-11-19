@@ -7,6 +7,7 @@ import BookTable from "./pages/BookTable";
 import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
+import UserBookings from "./pages/UserBookings";
 
 const App = () => {
   const { authUser, checkAuth } = useAuthStore();
@@ -40,6 +41,10 @@ const App = () => {
         <Route
           path="/book-table"
           element={authUser ? <BookTable /> : <LandingPage />}
+        />
+        <Route
+          path="/my-bookings"
+          element={authUser ? <UserBookings /> : <LandingPage />}
         />
       </Routes>
     </div>

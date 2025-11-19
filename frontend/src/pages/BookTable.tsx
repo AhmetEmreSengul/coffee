@@ -31,7 +31,7 @@ const BookTable = () => {
               key={table._id}
               data-tableid={table._id}
               onClick={(e) => {
-                const target = e.target as HTMLDivElement;
+                const target = e.currentTarget as HTMLDivElement;
                 setFormData({
                   ...formData,
                   tableNumber: target.dataset.tableid || "",
