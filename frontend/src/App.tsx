@@ -17,18 +17,18 @@ const App = () => {
   }, [checkAuth]);
 
   return (
-    <div>
+    <div className="font-[lato]">
       <ToastContainer
         position="bottom-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
+        autoClose={2000}
+        hideProgressBar={true}
+        newestOnTop={true}
+        closeOnClick={true}
         rtl={false}
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="light"
+        theme="dark"
       />
       <Routes>
         <Route path="/" element={<LandingPage />} />
