@@ -21,7 +21,7 @@ const Navbar = () => {
     <div>
       {width < 900 ? (
         <div>
-          <div className="w-screen fixed h-23 bg-white/20 backdrop-blur-sm flex items-center justify-between relative">
+          <div className="w-screen fixed h-23 bg-white/20 backdrop-blur-sm flex items-center justify-between">
             <div onClick={() => setOpen(!open)} className="px-8">
               <AiOutlineMenu size={30} />
             </div>
@@ -44,7 +44,7 @@ const Navbar = () => {
           </div>
         </div>
       ) : (
-        <div className="w-screen fixed h-23 bg-white/20 backdrop-blur-sm flex items-center justify-between relative">
+        <div className="w-screen fixed h-23 bg-white/20 backdrop-blur-sm flex items-center justify-between ">
           <div className="flex flex-row gap-6 ml-20">
             {navItems.map((item) => {
               if (item.protected && !authUser) return null;
@@ -84,27 +84,36 @@ const Navbar = () => {
 
       <AnimatePresence>
         {open && (
-          <div className="text-2xl flex w-screen h-screen backdrop-blur-sm flex-col items-center mt-10 gap-5 fixed">
+          <motion.div
+            className="text-2xl flex w-screen h-screen backdrop-blur-sm bg-white/20 flex-col items-center fixed top-23"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            onClick={() => setOpen(false)}
+          >
             {navItems.map((item, i) => {
               if (item.protected && !authUser) return null;
               return (
                 <motion.span
+                  className="mt-5"
+                  key={item.link}
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ delay: 0.1 + i * 0.1 }}
-                  key={item.link}
                   onClick={() => {
                     if (!authUser && item.requiresAuth) {
                       toast.error("Please login to book a table");
                     }
+                    setOpen(false); // close menu on click
                   }}
                 >
                   <Link to={item.link}>{item.title}</Link>
                 </motion.span>
               );
             })}
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
     </div>

@@ -1,0 +1,260 @@
+[
+  {
+    "id": 1,
+    "title": "Espresso",
+    "type": "Hot",
+    "image": "https://cdn.shopify.com/s/files/1/0510/5893/3917/files/espresso_480x480.png?v=1730890991"
+  },
+  {
+    "id": 2,
+    "title": "Cappuccino",
+    "type": "Hot",
+    "image": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c8/Cappuccino_at_Sightglass_Coffee.jpg/960px-Cappuccino_at_Sightglass_Coffee.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Latte",
+    "type": "Hot",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkFvE1f8co_MopSKmpTNpq-gkHAjAmxGaP6Q&s"
+  },
+  {
+    "id": 4,
+    "title": "Iced Coffee",
+    "type": "Cold",
+    "image": "https://cdn.loveandlemons.com/wp-content/uploads/2025/05/iced-coffee-recipe-580x729.jpg"
+  },
+  {
+    "id": 5,
+    "title": "Mocha",
+    "type": "Hot",
+    "image": "https://ichef.bbci.co.uk/food/ic/food_16x9_1600/recipes/the_perfect_mocha_coffee_29100_16x9.jpg"
+  },
+  {
+    "id": 6,
+    "title": "Macchiato",
+    "type": "Hot",
+    "image": "https://mikelcoffee.com.tr/wp-content/uploads/2022/04/03-middle-cold-cup-dimensions-ok-540x570_0004_espresso-latte-macchiato.jpg"
+  },
+  {
+    "id": 7,
+    "title": "Frappuccino",
+    "type": "Cold",
+    "image": "https://www.spicebangla.com/wp-content/uploads/2024/08/Coffee-Frappuccino001-scaled.jpg"
+  },
+  {
+    "id": 8,
+    "title": "Americano",
+    "type": "Hot",
+    "image": "https://cdn.shopify.com/s/files/1/2714/0802/files/americano-kahve-nedir-nasil-yapilir_480x480.jpg?v=1688990779"
+  },
+  {
+    "id": 9,
+    "title": "Flat White",
+    "type": "Hot",
+    "image": "https://cdn.shopify.com/s/files/1/0569/3987/2340/files/flat-white-nedir.jpg?v=1719521410"
+  },
+  {
+    "id": 10,
+    "title": "Affogato",
+    "type": "Cold",
+    "image": "https://d2lswn7b0fl4u2.cloudfront.net/photos/pg-affogato-coffee-with-vanilla-ice-cream-1629378614.jpg"
+  },
+  {
+    "id": 11,
+    "title": "Irish Coffee",
+    "type": "Hot",
+    "image": "https://www.thespruceeats.com/thmb/YK4VwbToIOezEQUNJPGjfZQjh-4=/750x0/filters:no_upscale():max_bytes(150000):strip_icc():format(webp)/original-irish-coffee-recipe-759311-Hero-5b759d4b46e0fb005089915e.jpg"
+  },
+  {
+    "id": 12,
+    "title": "Cortado",
+    "type": "Hot",
+    "image": "https://i.lezzet.com.tr/images-xxlarge-secondary/cortado-nedir-nasil-yapilir-777df5df-fda6-4064-92fe-28eaf7f07873.jpg"
+  },
+  {
+    "id": 13,
+    "title": "Vienna Coffee",
+    "type": "Hot",
+    "image": "https://www.helenacoffee.vn/wp-content/uploads/2022/01/Einspanner-Viennese-Coffee-with-Whipped-Cream-3-of-3.jpg"
+  },
+  {
+    "id": 14,
+    "title": "Iced Latte",
+    "type": "Cold",
+    "image": "https://www.brighteyedbaker.com/wp-content/uploads/2024/03/Iced-Spanish-Latte-Recipe.jpg"
+  },
+  {
+    "id": 15,
+    "title": "Nitro Cold Brew",
+    "type": "Cold",
+    "image": "https://donutbank.com/cdn/shop/files/nitrocoffee.jpg?v=1699456443"
+  },
+  {
+    "id": 16,
+    "title": "Ristretto",
+    "type": "Hot",
+    "image": "https://mocacocoffee.com/cdn/shop/articles/bir-fincan-ristretto-262031_1200x801.jpg?v=1680592021"
+  },
+  {
+    "id": 17,
+    "title": "Red Eye",
+    "type": "Hot",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSb6ru4RmoDC6gLkDXGUPtDZiQz_4Z3DvmBZQ&s"
+  },
+  {
+    "id": 18,
+    "title": "Black Eye",
+    "type": "Hot",
+    "image": "https://grindthosebeans.com/wp-content/uploads/2025/01/Black-Eye-Coffee-Recipe-photo.png"
+  },
+  {
+    "id": 19,
+    "title": "Cafe au Lait",
+    "type": "Hot",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkg2RhWCxsWaEz-u75ghdoWO6aWR7_UbAXig&s"
+  },
+  {
+    "id": 20,
+    "title": "Iced Mocha",
+    "type": "Cold",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT-Atap26hALZiTWXVyMWamsYcD-ev_rtSvxQ&s"
+  },
+  {
+    "id": 21,
+    "title": "Cinnamon Latte",
+    "type": "Hot",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRLSOo5O1yFyE5A0afI6KBFXajK8QKUmQVQfg&s"
+  },
+  {
+    "id": 22,
+    "title": "Pumpkin Spice Latte",
+    "type": "Hot",
+    "image": "https://swirlsofflavor.com/wp-content/uploads/2024/10/Ice-pumpkin-latte-DP-1200-feature-500x375.jpg"
+  },
+  {
+    "id": 23,
+    "title": "Caramel Macchiato",
+    "type": "Hot",
+    "image": "https://i2.wp.com/bakingmischief.com/wp-content/uploads/2016/01/better-than-starbucks-caramel-macchiato-photo-681x1024.jpg"
+  },
+  {
+    "id": 24,
+    "title": "Iced Caramel Latte",
+    "type": "Cold",
+    "image": "https://www.mygingergarlickitchen.com/wp-content/uploads/2024/05/iced-caramel-latte-recipe-2.jpg"
+  },
+  {
+    "id": 25,
+    "title": "Hazelnut Latte",
+    "type": "Hot",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSaLd_KycgpjzxAM_W3W4YCHUsD_spIpzhnZw&s"
+  },
+  {
+    "id": 26,
+    "title": "Mocha Frappe",
+    "type": "Cold",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKZTmoZGo2Ez6KMeasrhEfd3N-1yUztCZSgg&s"
+  },
+  {
+    "id": 27,
+    "title": "Vanilla Latte",
+    "type": "Hot",
+    "image": "https://images.ctfassets.net/v601h1fyjgba/7wGcWZgV7yaSLXrodALIuw/2496353e1ec8c39dd44adfb45e8335d3/Vanilla_Latte.jpg"
+  },
+  {
+    "id": 28,
+    "title": "Iced Vanilla Latte",
+    "type": "Cold",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSxhkonTXCXT_9CqhG6qzMndRuJQFYVO2O6vQ&s"
+  },
+  {
+    "id": 29,
+    "title": "Chai Latte",
+    "type": "Hot",
+    "image": "https://assets.tmecosys.com/image/upload/t_web_rdp_recipe_584x480/img/recipe/ras/Assets/478246be-f220-4ea9-bd33-1cf9958d43af/Derivates/4f9db3b7-c9d8-4ce2-9e23-dd03281fb61f.jpg"
+  },
+  {
+    "id": 30,
+    "title": "Dirty Chai",
+    "type": "Hot",
+    "image": "https://midwestniceblog.com/wp-content/uploads/2022/09/homemade-dirty-chai-latte-recipe.jpg"
+  },
+  {
+    "id": 31,
+    "title": "Iced Chai Latte",
+    "type": "Cold",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSz6jSxDJqV09_uHRDpwQpVpYr6tpIf0WNQA&s"
+  },
+  {
+    "id": 32,
+    "title": "Matcha Latte",
+    "type": "Hot",
+    "image": "https://iswari.s3.eu-west-3.amazonaws.com/blog/wxzaur-.jpg"
+  },
+  {
+    "id": 33,
+    "title": "Iced Matcha Latte",
+    "type": "Cold",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPrr8LfAbOr9iobH8p2S1K3AtkDj2Ezxem9A&s"
+  },
+  {
+    "id": 34,
+    "title": "Black Coffee",
+    "type": "Hot",
+    "image": "https://somedayilllearn.com/wp-content/uploads/2020/05/cup-of-black-coffee-scaled-720x540.jpeg"
+  },
+  {
+    "id": 35,
+    "title": "Iced Black Coffee",
+    "type": "Cold",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSioo4jVgmFbdJopEu8ppq7U_eymc6F_ODJrw&s"
+  },
+  {
+    "id": 36,
+    "title": "Mocha Latte",
+    "type": "Hot",
+    "image": "https://midwestniceblog.com/wp-content/uploads/2023/06/homemade-mocha-latte.jpg"
+  },
+  {
+    "id": 37,
+    "title": "Iced Mocha Latte",
+    "type": "Cold",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRE3Pj_as3Z7aonIma1qEHSDDjWNizzepS_Yw&s"
+  },
+  {
+    "id": 38,
+    "title": "Coconut Latte",
+    "type": "Hot",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1VDbxUu_1TcjELGQiAyU8SqgXVZeurAEGDA&s"
+  },
+  {
+    "id": 39,
+    "title": "Iced Coconut Latte",
+    "type": "Cold",
+    "image": "https://cdn.shopify.com/s/files/1/0606/6864/1369/files/Iced_Coconut_Dream_Latte_480x480.jpg?v=1725652629"
+  },
+  {
+    "id": 40,
+    "title": "Almond Milk Latte",
+    "type": "Hot",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQmNPQ9kXzT4SN2B5-O96CL9boooiBL3pwkSw&s"
+  },
+  {
+    "id": 41,
+    "title": "Iced Almond Latte",
+    "type": "Cold",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTmubqnW0QL0N20eyhs2W4ck7kBySzVNOXJtA&s"
+  },
+  {
+    "id": 42,
+    "title": "Honey Latte",
+    "type": "Hot",
+    "image": "https://www.albertabeekeepers.ca/wp-content/uploads/2019/10/HND_Social_1024x1024_Latte.jpg"
+  },
+  {
+    "id": 43,
+    "title": "Iced Honey Latte",
+    "type": "Cold",
+    "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8qo1fnwn-4rQuVp8gHDy3rLL1VLnKEgno3w&s"
+  }
+]
