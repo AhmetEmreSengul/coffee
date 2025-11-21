@@ -64,8 +64,8 @@ const Navbar = () => {
             })}
           </div>
 
-          <div className="absolute left-1/2 -translate-x-1/2">
-            <img className="size-30 rounded-xl" src="./timeslot.png" alt="" />
+          <div className="absolute left-1/2 -translate-x-1/2 translate-y-1/9">
+            <img className="size-45 rounded-xl" src="./timeslot.png" alt="" />
           </div>
 
           <div className="mr-20">
@@ -96,7 +96,7 @@ const Navbar = () => {
               if (item.protected && !authUser) return null;
               return (
                 <motion.span
-                  className="mt-5"
+                  className="mt-5 border-b-2"
                   key={item.link}
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
