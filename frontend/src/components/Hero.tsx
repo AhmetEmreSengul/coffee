@@ -19,6 +19,10 @@ const Hero = () => {
             Café
           </span>
         </h1>
+        <p className="text-xl text-center my-5 text-neutral-400 max-w-2xl mx-auto font-light">
+          A sanctuary for productivity and peace. Book your specific table,
+          receive your digital key, and enter a world where time is respected.
+        </p>
       </div>
       <Link
         to={"/book-table"}
