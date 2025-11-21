@@ -21,7 +21,7 @@ export const useCoffeeStore = create<CoffeeStore>((set) => ({
   getCoffee: async () => {
     set({ isLoading: true });
     try {
-      const response = await axios.get("/coffee.json");
+      const response = await axios.get<Coffee[]>("/coffee.json");
       set({ coffee: response.data });
     } catch (error) {
       console.error("Error fetching coffes for some reason??", error);
