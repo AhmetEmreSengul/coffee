@@ -18,10 +18,10 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div>
+    <div className="z-10">
       {width < 900 ? (
         <div>
-          <div className="w-screen fixed h-23 bg-white/20 backdrop-blur-sm flex items-center justify-between">
+          <div className="w-screen fixed h-23 bg-transparent backdrop-blur-sm flex items-center justify-between">
             <div onClick={() => setOpen(!open)} className="px-8">
               <AiOutlineMenu size={30} />
             </div>
@@ -44,7 +44,7 @@ const Navbar = () => {
           </div>
         </div>
       ) : (
-        <div className="w-screen fixed h-23 bg-white/20 backdrop-blur-sm flex items-center justify-between ">
+        <div className="w-screen fixed h-23 bg-transparent backdrop-blur-sm flex items-center justify-between ">
           <div className="flex flex-row gap-6 ml-20">
             {navItems.map((item) => {
               if (item.protected && !authUser) return null;
@@ -85,7 +85,7 @@ const Navbar = () => {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="text-2xl flex w-screen h-screen backdrop-blur-sm bg-white/20 flex-col items-center fixed top-23"
+            className="text-2xl flex w-screen h-screen backdrop-blur-sm bg-transparent flex-col items-center fixed top-23"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}

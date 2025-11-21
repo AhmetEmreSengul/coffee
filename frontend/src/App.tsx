@@ -17,7 +17,7 @@ const App = () => {
   }, [checkAuth]);
 
   return (
-    <div className="font-[lato]">
+    <div className="font-[lato] min-h-screen bg-[#0a0902] text-white">
       <ToastContainer
         position="bottom-right"
         autoClose={2000}
@@ -47,6 +47,8 @@ const App = () => {
           element={authUser ? <UserBookings /> : <LandingPage />}
         />
       </Routes>
+      <div className="absolute z-0 top-0 left-1/4 w-96 h-96 bg-amber-900/20 rounded-full blur-[120px] pointer-events-none"></div>
+      <div className="absolute z-0 bottom-0 right-1/4 w-64 h-64 bg-orange-900/20 rounded-full blur-[100px] pointer-events-none"></div>
     </div>
   );
 };
