@@ -7,8 +7,8 @@ const Hero = () => {
   const { authUser } = useAuthStore();
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-5">
-      <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full border-3 border-amber-900/30 text-amber-200/80 text-sm uppercase tracking-widest">
+    <div className="min-h-screen flex flex-col items-center justify-center gap-5 p-3 pt-30">
+      <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full border-3 border-amber-900/30 text-amber-200/80 text-sm uppercase tracking-tighter md:tracking-widest">
         <AiFillClockCircle size={14} />
         <span>Reservation Only • Exclusive Access</span>
       </div>
@@ -26,7 +26,7 @@ const Hero = () => {
       </div>
       <Link
         to={"/book-table"}
-        className="p-3 rounded-lg bg-transparent border  text-amber-200/80 hover:bg-amber-900/30 hover:border-none transition cursor-pointer"
+        className="p-3 rounded-lg bg-transparent border text-amber-200/80 hover:bg-amber-900/30 hover:border-none transition cursor-pointer"
         onClick={() =>
           !authUser && toast.error("Please log in to book a table")
         }

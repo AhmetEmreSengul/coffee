@@ -30,27 +30,33 @@ const Navbar = () => {
               <img className="size-30 rounded-xl" src="./timeslot.png" alt="" />
             </div>
 
-            <div className="mr-20">
+            <div className="mr-10">
               <span>
                 {authUser ? (
-                  <button className="cursor-pointer" onClick={logout}>
+                  <button
+                    className="px-4 py-3 font-bold border-2 text-amber-200/80 rounded-xl cursor-pointer"
+                    onClick={logout}
+                  >
                     Logout
                   </button>
                 ) : (
-                  <Link to={"/login"}> Login </Link>
+                  <button className="px-4 py-3 font-bold border-2 text-amber-200/80 rounded-xl cursor-pointer">
+                    <Link to={"/login"}> Login </Link>
+                  </button>
                 )}
               </span>
             </div>
           </div>
         </div>
       ) : (
-        <div className="w-screen fixed h-23 bg-transparent backdrop-blur-sm flex items-center justify-between ">
+        <div className="w-screen fixed h-23 bg-transparent backdrop-blur-sm flex items-center justify-between">
           <div className="flex flex-row gap-6 ml-20">
             {navItems.map((item) => {
               if (item.protected && !authUser) return null;
 
               return (
                 <span
+                  className="font-bold hover:text-amber-300 transition"
                   key={item.link}
                   onClick={() => {
                     if (!authUser && item.requiresAuth) {
@@ -71,11 +77,16 @@ const Navbar = () => {
           <div className="mr-20">
             <span>
               {authUser ? (
-                <button className="cursor-pointer" onClick={logout}>
+                <button
+                  className="px-4 py-3 font-bold border-2 hover:border-amber-300 text-amber-200/80 rounded-xl transition cursor-pointer"
+                  onClick={logout}
+                >
                   Logout
                 </button>
               ) : (
-                <Link to={"/login"}> Login </Link>
+                <button className="px-4 py-3 font-bold border-2 hover:border-amber-300 text-amber-200/80 rounded-xl transition cursor-pointer">
+                  <Link to={"/login"}> Login </Link>
+                </button>
               )}
             </span>
           </div>
@@ -96,7 +107,7 @@ const Navbar = () => {
               if (item.protected && !authUser) return null;
               return (
                 <motion.span
-                  className="mt-5 border-b-2"
+                  className="mt-5 border-b-2 border-amber-200"
                   key={item.link}
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
