@@ -40,9 +40,12 @@ const Navbar = () => {
                     Logout
                   </button>
                 ) : (
-                  <button className="px-4 py-3 font-bold border-2 text-amber-200/80 rounded-xl cursor-pointer">
-                    <Link to={"/login"}> Login </Link>
-                  </button>
+                  <Link
+                    className="px-4 py-3 font-bold border-2 hover:border-amber-300 text-amber-200/80 rounded-xl transition cursor-pointer"
+                    to={"/login"}
+                  >
+                    Login
+                  </Link>
                 )}
               </span>
             </div>
@@ -84,9 +87,12 @@ const Navbar = () => {
                   Logout
                 </button>
               ) : (
-                <button className="px-4 py-3 font-bold border-2 hover:border-amber-300 text-amber-200/80 rounded-xl transition cursor-pointer">
-                  <Link to={"/login"}> Login </Link>
-                </button>
+                <Link
+                  className="px-4 py-3 font-bold border-2 hover:border-amber-300 text-amber-200/80 rounded-xl transition cursor-pointer"
+                  to={"/login"}
+                >
+                  Login
+                </Link>
               )}
             </span>
           </div>
