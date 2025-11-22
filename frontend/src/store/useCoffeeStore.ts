@@ -6,15 +6,17 @@ interface Coffee {
   title: string;
   type: string;
   image: string;
+  description: string;
 }
 
 interface CoffeeStore {
   isLoading: boolean;
   coffee: Coffee[];
   getCoffee: () => Promise<void>;
+  getRandomThree: () => Coffee[];
 }
 
-export const useCoffeeStore = create<CoffeeStore>((set) => ({
+export const useCoffeeStore = create<CoffeeStore>((set, get) => ({
   isLoading: true,
   coffee: [],
 
@@ -28,5 +30,11 @@ export const useCoffeeStore = create<CoffeeStore>((set) => ({
     } finally {
       set({ isLoading: false });
     }
+  },
+
+  getRandomThree: () => {
+    const list = get().coffee;
+
+    return [...list].sort(() => Math.random() - 0.5).slice(0, 3);
   },
 }));
