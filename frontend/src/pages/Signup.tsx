@@ -1,5 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { useAuthStore } from "../store/useAuthStore";
+import { Link } from "react-router-dom";
+import { AiFillEye, AiFillEyeInvisible, AiOutlineGoogle } from "react-icons/ai";
 
 interface UserFormData {
   fullName: string;
@@ -13,6 +15,7 @@ const Signup = () => {
     email: "",
     password: "",
   });
+  const [visible, setVisible] = useState<boolean>(false);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -22,11 +25,21 @@ const Signup = () => {
   const { signup, isSigningUp } = useAuthStore();
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
+    <div className="flex flex-col items-center justify-center min-h-screen min-w-screen overflow-hidden">
+      <Link to={"/"}>
+        <div className="inline-flex items-center fixed top-0 left-0 md:p-20 p-5">
+          <img className="size-20 md:size-30" src="/timeslot.png" alt="" />
+          <h1 className="text-4xl font-serif text-amber-200/70">Time Slot</h1>
+        </div>
+      </Link>
+      <form
+        className="flex flex-col gap-7 size-80 md:size-100 justify-center"
+        onSubmit={handleSubmit}
+      >
+        <h1 className="text-center text-4xl">Welcome </h1>
         <div>
-          <label>Full Name</label>
           <input
+            className="p-4 w-full border rounded-lg bg-white/4 backdrop-blur-3xl hover:border-amber-200 focus:border-none transition"
             placeholder="Full Name"
             type="text"
             value={formData.fullName}
@@ -36,9 +49,9 @@ const Signup = () => {
           />
         </div>
         <div>
-          <label>Email</label>
           <input
-            placeholder="Email"
+            className="p-4 w-full border rounded-lg bg-white/4 backdrop-blur-3xl hover:border-amber-200 focus:border-none transition"
+            placeholder="coffee@gmail.com"
             type="email"
             value={formData.email}
             onChange={(e) =>
@@ -46,20 +59,49 @@ const Signup = () => {
             }
           />
         </div>
-        <div>
-          <label>Password</label>
+        <div className="relative">
           <input
+            className="p-4 w-full border rounded-lg bg-white/4 backdrop-blur-3xl hover:border-amber-200 focus:border-none transition"
             placeholder="Password"
-            type="password"
+            type={`${visible ? "text" : "password"}`}
             value={formData.password}
             onChange={(e) =>
               setFormData({ ...formData, password: e.target.value })
             }
           />
+          {visible ? (
+            <AiFillEye
+              onClick={() => setVisible(false)}
+              className="absolute right-5 top-1/3 size-6"
+            />
+          ) : (
+            <AiFillEyeInvisible
+              onClick={() => setVisible(true)}
+              className="absolute right-5 top-1/3 size-6"
+            />
+          )}
         </div>
-        <button disabled={isSigningUp} type="submit">
+        <button
+          className="p-3 rounded-lg border bg-white/4 backdrop-blur-3xl border-amber-200/70 text-amber-200/70 cursor-pointer hover:border-amber-200 transition"
+          disabled={isSigningUp}
+          type="submit"
+        >
           Create Account
         </button>
+        <div className="flex flex-col gap-8 items-center">
+          <h2 className="text-center">
+            Already have an account?{" "}
+            <Link className="hover:text-amber-200 transition" to={"/login"}>
+              Login
+            </Link>
+          </h2>
+          <button
+            disabled
+            className=" inline-flex text-md gap-2 items-center border p-3 bg-white/4 backdrop-blur-3xl border-amber-200/70 text-amber-200/70 cursor-not-allowed hover:border-amber-200 transition rounded-lg w-full justify-center text-center"
+          >
+            Continue with <AiOutlineGoogle className="size-8" />
+          </button>
+        </div>
       </form>
     </div>
   );
