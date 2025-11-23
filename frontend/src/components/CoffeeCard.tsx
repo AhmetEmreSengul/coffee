@@ -8,7 +8,7 @@ interface CoffeeCardProps {
 const CoffeeCard = ({ title, type, image, description }: CoffeeCardProps) => {
   return (
     <div className="flex flex-col items-center justify-center bg-amber-900/20 p-5 rounded-3xl mt-10">
-      <div className="rounded-xl flex flex-col items-center w-70">
+      <div className="rounded-xl flex flex-col items-center w-70 h-100">
         <img
           className={`size-70 rounded-lg border ${
             type === "Cold" ? "border-sky-600" : "border-orange-600"
