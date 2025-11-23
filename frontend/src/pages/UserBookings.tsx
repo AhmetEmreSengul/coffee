@@ -1,6 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useBookingStore } from "../store/useBookingStore";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const UserBookings = () => {
   const {
@@ -51,6 +52,17 @@ const UserBookings = () => {
 
     setUpdateOpen(false);
   };
+
+  if (myBookings.length === 0) {
+    return (
+      <div className="flex items-center justify-center h-screen w-screen">
+        No bookings found, You can reserve a table{" "}
+        <Link to={"/book-table"} className="underline ml-1 text-amber-200 ">
+          here.
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div>
