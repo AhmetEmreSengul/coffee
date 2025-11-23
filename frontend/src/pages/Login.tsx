@@ -20,7 +20,7 @@ const Login = () => {
     <div className="flex flex-col items-center justify-center min-h-screen min-w-screen overflow-hidden">
       <Link to={"/"}>
         <div className="inline-flex items-center fixed top-0 left-0 md:p-20 p-5">
-          <img className="size-30" src="/timeslot.png" alt="" />
+          <img className="size-20 md:size-30" src="/timeslot.png" alt="" />
           <h1 className="text-4xl font-serif text-amber-200/70">Time Slot</h1>
         </div>
       </Link>
