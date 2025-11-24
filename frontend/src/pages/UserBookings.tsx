@@ -2,6 +2,10 @@ import { useEffect, useState, type FormEvent } from "react";
 import { useBookingStore } from "../store/useBookingStore";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import { useAuthStore } from "../store/useAuthStore";
+import BookingCard from "../components/BookingCard";
+import { motion } from "framer-motion";
 
 const UserBookings = () => {
   const {
@@ -12,7 +16,9 @@ const UserBookings = () => {
     updateUserBooking,
     deleteUserBooking,
   } = useBookingStore();
+  const { authUser } = useAuthStore();
   const [updateOpen, setUpdateOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
   const [formData, setFormData] = useState({
     bookingId: "",
     bookingTime: {
@@ -20,7 +26,6 @@ const UserBookings = () => {
       end: "",
     },
   });
-  const [deleteId, setDeleteId] = useState("");
 
   useEffect(() => {
     getUserBookings();
@@ -56,89 +61,48 @@ const UserBookings = () => {
   if (myBookings.length === 0) {
     return (
       <div className="flex items-center justify-center h-screen w-screen">
-        No bookings found, You can reserve a table{" "}
-        <Link to={"/book-table"} className="underline ml-1 text-amber-200 ">
-          here.
-        </Link>
+        <Navbar />
+        <div>
+          No bookings found, You can reserve a table{" "}
+          <Link to={"/book-table"} className="underline ml-1 text-amber-200 ">
+            here.
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div>
-      {myBookings.map((booking) => (
-        <div key={booking._id}>
-          <p>{booking.tableNumber.number}</p>
-          <p>
-            {booking.bookingTime.start} {booking.bookingTime.end}
-          </p>
-          <button
-            onClick={() => {
-              setUpdateOpen(true),
-                setFormData({ ...formData, bookingId: booking._id });
-            }}
-          >
-            Update
-          </button>
-          <button
-            onClick={() => {
-              setDeleteId(booking._id), deleteUserBooking(deleteId);
-            }}
-          >
-            Delete
-          </button>
-          {updateOpen && (
-            <div className="fixed inset-0 h-screen w-screen flex items-center justify-center ">
-              <div className="size-90 bg-white/5 rounded-xl relative backdrop-blur-sm">
-                <p
-                  onClick={() => setUpdateOpen(false)}
-                  className="absolute right-0 size-5 text-2xl"
-                >
-                  X
-                </p>
-                <form>
-                  <div className="flex flex-col items-center justify-center gap-3">
-                    <input
-                      type="datetime-local"
-                      value={formData.bookingTime.start}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          bookingTime: {
-                            ...formData.bookingTime,
-                            start: e.target.value,
-                          },
-                        })
-                      }
-                    />
-                    <input
-                      type="datetime-local"
-                      value={formData.bookingTime.end}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          bookingTime: {
-                            ...formData.bookingTime,
-                            end: e.target.value,
-                          },
-                        })
-                      }
-                    />
-                  </div>
-                  <div>
-                    <button onClick={handleSubmit}>Update</button>
-                    <button onClick={() => setUpdateOpen(false)}>Cancel</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          )}
+    <div className="flex justify p-5 justify-center">
+      <Navbar />
+      <div className="text-amber-950 rounded-3xl overflow-hidden relative mt-40">
+        <div className="flex flex-col md:flex-row gap-5">
+          {myBookings.map((booking, i) => (
+            <motion.div
+              key={booking._id}
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.2 + i * 0.1 }}
+            >
+              <BookingCard
+                key={booking._id}
+                booking={booking}
+                authUser={authUser}
+                bookingQR={bookingQR}
+                formData={formData}
+                setFormData={setFormData}
+                updateOpen={updateOpen}
+                setUpdateOpen={setUpdateOpen}
+                deleteOpen={deleteOpen}
+                setDeleteOpen={setDeleteOpen}
+                deleteUserBooking={deleteUserBooking}
+                onSubmit={handleSubmit}
+                getUserBookings={getUserBookings}
+              />
+            </motion.div>
+          ))}
         </div>
-      ))}
-
-      {bookingQR.map((qrObj, i) => (
-        <img key={i} src={qrObj.qrCode} alt="QR Code" />
-      ))}
+      </div>
     </div>
   );
 };

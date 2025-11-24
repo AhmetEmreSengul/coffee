@@ -56,8 +56,8 @@ const DateTimeInput = ({
   }, [value]);
 
   return (
-    <div className="flex flex-col gap-2 p-4 rounded-lg bg-black/15">
-      <label className="text-2xl font-medium">{label}</label>
+    <div className="flex flex-col gap-2 p-4 rounded-lg text-white backdrop-blur-sm bg-neutral-700/30">
+      <label className="text-2xl  font-medium">{label}</label>
 
       <div className="font-medium">
         {tempDate ? format(tempDate, "PPP p") : "Select date & time"}
@@ -65,7 +65,7 @@ const DateTimeInput = ({
 
       <DayPicker
         animate
-        weekStartsOn={6}
+        weekStartsOn={1}
         mode="single"
         selected={tempDate ?? undefined}
         onSelect={(d) => {

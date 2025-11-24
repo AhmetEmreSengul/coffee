@@ -18,7 +18,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <div className="z-10">
+    <div className="z-10 fixed top-0 left-0">
       {width < 900 ? (
         <div>
           <div className="w-screen fixed h-23 bg-transparent backdrop-blur-sm flex items-center justify-between">
