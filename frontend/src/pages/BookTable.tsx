@@ -40,8 +40,8 @@ const BookTable = () => {
             />
           </div>
           <h3 className="text-sm text-center font-light mt-5">
-            Keep in mind you can only book a table for two hours max
-            (09.00-11.00, 13.00-15.00 etc.)
+            Tables are limited to four hours
+            (09.00-13.00, 13.00-17.00 etc.)
           </h3>
           <div className="flex flex-col md:flex-row gap-4 justify-center mt-5">
             <DateTimeInput
@@ -72,7 +72,7 @@ const BookTable = () => {
               maxDate={
                 formData.bookingTime.start
                   ? new Date(formData.bookingTime.start)
-                  : undefined // same day only
+                  : undefined 
               }
               minTime={
                 formData.bookingTime.start
@@ -84,7 +84,7 @@ const BookTable = () => {
                   ? format(
                       new Date(
                         new Date(formData.bookingTime.start).getTime() +
-                          2 * 60 * 60 * 1000
+                          4 * 60 * 60 * 1000
                       ),
                       "HH:mm"
                     )
