@@ -1,93 +1,130 @@
-import { useState } from "react";
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-} from "@radix-ui/react-popover";
+import { useState, useEffect } from "react";
 import { DayPicker } from "react-day-picker";
 import { format } from "date-fns";
 import "react-day-picker/dist/style.css";
 
 interface DateTimeInputProps {
   label: string;
-  value: string; // ISO string "YYYY-MM-DDTHH:mm"
+  value: string;
   onChange: (value: string) => void;
+
+  minDate?: Date;
+  maxDate?: Date;
+  minTime?: string;
+  maxTime?: string;
 }
 
-const DateTimeInput = ({ label, value, onChange }: DateTimeInputProps) => {
-  const [open, setOpen] = useState(false);
+const DateTimeInput = ({
+  label,
+  value,
+  onChange,
+  minDate,
+  maxDate,
+  minTime,
+  maxTime,
+}: DateTimeInputProps) => {
   const [tempDate, setTempDate] = useState<Date | null>(
     value ? new Date(value) : null
   );
 
-  const applyDate = () => {
-    if (tempDate) {
-      // Get local YYYY-MM-DDTHH:mm string
-      const year = tempDate.getFullYear();
-      const month = String(tempDate.getMonth() + 1).padStart(2, "0");
-      const day = String(tempDate.getDate()).padStart(2, "0");
-      const hours = String(tempDate.getHours()).padStart(2, "0");
-      const minutes = String(tempDate.getMinutes()).padStart(2, "0");
+  const today = new Date();
+  const defaultMaxDate = new Date(today);
+  defaultMaxDate.setDate(today.getDate() + 7);
 
-      const localString = `${year}-${month}-${day}T${hours}:${minutes}`;
-      onChange(localString);
-    }
-    setOpen(false);
+  const toIsoLocal = (d: Date) => {
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    const hours = String(d.getHours()).padStart(2, "0");
+    const minutes = String(d.getMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day}T${hours}:${minutes}`;
   };
 
+  const clampDailyTime = (d: Date) => {
+    if (d.getHours() < 9) d.setHours(9, 0);
+    if (d.getHours() > 23) d.setHours(23, 59);
+    return d;
+  };
+
+  const emit = (d: Date | null) => {
+    if (!d) return;
+    onChange(toIsoLocal(d));
+  };
+
+  useEffect(() => {
+    if (value) setTempDate(new Date(value));
+  }, [value]);
+
   return (
-    <div className="flex flex-col gap-1">
-      <label className="text-sm font-medium">{label}</label>
+    <div className="flex flex-col gap-2 p-4 rounded-lg bg-black/15">
+      <label className="text-2xl font-medium">{label}</label>
 
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <button
-            type="button"
-            className="w-full text-left border rounded-md p-2 bg-white shadow-sm hover:shadow-md transition"
-          >
-            {tempDate ? format(tempDate, "PPP p") : "Select Date & Time"}
-          </button>
-        </PopoverTrigger>
+      <div className="font-medium">
+        {tempDate ? format(tempDate, "PPP p") : "Select date & time"}
+      </div>
 
-        <PopoverContent
-          className="bg-white shadow-xl rounded-xl p-4 border w-fit"
-          sideOffset={8}
-        >
-          <div className="flex flex-col gap-3">
-            {/* Day Picker */}
-            <DayPicker
-              mode="single"
-              selected={tempDate ?? undefined}
-              onSelect={(date) => setTempDate(date ?? null)}
-              className="rounded-lg"
-            />
+      <DayPicker
+        animate
+        weekStartsOn={6}
+        mode="single"
+        selected={tempDate ?? undefined}
+        onSelect={(d) => {
+          if (!d) return;
+          let selected = new Date(d);
 
-            {/* Time Input */}
-            <input
-              type="time"
-              className="border rounded-md p-2"
-              value={tempDate ? format(tempDate, "HH:mm") : ""}
-              onChange={(e) => {
-                if (!tempDate) return;
-                const [hours, minutes] = e.target.value.split(":").map(Number);
-                const updated = new Date(tempDate);
-                updated.setHours(hours);
-                updated.setMinutes(minutes);
-                setTempDate(updated);
-              }}
-            />
+          if (minDate && selected < minDate) selected = minDate;
+          if (maxDate && selected > maxDate) selected = maxDate;
 
-            {/* Apply Button */}
-            <button
-              type="button"
-              className="bg-black text-white rounded-md py-2 hover:bg-gray-800 transition"
-              onClick={applyDate}
-            >
-              Apply
-            </button>
-          </div>
-        </PopoverContent>
-      </Popover>
+          selected = clampDailyTime(selected);
+
+          if (tempDate) {
+            selected.setHours(tempDate.getHours());
+            selected.setMinutes(tempDate.getMinutes());
+          }
+
+          setTempDate(selected);
+          emit(selected);
+        }}
+        disabled={{
+          before: minDate ?? today,
+          after: maxDate ?? defaultMaxDate,
+        }}
+      />
+
+      <input
+        type="time"
+        className="border rounded-md p-2 text-white"
+        value={tempDate ? format(tempDate, "HH:mm") : ""}
+        min={minTime ?? "09:00"}
+        max={maxTime ?? "23:59"}
+        onChange={(e) => {
+          if (!tempDate) return;
+
+          const [h, m] = e.target.value.split(":").map(Number);
+          let updated = new Date(tempDate);
+          updated.setHours(h);
+          updated.setMinutes(m);
+
+          updated = clampDailyTime(updated);
+
+          if (minTime) {
+            const [minH, minM] = minTime.split(":").map(Number);
+            const minD = new Date(updated);
+            minD.setHours(minH, minM);
+            if (updated < minD) updated = minD;
+          }
+
+          if (maxTime) {
+            const [maxH, maxM] = maxTime.split(":").map(Number);
+            const maxD = new Date(updated);
+            maxD.setHours(maxH, maxM);
+            if (updated > maxD) updated = maxD;
+          }
+
+          setTempDate(updated);
+          emit(updated);
+        }}
+      />
     </div>
   );
 };

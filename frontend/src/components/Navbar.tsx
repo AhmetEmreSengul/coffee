@@ -27,7 +27,13 @@ const Navbar = () => {
             </div>
 
             <div className="absolute left-1/2 -translate-x-1/2">
-              <img className="size-30 rounded-xl" src="./timeslot.png" alt="" />
+              <Link to={"/"}>
+                <img
+                  className="size-30 rounded-xl"
+                  src="./timeslot.png"
+                  alt=""
+                />
+              </Link>
             </div>
 
             <div className="mr-10">
@@ -73,8 +79,14 @@ const Navbar = () => {
             })}
           </div>
 
-          <div className="absolute left-1/2 -translate-x-1/2 translate-y-1/9">
-            <img className="size-45 rounded-xl" src="./timeslot.png" alt="" />
+          <div className="absolute left-1/2 -translate-x-1/2">
+            <Link to={"/"}>
+              <img
+                className="size-45 mt-4 rounded-xl"
+                src="./timeslot.png"
+                alt=""
+              />
+            </Link>
           </div>
 
           <div className="mr-20">
