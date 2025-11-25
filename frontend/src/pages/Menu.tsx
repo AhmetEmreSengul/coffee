@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import { useCoffeeStore } from "../store/useCoffeeStore";
 import CoffeeCard from "../components/CoffeeCard";
+import { motion } from "framer-motion";
+import { FaQuestion } from "react-icons/fa";
 
 const Menu = () => {
   const {
@@ -36,9 +38,10 @@ const Menu = () => {
       <div className="mt-35">
         <h1 className="text-5xl text-center mt-10 text-text-primary">MENU</h1>
         <div className="flex flex-col items-center md:items-start md:flex-row gap-3">
-          <div className="hidden md:flex w-70 h-20 rounded-l-lg  flex-col p-3" />
+          <div className="hidden md:block md:w-80 md:shrink-0" />
           <div className="w-full md:h-20 md:fixed items-center md:items-start flex flex-col p-3">
             <input
+              value={text}
               className="p-3 mt-7 w-72 border border-border-medium rounded-lg bg-cream-50 text-text-primary placeholder:text-text-tertiary focus:border-caramel-400 focus:outline-none transition"
               type="text"
               placeholder="Search For Coffees"
@@ -66,15 +69,29 @@ const Menu = () => {
             </div>
           </div>
           <div className="flex flex-col">
-            <div className="grid  grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 px-15 gap-3">
-              {paginated.map((coffee) => (
-                <CoffeeCard
-                  key={coffee.id}
-                  title={coffee.title}
-                  description={coffee.description}
-                  image={coffee.image}
-                  type={coffee.type}
-                />
+            {paginated.length === 0 && (
+              <div className="w-full p-10 flex flex-col justify-center items-center gap-20">
+                <h1 className="text-2xl font-light">
+                  No coffees found for that description.
+                </h1>
+                <FaQuestion className="size-90 md:size-100 animate-pulse" />
+              </div>
+            )}
+            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 px-15 gap-3">
+              {paginated.map((coffee, i) => (
+                <motion.div
+                  initial={{ y: 10, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
+                >
+                  <CoffeeCard
+                    key={coffee.id}
+                    title={coffee.title}
+                    description={coffee.description}
+                    image={coffee.image}
+                    type={coffee.type}
+                  />
+                </motion.div>
               ))}
             </div>
             <div className="flex gap-2 mb-5 px-15 my-10">
