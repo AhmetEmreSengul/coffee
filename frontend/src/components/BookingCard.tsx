@@ -47,8 +47,8 @@ const BookingCard = ({
   };
 
   return (
-    <div className="relative">
-      <div className="absolute left-0 right-0 top-5/9 z-11 border-t-2 border-dashed border-amber-950/20"></div>
+    <div className="relative z-5">
+      <div className="absolute left-0 right-0 top-5/9 z-10 border-t-2 border-dashed border-amber-950/20"></div>
       <AnimatePresence>
         {!isRipping && (
           <>
