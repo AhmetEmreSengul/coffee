@@ -48,6 +48,7 @@ const BookingCard = ({
 
   return (
     <div className="relative">
+      <div className="absolute left-0 right-0 top-5/9 z-11 border-t-2 border-dashed border-amber-950/20"></div>
       <AnimatePresence>
         {!isRipping && (
           <>
@@ -188,121 +189,131 @@ const BookingCard = ({
         )}
       </AnimatePresence>
 
-      {updateOpen && (
-        <div className="fixed inset-0 bg-black/30 h-screen w-screen flex items-center justify-center z-10">
-          <div className="rounded-xl relative p-5 max-h-[90vh] overflow-y-auto">
-            <p
-              onClick={() => setUpdateOpen(false)}
-              className="absolute right-3 cursor-pointer size-5 text-2xl z-10 text-black"
+      <AnimatePresence>
+        {updateOpen && (
+          <div className="fixed inset-0 bg-black/30 h-screen w-screen flex items-center justify-center z-10">
+            <motion.div
+              className="rounded-xl relative p-5 max-h-[90vh] overflow-y-auto"
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 50, opacity: 0 }}
             >
-              <IoMdClose size={30} />
-            </p>
+              <p
+                onClick={() => setUpdateOpen(false)}
+                className="absolute right-3 cursor-pointer size-5 text-2xl z-10 text-black"
+              >
+                <IoMdClose size={30} />
+              </p>
 
-            <form onSubmit={onSubmit}>
-              <div className="flex items-center justify-center flex-col md:flex-row gap-3 md:gap-20">
-                <DateTimeInput
-                  label="Start Time"
-                  value={formData.bookingTime.start}
-                  onChange={(value) =>
-                    setFormData((prev: any) => ({
-                      ...prev,
-                      bookingTime: { ...prev.bookingTime, start: value },
-                    }))
-                  }
-                />
+              <form onSubmit={onSubmit}>
+                <div className="flex items-center justify-center flex-col md:flex-row gap-3 md:gap-20">
+                  <DateTimeInput
+                    label="Start Time"
+                    value={formData.bookingTime.start}
+                    onChange={(value) =>
+                      setFormData((prev: any) => ({
+                        ...prev,
+                        bookingTime: { ...prev.bookingTime, start: value },
+                      }))
+                    }
+                  />
 
-                <DateTimeInput
-                  label="End Time"
-                  value={formData.bookingTime.end}
-                  onChange={(value) =>
-                    setFormData((prev: any) => ({
-                      ...prev,
-                      bookingTime: { ...prev.bookingTime, end: value },
-                    }))
-                  }
-                  minDate={
-                    formData.bookingTime.start
-                      ? new Date(formData.bookingTime.start)
-                      : undefined
-                  }
-                  maxDate={
-                    formData.bookingTime.start
-                      ? new Date(formData.bookingTime.start)
-                      : undefined
-                  }
-                  minTime={
-                    formData.bookingTime.start
-                      ? format(new Date(formData.bookingTime.start), "HH:mm")
-                      : undefined
-                  }
-                  maxTime={
-                    formData.bookingTime.start
-                      ? format(
-                          new Date(
-                            new Date(formData.bookingTime.start).getTime() +
-                              4 * 60 * 60 * 1000
-                          ),
-                          "HH:mm"
-                        )
-                      : undefined
-                  }
-                />
-              </div>
+                  <DateTimeInput
+                    label="End Time"
+                    value={formData.bookingTime.end}
+                    onChange={(value) =>
+                      setFormData((prev: any) => ({
+                        ...prev,
+                        bookingTime: { ...prev.bookingTime, end: value },
+                      }))
+                    }
+                    minDate={
+                      formData.bookingTime.start
+                        ? new Date(formData.bookingTime.start)
+                        : undefined
+                    }
+                    maxDate={
+                      formData.bookingTime.start
+                        ? new Date(formData.bookingTime.start)
+                        : undefined
+                    }
+                    minTime={
+                      formData.bookingTime.start
+                        ? format(new Date(formData.bookingTime.start), "HH:mm")
+                        : undefined
+                    }
+                    maxTime={
+                      formData.bookingTime.start
+                        ? format(
+                            new Date(
+                              new Date(formData.bookingTime.start).getTime() +
+                                4 * 60 * 60 * 1000
+                            ),
+                            "HH:mm"
+                          )
+                        : undefined
+                    }
+                  />
+                </div>
 
-              <div className="flex justify-end gap-3 mt-5">
-                <button
-                  className="p-2 bg-green-600 text-white font-bold rounded-lg"
-                  type="submit"
-                >
-                  Update
-                </button>
+                <div className="flex justify-end gap-3 mt-5">
+                  <button
+                    className="p-2 bg-green-600 text-white font-bold rounded-lg"
+                    type="submit"
+                  >
+                    Update
+                  </button>
 
-                <button
-                  className="p-2 bg-red-600 text-white font-bold rounded-lg"
-                  onClick={() => setUpdateOpen(false)}
-                  type="button"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
+                  <button
+                    className="p-2 bg-red-600 text-white font-bold rounded-lg"
+                    onClick={() => setUpdateOpen(false)}
+                    type="button"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
 
-      {deleteOpen && (
-        <div
-          className="inset-0 fixed bg-black/40 h-screen w-screen flex items-center justify-center text-white z-10"
-          onClick={() => setDeleteOpen(false)}
-        >
+        {deleteOpen && (
           <div
-            className="bg-neutral-500/60 backdrop-blur-sm p-6 rounded-xl"
-            onClick={(e) => e.stopPropagation()}
+            className="inset-0 fixed bg-black/40 h-screen w-screen flex items-center justify-center text-white z-10"
+            onClick={() => setDeleteOpen(false)}
           >
-            <h3 className="text-lg font-bold w-90 h-20 text-gray-300">
-              Are you sure you want to cancel your booking? This action cannot
-              be undone.
-            </h3>
-            <div className="flex justify-between mt-5">
-              <button
-                className="p-2 bg-red-600 rounded-lg"
-                onClick={() => {
-                  setDeleteOpen(false);
-                  handleDelete();
-                }}
-              >
-                Yes I'm sure.
-              </button>
-              <button
-                className="p-2 bg-neutral-700 rounded-lg"
-                onClick={() => setDeleteOpen(false)}
-              >
-                Nevermind.
-              </button>
-            </div>
+            <motion.div
+              className="bg-neutral-500/60 backdrop-blur-sm p-6 rounded-xl"
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 50, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h3 className="text-lg font-bold w-90 h-20 text-gray-300">
+                Are you sure you want to cancel your booking? This action cannot
+                be undone.
+              </h3>
+              <div className="flex justify-between mt-5">
+                <button
+                  className="p-2 bg-red-600 rounded-lg"
+                  onClick={() => {
+                    setDeleteOpen(false);
+                    handleDelete();
+                  }}
+                >
+                  Yes I'm sure.
+                </button>
+                <button
+                  className="p-2 bg-neutral-700 rounded-lg"
+                  onClick={() => setDeleteOpen(false)}
+                >
+                  Nevermind.
+                </button>
+              </div>
+            </motion.div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   );
 };

@@ -76,7 +76,7 @@ const UserBookings = () => {
     <div className="flex justify p-5 justify-center">
       <Navbar />
       <div className="text-amber-950 rounded-3xl overflow-hidden relative mt-40">
-        <div className="flex flex-col md:flex-row gap-5">
+        <div className="flex flex-col md:flex-row gap-10">
           {myBookings.map((booking, i) => (
             <motion.div
               key={booking._id}
