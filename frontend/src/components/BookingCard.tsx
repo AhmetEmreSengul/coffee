@@ -293,11 +293,12 @@ const BookingCard = ({
               exit={{ y: 50, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <h3 className="text-lg font-bold w-90 h-20 text-text-primary">
+              <h1 className="text-lg font-black">Cancel Booking</h1>
+              <h3 className="font-light w-70 md:w-90 h-20 text-text-primary mt-3">
                 Are you sure you want to cancel your booking? This action cannot
                 be undone.
               </h3>
-              <div className="flex justify-between mt-5">
+              <div className="flex justify-between">
                 <button
                   className="p-2 bg-caramel-400 text-cream-50 rounded-lg hover:bg-caramel-500 transition font-medium"
                   onClick={() => {
