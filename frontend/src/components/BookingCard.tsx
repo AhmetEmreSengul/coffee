@@ -65,7 +65,7 @@ const BookingCard = ({
                   ease: [0.6, 0.05, 0.01, 0.9],
                 },
               }}
-              className="bg-beige-100 rounded-t-lg relative z-10 border border-border-light"
+              className="bg-beige-100 rounded-t-lg relative z-10 border-border-light"
               style={{
                 clipPath: isRipping
                   ? "polygon(0 0, 100% 0, 100% 100%, 95% 95%, 90% 100%, 85% 95%, 80% 100%, 75% 95%, 70% 100%, 65% 95%, 60% 100%, 55% 95%, 50% 100%, 45% 95%, 40% 100%, 35% 95%, 30% 100%, 25% 95%, 20% 100%, 15% 95%, 10% 100%, 5% 95%, 0 100%)"
@@ -75,7 +75,9 @@ const BookingCard = ({
               <div className="flex justify-between mb-10">
                 <div className="p-5">
                   <p className="text-text-tertiary">Guest</p>
-                  <p className="font-bold text-text-primary">{authUser?.fullName}</p>
+                  <p className="font-bold text-text-primary">
+                    {authUser?.fullName}
+                  </p>
                 </div>
 
                 <div className="p-5">
@@ -118,7 +120,9 @@ const BookingCard = ({
                 <p className="inline-flex items-center gap-1 text-text-secondary">
                   <CiLocationOn /> Table
                 </p>
-                <p className="font-bold text-text-primary">T{booking.tableNumber.number}</p>
+                <p className="font-bold text-text-primary">
+                  T{booking.tableNumber.number}
+                </p>
               </div>
 
               <div className="flex justify-between px-5 pb-5">
