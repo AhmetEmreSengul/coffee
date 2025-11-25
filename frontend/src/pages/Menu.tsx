@@ -31,15 +31,15 @@ const Menu = () => {
   }, [text]);
 
   return (
-    <div className="min-h-screen overflow-x-hidden items-center flex flex-col">
+    <div className="min-h-screen overflow-x-hidden items-center flex flex-col bg-bg-primary">
       <Navbar />
       <div className="mt-35">
-        <h1 className="text-5xl text-center mt-10">MENU</h1>
+        <h1 className="text-5xl text-center mt-10 text-text-primary">MENU</h1>
         <div className="flex flex-col items-center md:items-start md:flex-row gap-3">
           <div className="hidden md:flex w-70 h-20 rounded-l-lg  flex-col p-3" />
           <div className="w-full md:h-20 md:fixed items-center md:items-start flex flex-col p-3">
             <input
-              className="p-3 mt-7 w-72 border rounded-lg "
+              className="p-3 mt-7 w-72 border border-border-medium rounded-lg bg-cream-50 text-text-primary placeholder:text-text-tertiary focus:border-caramel-400 focus:outline-none transition"
               type="text"
               placeholder="Search For Coffees"
               onChange={(e) => setText(e.target.value)}
@@ -47,19 +47,19 @@ const Menu = () => {
             <div className="mt-7 flex flex-row md:flex-col justify-start items-start gap-3">
               <button
                 onClick={() => setText("hot")}
-                className="w-22 h-17 md:h-12 p-3 bg-red-500 rounded-lg hover:bg-red-900 transition cursor-pointer"
+                className="w-22 h-17 md:h-12 p-3 bg-caramel-300 text-caramel-500 rounded-lg hover:bg-caramel-400 transition cursor-pointer font-medium"
               >
                 Hot
               </button>
               <button
                 onClick={() => setText("cold")}
-                className="w-22 h-17 md:h-12 p-3 bg-sky-500 rounded-lg hover:bg-sky-600 transition cursor-pointer"
+                className="w-22 h-17 md:h-12 p-3 bg-dusty-blue-300 text-dusty-blue-400 rounded-lg hover:bg-dusty-blue-400 transition cursor-pointer font-medium"
               >
                 Cold
               </button>
               <button
                 onClick={() => setText("")}
-                className="w-22 h-17 md:h-12 p-3 rounded-lg bg-neutral-500 hover:bg-neutral-600 transition cursor-pointer"
+                className="w-22 h-17 md:h-12 p-3 rounded-lg bg-beige-300 text-text-secondary hover:bg-beige-400 transition cursor-pointer font-medium"
               >
                 Reset
               </button>
@@ -82,10 +82,10 @@ const Menu = () => {
                 <button
                   key={i}
                   onClick={() => setPage(i + 1)}
-                  className={`px-4 py-2 rounded ${
+                  className={`px-4 py-2 rounded transition ${
                     currentPage === i + 1
-                      ? "bg-amber-600 text-white"
-                      : "bg-neutral-500"
+                      ? "bg-caramel-400 text-cream-50"
+                      : "bg-beige-200 text-text-secondary hover:bg-beige-300"
                   }`}
                 >
                   {i + 1}

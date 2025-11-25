@@ -14,8 +14,8 @@ const CoffeeDisplay = () => {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col items-center">
-      <h1 className="text-4xl ">Today's Selection</h1>
+    <div className="min-h-screen flex flex-col items-center py-20">
+      <h1 className="text-4xl text-text-primary mb-10">Today's Selection</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center gap-7">
         {getRandomThree().map((coffee, i) => (
@@ -38,7 +38,7 @@ const CoffeeDisplay = () => {
 
       <Link
         to={"/menu"}
-        className="p-3 rounded-lg bg-transparent border text-amber-200/80 hover:bg-amber-900/30 hover:border-none transition cursor-pointer mt-10"
+        className="p-3 rounded-lg bg-caramel-200 border border-caramel-300 text-caramel-500 hover:bg-caramel-300 hover:border-caramel-400 transition cursor-pointer mt-10"
       >
         <span className="inline-flex gap-3 items-center group">
           See The Full Menu

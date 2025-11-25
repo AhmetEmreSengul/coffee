@@ -21,8 +21,8 @@ const Navbar = () => {
     <div className="z-10 fixed top-0 left-0">
       {width < 900 ? (
         <div>
-          <div className="w-screen fixed h-23 bg-transparent backdrop-blur-sm flex items-center justify-between">
-            <div onClick={() => setOpen(!open)} className="px-8">
+          <div className="w-screen fixed h-23 bg-cream-50/50 backdrop-blur-sm flex items-center justify-between border-b border-border-light">
+            <div onClick={() => setOpen(!open)} className="px-8 text-text-primary">
               <AiOutlineMenu size={30} />
             </div>
 
@@ -40,14 +40,14 @@ const Navbar = () => {
               <span>
                 {authUser ? (
                   <button
-                    className="px-4 py-3 font-bold border-2 text-amber-200/80 rounded-xl cursor-pointer"
+                    className="px-4 py-3 font-bold border-2 border-caramel-300 text-caramel-500 rounded-xl cursor-pointer hover:bg-caramel-100 transition"
                     onClick={logout}
                   >
                     Logout
                   </button>
                 ) : (
                   <Link
-                    className="px-4 py-3 font-bold border-2 hover:border-amber-300 text-amber-200/80 rounded-xl transition cursor-pointer"
+                    className="px-4 py-3 font-bold border-2 border-caramel-300 hover:border-caramel-400 text-caramel-500 rounded-xl transition cursor-pointer hover:bg-caramel-100"
                     to={"/login"}
                   >
                     Login
@@ -58,14 +58,14 @@ const Navbar = () => {
           </div>
         </div>
       ) : (
-        <div className="w-screen fixed h-23 bg-transparent backdrop-blur-sm flex items-center justify-between">
+        <div className="w-screen fixed h-23 bg-cream-50/50 backdrop-blur-sm flex items-center justify-between border-b border-border-light">
           <div className="flex flex-row gap-6 ml-20">
             {navItems.map((item) => {
               if (item.protected && !authUser) return null;
 
               return (
                 <span
-                  className="font-bold hover:text-amber-300 transition"
+                  className="font-bold text-text-primary hover:text-caramel-500 transition"
                   key={item.link}
                   onClick={() => {
                     if (!authUser && item.requiresAuth) {
@@ -93,14 +93,14 @@ const Navbar = () => {
             <span>
               {authUser ? (
                 <button
-                  className="px-4 py-3 font-bold border-2 hover:border-amber-300 text-amber-200/80 rounded-xl transition cursor-pointer"
+                  className="px-4 py-3 font-bold border-2 border-caramel-300 hover:border-caramel-400 text-caramel-500 rounded-xl transition cursor-pointer hover:bg-caramel-100"
                   onClick={logout}
                 >
                   Logout
                 </button>
               ) : (
                 <Link
-                  className="px-4 py-3 font-bold border-2 hover:border-amber-300 text-amber-200/80 rounded-xl transition cursor-pointer"
+                  className="px-4 py-3 font-bold border-2 border-caramel-300 hover:border-caramel-400 text-caramel-500 rounded-xl transition cursor-pointer hover:bg-caramel-100"
                   to={"/login"}
                 >
                   Login
@@ -114,7 +114,7 @@ const Navbar = () => {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="text-2xl flex w-screen h-screen backdrop-blur-sm bg-transparent flex-col items-center fixed top-23"
+            className="text-2xl flex w-screen h-screen backdrop-blur-sm bg-cream-50/50 flex-col items-center fixed top-23"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -125,7 +125,7 @@ const Navbar = () => {
               if (item.protected && !authUser) return null;
               return (
                 <motion.span
-                  className="mt-5 border-b-2 border-amber-200"
+                  className="mt-5 border-b-2 border-caramel-200 text-text-primary"
                   key={item.link}
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}

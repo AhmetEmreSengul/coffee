@@ -60,11 +60,11 @@ const UserBookings = () => {
 
   if (myBookings.length === 0) {
     return (
-      <div className="flex items-center justify-center h-screen w-screen">
+      <div className="flex items-center justify-center h-screen w-screen bg-bg-primary">
         <Navbar />
-        <div>
+        <div className="text-text-primary">
           No bookings found, You can reserve a table{" "}
-          <Link to={"/book-table"} className="underline ml-1 text-amber-200 ">
+          <Link to={"/book-table"} className="underline ml-1 text-caramel-500 hover:text-caramel-400 transition">
             here.
           </Link>
         </div>
@@ -73,9 +73,9 @@ const UserBookings = () => {
   }
 
   return (
-    <div className="flex justify p-5 justify-center">
+    <div className="flex justify p-5 justify-center bg-bg-primary">
       <Navbar />
-      <div className="text-amber-950 rounded-3xl overflow-hidden relative mt-40">
+      <div className="text-text-primary rounded-3xl overflow-hidden relative mt-40">
         <div className="flex flex-col md:flex-row gap-10">
           {myBookings.map((booking, i) => (
             <motion.div

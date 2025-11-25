@@ -17,7 +17,7 @@ const App = () => {
   }, [checkAuth]);
 
   return (
-    <div className="font-[lato] min-h-screen bg-[#0a0902] text-white bg-linear-to-bl from-amber-900/50 to-black">
+    <div className="font-[lato] min-h-screen bg-bg-primary text-text-primary">
       <ToastContainer
         position="bottom-right"
         autoClose={2000}
@@ -28,7 +28,7 @@ const App = () => {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-        theme="dark"
+        theme="light"
       />
       <Routes>
         <Route path="/" element={<LandingPage />} />

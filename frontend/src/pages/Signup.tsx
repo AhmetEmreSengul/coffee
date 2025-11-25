@@ -25,21 +25,21 @@ const Signup = () => {
   const { signup, isSigningUp } = useAuthStore();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen min-w-screen overflow-hidden">
+    <div className="flex flex-col items-center justify-center min-h-screen min-w-screen overflow-hidden bg-bg-primary">
       <Link to={"/"}>
         <div className="inline-flex items-center fixed top-0 left-0 md:p-20 p-5">
           <img className="size-20 md:size-30" src="/timeslot.png" alt="" />
-          <h1 className="text-4xl font-serif text-amber-200/70">Time Slot</h1>
+          <h1 className="text-4xl font-serif text-caramel-500">Time Slot</h1>
         </div>
       </Link>
       <form
         className="flex flex-col gap-7 size-80 md:size-100 justify-center"
         onSubmit={handleSubmit}
       >
-        <h1 className="text-center text-4xl">Welcome </h1>
+        <h1 className="text-center text-4xl text-text-primary">Welcome </h1>
         <div>
           <input
-            className="p-4 w-full border rounded-lg bg-white/4 backdrop-blur-3xl hover:border-amber-200 focus:border-none transition"
+            className="p-4 w-full border border-border-medium rounded-lg bg-cream-50 text-text-primary placeholder:text-text-tertiary hover:border-caramel-300 focus:border-caramel-400 focus:outline-none transition"
             placeholder="Full Name"
             type="text"
             value={formData.fullName}
@@ -50,7 +50,7 @@ const Signup = () => {
         </div>
         <div>
           <input
-            className="p-4 w-full border rounded-lg bg-white/4 backdrop-blur-3xl hover:border-amber-200 focus:border-none transition"
+            className="p-4 w-full border border-border-medium rounded-lg bg-cream-50 text-text-primary placeholder:text-text-tertiary hover:border-caramel-300 focus:border-caramel-400 focus:outline-none transition"
             placeholder="coffee@gmail.com"
             type="email"
             value={formData.email}
@@ -61,7 +61,7 @@ const Signup = () => {
         </div>
         <div className="relative">
           <input
-            className="p-4 w-full border rounded-lg bg-white/4 backdrop-blur-3xl hover:border-amber-200 focus:border-none transition"
+            className="p-4 w-full border border-border-medium rounded-lg bg-cream-50 text-text-primary placeholder:text-text-tertiary hover:border-caramel-300 focus:border-caramel-400 focus:outline-none transition"
             placeholder="Password"
             type={`${visible ? "text" : "password"}`}
             value={formData.password}
@@ -72,32 +72,32 @@ const Signup = () => {
           {visible ? (
             <AiFillEye
               onClick={() => setVisible(false)}
-              className="absolute right-5 top-1/3 size-6"
+              className="absolute right-5 top-1/3 size-6 text-text-secondary cursor-pointer"
             />
           ) : (
             <AiFillEyeInvisible
               onClick={() => setVisible(true)}
-              className="absolute right-5 top-1/3 size-6"
+              className="absolute right-5 top-1/3 size-6 text-text-secondary cursor-pointer"
             />
           )}
         </div>
         <button
-          className="p-3 rounded-lg border bg-white/4 backdrop-blur-3xl border-amber-200/70 text-amber-200/70 cursor-pointer hover:border-amber-200 transition"
+          className="p-3 rounded-lg border border-caramel-300 bg-caramel-200 text-caramel-500 cursor-pointer hover:bg-caramel-300 hover:border-caramel-400 transition font-medium"
           disabled={isSigningUp}
           type="submit"
         >
           Create Account
         </button>
         <div className="flex flex-col gap-8 items-center">
-          <h2 className="text-center">
+          <h2 className="text-center text-text-secondary">
             Already have an account?{" "}
-            <Link className="hover:text-amber-200 transition" to={"/login"}>
+            <Link className="hover:text-caramel-500 text-caramel-400 transition" to={"/login"}>
               Login
             </Link>
           </h2>
           <button
             disabled
-            className=" inline-flex text-md gap-2 items-center border p-3 bg-white/4 backdrop-blur-3xl border-amber-200/70 text-amber-200/70 cursor-not-allowed hover:border-amber-200 transition rounded-lg w-full justify-center text-center"
+            className=" inline-flex text-md gap-2 items-center border border-border-medium p-3 bg-beige-100 text-text-tertiary cursor-not-allowed hover:border-border-medium transition rounded-lg w-full justify-center text-center"
           >
             Continue with <AiOutlineGoogle className="size-8" />
           </button>

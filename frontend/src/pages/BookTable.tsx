@@ -25,7 +25,7 @@ const BookTable = () => {
   };
 
   return (
-    <div className="min-h-screen flex flex-col ">
+    <div className="min-h-screen flex flex-col bg-bg-primary">
       <Navbar/>
       <div className="mt-45">
         <form
@@ -39,7 +39,7 @@ const BookTable = () => {
               setFormData={setFormData}
             />
           </div>
-          <h3 className="text-sm text-center font-light mt-5">
+          <h3 className="text-sm text-center font-light mt-5 text-text-secondary">
             Tables are limited to four hours
             (09.00-13.00, 13.00-17.00 etc.)
           </h3>
@@ -93,7 +93,7 @@ const BookTable = () => {
             />
           </div>
           <button
-            className="p-3 rounded-lg bg-transparent border text-amber-200/80 hover:bg-amber-900/30 hover:border-none transition cursor-pointer m-10"
+            className="p-3 rounded-lg bg-caramel-200 border border-caramel-300 text-caramel-500 hover:bg-caramel-300 hover:border-caramel-400 transition cursor-pointer m-10 font-medium"
             type="submit"
           >
             Create Booking

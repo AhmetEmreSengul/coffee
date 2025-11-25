@@ -56,10 +56,10 @@ const DateTimeInput = ({
   }, [value]);
 
   return (
-    <div className="flex flex-col gap-2 p-4 rounded-lg text-white backdrop-blur-sm bg-neutral-700/30">
+    <div className="flex flex-col gap-2 p-4 rounded-lg text-text-primary bg-beige-100/60 backdrop-blur-sm border border-border-light shadow-sm">
       <label className="text-2xl  font-medium">{label}</label>
 
-      <div className="font-medium">
+      <div className="font-medium text-text-secondary">
         {tempDate ? format(tempDate, "PPP p") : "Select date & time"}
       </div>
 
@@ -93,7 +93,7 @@ const DateTimeInput = ({
 
       <input
         type="time"
-        className="border rounded-md p-2 text-white"
+        className="border border-border-medium rounded-md p-2 text-text-primary bg-cream-50 focus:border-caramel-400 focus:outline-none transition"
         value={tempDate ? format(tempDate, "HH:mm") : ""}
         min={minTime ?? "09:00"}
         max={maxTime ?? "23:59"}

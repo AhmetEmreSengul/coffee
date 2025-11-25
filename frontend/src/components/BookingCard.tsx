@@ -48,7 +48,7 @@ const BookingCard = ({
 
   return (
     <div className="relative z-5">
-      <div className="absolute left-0 right-0 top-5/9 z-10 border-t-2 border-dashed border-amber-950/20"></div>
+      <div className="absolute left-0 right-0 top-5/9 z-10 border-t-2 border-dashed border-border-medium"></div>
       <AnimatePresence>
         {!isRipping && (
           <>
@@ -65,7 +65,7 @@ const BookingCard = ({
                   ease: [0.6, 0.05, 0.01, 0.9],
                 },
               }}
-              className="bg-[#e6e1d1] rounded-t-lg relative z-10"
+              className="bg-beige-100 rounded-t-lg relative z-10 border border-border-light"
               style={{
                 clipPath: isRipping
                   ? "polygon(0 0, 100% 0, 100% 100%, 95% 95%, 90% 100%, 85% 95%, 80% 100%, 75% 95%, 70% 100%, 65% 95%, 60% 100%, 55% 95%, 50% 100%, 45% 95%, 40% 100%, 35% 95%, 30% 100%, 25% 95%, 20% 100%, 15% 95%, 10% 100%, 5% 95%, 0 100%)"
@@ -74,22 +74,22 @@ const BookingCard = ({
             >
               <div className="flex justify-between mb-10">
                 <div className="p-5">
-                  <p className="text-neutral-400">Guest</p>
-                  <p className="font-bold">{authUser?.fullName}</p>
+                  <p className="text-text-tertiary">Guest</p>
+                  <p className="font-bold text-text-primary">{authUser?.fullName}</p>
                 </div>
 
                 <div className="p-5">
-                  <p className="text-end text-neutral-400">ID</p>
-                  <p className="font-bold">{booking._id}</p>
+                  <p className="text-end text-text-tertiary">BOOKING ID</p>
+                  <p className="font-bold text-text-primary">{booking._id}</p>
                 </div>
               </div>
 
               <div className="flex justify-between">
                 <div className="pl-5">
-                  <p className="inline-flex gap-1 items-center">
+                  <p className="inline-flex gap-1 items-center text-text-secondary">
                     <CiCalendar /> Date
                   </p>
-                  <p className="font-bold">
+                  <p className="font-bold text-text-primary">
                     {
                       new Date(booking.bookingTime.start)
                         .toISOString()
@@ -99,10 +99,10 @@ const BookingCard = ({
                 </div>
 
                 <div className="pr-5">
-                  <p className="inline-flex gap-1 items-center">
+                  <p className="inline-flex gap-1 items-center text-text-secondary">
                     <CiClock1 /> Time
                   </p>
-                  <p className="text-end font-bold">
+                  <p className="text-end font-bold text-text-primary">
                     {new Date(booking.bookingTime.start).toLocaleTimeString(
                       "en-GB",
                       {
@@ -115,15 +115,15 @@ const BookingCard = ({
               </div>
 
               <div className="p-5">
-                <p className="inline-flex items-center gap-1">
+                <p className="inline-flex items-center gap-1 text-text-secondary">
                   <CiLocationOn /> Table
                 </p>
-                <p className="font-bold">T{booking.tableNumber.number}</p>
+                <p className="font-bold text-text-primary">T{booking.tableNumber.number}</p>
               </div>
 
               <div className="flex justify-between px-5 pb-5">
                 <button
-                  className="p-2 bg-green-600 text-white font-bold rounded-lg"
+                  className="p-2 bg-sage-300 text-sage-400 font-bold rounded-lg hover:bg-sage-400 hover:text-cream-50 transition"
                   onClick={() => {
                     setUpdateOpen(true);
                     setFormData({
@@ -136,7 +136,7 @@ const BookingCard = ({
                 </button>
 
                 <button
-                  className="p-2 bg-red-800 text-white font-bold rounded-lg"
+                  className="p-2 bg-caramel-400 text-cream-50 font-bold rounded-lg hover:bg-caramel-500 transition"
                   onClick={() => setDeleteOpen(true)}
                 >
                   Delete
@@ -157,7 +157,7 @@ const BookingCard = ({
                   ease: [0.6, 0.05, 0.01, 0.9],
                 },
               }}
-              className="bg-[#e6e1d1] rounded-b-lg -mt-1"
+              className="bg-beige-100 rounded-b-lg -mt-1 border border-border-light border-t-0"
               style={{
                 clipPath: isRipping
                   ? "polygon(5% 5%, 10% 0, 15% 5%, 20% 0, 25% 5%, 30% 0, 35% 5%, 40% 0, 45% 5%, 50% 0, 55% 5%, 60% 0, 65% 5%, 70% 0, 75% 5%, 80% 0, 85% 5%, 90% 0, 95% 5%, 100% 0, 100% 100%, 0 100%, 0 0)"
@@ -171,14 +171,14 @@ const BookingCard = ({
                     className="p-8 flex flex-col items-center justify-center space-y-4"
                     key={i}
                   >
-                    <div className="p-3 bg-white rounded-xl shadow-sm">
+                    <div className="p-3 bg-cream-50 rounded-xl shadow-sm border border-border-light">
                       <img
                         src={qrObj.qrCode}
                         alt="Entry QR Code"
                         className="w-40 h-40 mix-blend-multiply opacity-90"
                       />
                     </div>
-                    <p className="text-xs text-center opacity-50 max-w-[200px]">
+                    <p className="text-xs text-center text-text-tertiary max-w-[200px]">
                       Scan this code at the entrance to access your reserved
                       table.
                     </p>
@@ -193,14 +193,14 @@ const BookingCard = ({
         {updateOpen && (
           <div className="fixed inset-0 bg-black/30 h-screen w-screen flex items-center justify-center z-10">
             <motion.div
-              className="rounded-xl relative p-5 max-h-[90vh] overflow-y-auto"
+              className="rounded-xl relative p-5 max-h-[90vh] overflow-y-auto border-border-light"
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 50, opacity: 0 }}
             >
               <p
                 onClick={() => setUpdateOpen(false)}
-                className="absolute right-3 cursor-pointer size-5 text-2xl z-10 text-black"
+                className="absolute right-8 cursor-pointer size-5 text-2xl z-10 text-text-primary hover:text-caramel-500 transition"
               >
                 <IoMdClose size={30} />
               </p>
@@ -258,14 +258,14 @@ const BookingCard = ({
 
                 <div className="flex justify-end gap-3 mt-5">
                   <button
-                    className="p-2 bg-green-600 text-white font-bold rounded-lg"
+                    className="p-2 bg-sage-300 text-sage-400 font-bold rounded-lg hover:bg-sage-400 hover:text-cream-50 transition"
                     type="submit"
                   >
                     Update
                   </button>
 
                   <button
-                    className="p-2 bg-red-600 text-white font-bold rounded-lg"
+                    className="p-2 bg-beige-300 text-text-secondary font-bold rounded-lg hover:bg-beige-400 transition"
                     onClick={() => setUpdateOpen(false)}
                     type="button"
                   >
@@ -279,23 +279,23 @@ const BookingCard = ({
 
         {deleteOpen && (
           <div
-            className="inset-0 fixed bg-black/40 h-screen w-screen flex items-center justify-center text-white z-10"
+            className="inset-0 fixed bg-black/40 h-screen w-screen flex items-center justify-center z-10"
             onClick={() => setDeleteOpen(false)}
           >
             <motion.div
-              className="bg-neutral-500/60 backdrop-blur-sm p-6 rounded-xl"
+              className="bg-cream-50/50 backdrop-blur-sm border border-border-light p-6 rounded-xl shadow-lg"
               initial={{ y: 50, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: 50, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
             >
-              <h3 className="text-lg font-bold w-90 h-20 text-gray-300">
+              <h3 className="text-lg font-bold w-90 h-20 text-text-primary">
                 Are you sure you want to cancel your booking? This action cannot
                 be undone.
               </h3>
               <div className="flex justify-between mt-5">
                 <button
-                  className="p-2 bg-red-600 rounded-lg"
+                  className="p-2 bg-caramel-400 text-cream-50 rounded-lg hover:bg-caramel-500 transition font-medium"
                   onClick={() => {
                     setDeleteOpen(false);
                     handleDelete();
@@ -304,7 +304,7 @@ const BookingCard = ({
                   Yes I'm sure.
                 </button>
                 <button
-                  className="p-2 bg-neutral-700 rounded-lg"
+                  className="p-2 bg-beige-300 text-text-secondary rounded-lg hover:bg-beige-400 transition font-medium"
                   onClick={() => setDeleteOpen(false)}
                 >
                   Nevermind.
