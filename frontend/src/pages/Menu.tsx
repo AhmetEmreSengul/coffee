@@ -4,6 +4,7 @@ import { useCoffeeStore } from "../store/useCoffeeStore";
 import CoffeeCard from "../components/CoffeeCard";
 import { motion } from "framer-motion";
 import { FaQuestion } from "react-icons/fa";
+import CoffeDisplaySkeleton from "../components/CoffeDisplaySkeleton";
 
 const Menu = () => {
   const {
@@ -13,6 +14,7 @@ const Menu = () => {
     currentPage,
     coffeesPerPage,
     setPage,
+    isLoading,
   } = useCoffeeStore();
   const [text, setText] = useState("");
 
@@ -77,38 +79,50 @@ const Menu = () => {
                 <FaQuestion className="size-90 md:size-100 animate-pulse" />
               </div>
             )}
-            <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 px-15 gap-3">
-              {paginated.map((coffee, i) => (
-                <motion.div
-                  initial={{ y: 10, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
-                >
-                  <CoffeeCard
-                    key={coffee.id}
-                    title={coffee.title}
-                    description={coffee.description}
-                    image={coffee.image}
-                    type={coffee.type}
-                  />
-                </motion.div>
-              ))}
-            </div>
-            <div className="flex gap-2 mb-5 px-15 my-10">
-              {Array.from({ length: totalPages }, (_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setPage(i + 1)}
-                  className={`px-4 py-2 rounded transition ${
-                    currentPage === i + 1
-                      ? "bg-caramel-400 text-cream-50"
-                      : "bg-beige-200 text-text-secondary hover:bg-beige-300"
-                  }`}
-                >
-                  {i + 1}
-                </button>
-              ))}
-            </div>
+            {isLoading ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                {[1, 2, 3, 4, 5, 6].map(() => (
+                  <div>
+                    <CoffeDisplaySkeleton />
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div>
+                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 px-15 gap-3">
+                  {paginated.map((coffee, i) => (
+                    <motion.div
+                      initial={{ y: 10, opacity: 0 }}
+                      animate={{ y: 0, opacity: 1 }}
+                      transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
+                    >
+                      <CoffeeCard
+                        key={coffee.id}
+                        title={coffee.title}
+                        description={coffee.description}
+                        image={coffee.image}
+                        type={coffee.type}
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+                <div className="flex gap-2 mb-5 px-15 my-10">
+                  {Array.from({ length: totalPages }, (_, i) => (
+                    <button
+                      key={i}
+                      onClick={() => setPage(i + 1)}
+                      className={`px-4 py-2 rounded transition ${
+                        currentPage === i + 1
+                          ? "bg-caramel-400 text-cream-50"
+                          : "bg-beige-200 text-text-secondary hover:bg-beige-300"
+                      }`}
+                    >
+                      {i + 1}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

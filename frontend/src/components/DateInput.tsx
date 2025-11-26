@@ -93,7 +93,7 @@ const DateTimeInput = ({
 
       <input
         type="time"
-        className="border border-border-medium rounded-md p-2 text-text-primary bg-cream-50 focus:border-caramel-400 focus:outline-none transition"
+        className="border border-border-medium rounded-md p-2 text-text-primary bg-caramel-500/60 focus:border-caramel-400 focus:outline-none transition"
         value={tempDate ? format(tempDate, "HH:mm") : ""}
         min={minTime ?? "09:00"}
         max={maxTime ?? "23:59"}

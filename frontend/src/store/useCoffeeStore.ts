@@ -22,7 +22,7 @@ interface CoffeeStore {
 }
 
 export const useCoffeeStore = create<CoffeeStore>((set, get) => ({
-  isLoading: true,
+  isLoading: false,
   coffee: [],
   filteredCoffee: [],
   currentPage: 1,

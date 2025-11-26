@@ -39,6 +39,7 @@ interface BookingStore {
   tables: Table[];
   myBookings: UserBooking[];
   bookingQR: BookingQR[];
+  isLoading: boolean;
 
   getTables: () => Promise<void>;
   createBooking: (data: CreateBookingData) => Promise<void>;
@@ -56,14 +57,18 @@ export const useBookingStore = create<BookingStore>((set) => ({
   tables: [],
   myBookings: [],
   bookingQR: [],
+  isLoading: false,
 
   getTables: async () => {
+    set({ isLoading: true });
     try {
       const res = await axiosInstance.get<Table[]>("/book/available-tables");
       set({ tables: res.data });
     } catch (error: any) {
       console.error("Error getting tables", error?.response?.data?.message);
       set({ tables: [] });
+    } finally {
+      set({ isLoading: false });
     }
   },
 
@@ -78,6 +83,7 @@ export const useBookingStore = create<BookingStore>((set) => ({
   },
 
   getUserBookings: async () => {
+    set({ isLoading: true });
     try {
       const res = await axiosInstance.get<UserBooking[]>("/book/my-bookings");
       set({ myBookings: res.data });
@@ -85,6 +91,8 @@ export const useBookingStore = create<BookingStore>((set) => ({
       console.error("Error fetching bookings");
       toast.error(error?.response?.data?.message);
       set({ myBookings: [] });
+    } finally {
+      set({ isLoading: false });
     }
   },
 

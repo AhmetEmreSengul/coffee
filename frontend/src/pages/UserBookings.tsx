@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar";
 import { useAuthStore } from "../store/useAuthStore";
 import BookingCard from "../components/BookingCard";
 import { motion } from "framer-motion";
+import CoffeDisplaySkeleton from "../components/CoffeDisplaySkeleton";
 
 const UserBookings = () => {
   const {
@@ -15,6 +16,7 @@ const UserBookings = () => {
     getQRCode,
     updateUserBooking,
     deleteUserBooking,
+    isLoading,
   } = useBookingStore();
   const { authUser } = useAuthStore();
   const [updateOpen, setUpdateOpen] = useState(false);
@@ -58,13 +60,30 @@ const UserBookings = () => {
     setUpdateOpen(false);
   };
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {[1, 2, 3].map(() => (
+            <div>
+              <CoffeDisplaySkeleton />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
   if (myBookings.length === 0) {
     return (
       <div className="flex items-center justify-center h-screen w-screen bg-bg-primary">
         <Navbar />
         <div className="text-text-primary">
           No bookings found, You can reserve a table{" "}
-          <Link to={"/book-table"} className="underline ml-1 text-caramel-500 hover:text-caramel-400 transition">
+          <Link
+            to={"/book-table"}
+            className="underline ml-1 text-caramel-500 hover:text-caramel-400 transition"
+          >
             here.
           </Link>
         </div>

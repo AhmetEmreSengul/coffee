@@ -4,14 +4,29 @@ import CoffeeCard from "./CoffeeCard";
 import { Link } from "react-router-dom";
 import { AiOutlineArrowRight } from "react-icons/ai";
 import { motion } from "framer-motion";
+import CoffeDisplaySkeleton from "./CoffeDisplaySkeleton";
 
 const CoffeeDisplay = () => {
-  const { getCoffee, getRandomThree } = useCoffeeStore();
+  const { getCoffee, getRandomThree, isLoading } = useCoffeeStore();
 
   useEffect(() => {
     getCoffee();
     getRandomThree();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {[1, 2, 3].map(() => (
+            <div>
+              <CoffeDisplaySkeleton />
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex flex-col items-center py-20">
