@@ -105,13 +105,12 @@ const BookingCard = ({
                     <CiClock1 /> Time
                   </p>
                   <p className="text-end font-bold text-text-primary">
-                    {new Date(booking.bookingTime.start).toLocaleTimeString(
-                      "en-GB",
-                      {
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      }
-                    )}
+                    {new Intl.DateTimeFormat("en-GB", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                      hour12: false,
+                      timeZone: "Europe/Istanbul",
+                    }).format(new Date(booking.bookingTime.start))}
                   </p>
                 </div>
               </div>
