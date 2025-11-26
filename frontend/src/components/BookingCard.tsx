@@ -126,7 +126,7 @@ const BookingCard = ({
 
               <div className="flex justify-between px-5 pb-5">
                 <button
-                  className="p-2 bg-sage-300 text-sage-400 font-bold rounded-lg hover:bg-sage-400 hover:text-cream-50 transition"
+                  className="p-2 bg-caramel-500 text-cream-50 font-bold rounded-lg hover:bg-caramel-400 hover:text-cream-50 transition"
                   onClick={() => {
                     setUpdateOpen(true);
                     setFormData({
@@ -139,7 +139,7 @@ const BookingCard = ({
                 </button>
 
                 <button
-                  className="p-2 bg-caramel-400 text-cream-50 font-bold rounded-lg hover:bg-caramel-500 transition"
+                  className="p-2 bg-amber-800 text-cream-50 font-bold rounded-lg hover:bg-amber-700 transition"
                   onClick={() => setDeleteOpen(true)}
                 >
                   Delete
