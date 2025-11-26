@@ -6,4 +6,6 @@ export const ENV = {
   JWT_SECRET: process.env.JWT_SECRET,
   NODE_ENV: process.env.NODE_ENV,
   CLIENT_URL: process.env.CLIENT_URL,
+  ARCJET_KEY: process.env.ARCJET_KEY,
+  ARCJET_ENV: process.env.ARCJET_ENV,
 };
