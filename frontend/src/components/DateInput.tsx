@@ -31,13 +31,13 @@ const DateTimeInput = ({
   const defaultMaxDate = new Date(today);
   defaultMaxDate.setDate(today.getDate() + 7);
 
-  const toIsoLocal = (d: Date) => {
-    const year = d.getFullYear();
-    const month = String(d.getMonth() + 1).padStart(2, "0");
-    const day = String(d.getDate()).padStart(2, "0");
-    const hours = String(d.getHours()).padStart(2, "0");
-    const minutes = String(d.getMinutes()).padStart(2, "0");
-    return `${year}-${month}-${day}T${hours}:${minutes}`;
+  const toIsoUTC = (d: Date) => {
+    const year = d.getUTCFullYear();
+    const month = String(d.getUTCMonth() + 1).padStart(2, "0");
+    const day = String(d.getUTCDate()).padStart(2, "0");
+    const hours = String(d.getUTCHours()).padStart(2, "0");
+    const minutes = String(d.getUTCMinutes()).padStart(2, "0");
+    return `${year}-${month}-${day}T${hours}:${minutes}Z`; // note the Z
   };
 
   const clampDailyTime = (d: Date) => {
@@ -48,7 +48,7 @@ const DateTimeInput = ({
 
   const emit = (d: Date | null) => {
     if (!d) return;
-    onChange(toIsoLocal(d));
+    onChange(toIsoUTC(d));
   };
 
   useEffect(() => {
