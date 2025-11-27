@@ -8,7 +8,6 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import passport from "./lib/google.js";
 
-
 const PORT = ENV.PORT || 3000;
 
 const __dirname = path.resolve();
@@ -18,6 +17,7 @@ const app = express();
 app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
 app.use(express.json());
 app.use(cookieParser());
+app.set("trust proxy", 1);
 app.use(passport.initialize());
 
 app.use("/auth", authRoutes);
