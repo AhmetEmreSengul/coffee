@@ -16,6 +16,10 @@ const Login = () => {
     login(formData);
   };
 
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:3000/auth/google";
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen min-w-screen overflow-hidden bg-bg-primary">
       <Link to={"/"}>
@@ -30,7 +34,9 @@ const Login = () => {
           className="flex flex-col gap-7 size-80 md:size-100 justify-center"
           onSubmit={handleSubmit}
         >
-          <h1 className="text-center text-4xl text-text-primary">Welcome Back</h1>
+          <h1 className="text-center text-4xl text-text-primary">
+            Welcome Back
+          </h1>
           <div>
             <input
               className="p-4 w-full border border-border-medium rounded-lg bg-cream-50 text-text-primary placeholder:text-text-tertiary hover:border-caramel-300 focus:border-caramel-400 focus:outline-none transition"
@@ -75,13 +81,16 @@ const Login = () => {
         <div className="flex flex-col gap-8 items-center">
           <h2 className="text-center text-text-secondary">
             Don't have an account?{" "}
-            <Link className="hover:text-caramel-500 text-caramel-400 transition" to={"/signup"}>
+            <Link
+              className="hover:text-caramel-500 text-caramel-400 transition"
+              to={"/signup"}
+            >
               Signup
             </Link>
           </h2>
           <button
-            disabled
-            className="inline-flex text-md gap-2 items-center border border-border-medium p-3 bg-beige-100 text-text-tertiary cursor-not-allowed hover:border-border-medium transition rounded-lg w-full justify-center text-center"
+            onClick={handleGoogleLogin}
+            className="inline-flex text-md gap-2 items-center border cursor-pointer border-border-medium p-3 bg-beige-100 text-text-tertiary  hover:border-border-medium transition rounded-lg w-full justify-center text-center"
           >
             Continue with <AiOutlineGoogle className="size-8" />
           </button>

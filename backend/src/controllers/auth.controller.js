@@ -1,3 +1,4 @@
+import { ENV } from "../lib/env.js";
 import { generateToken } from "../lib/utils.js";
 import User from "../models/User.js";
 import bcryptjs from "bcryptjs";
@@ -97,5 +98,20 @@ export const updateProfile = async (req, res) => {
   } catch (error) {
     console.error("Error updating profile", error.message);
     res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const googleAuthCallback = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.redirect(`${process.env.CLIENT_URL}/login?error=auth_failed`);
+    }
+
+    generateToken(req.user._id, res);
+
+    res.redirect(`${ENV.CLIENT_URL}/auth/google/success`);
+  } catch (error) {
+    console.error("Error in Google auth callback:", error.message);
+    res.redirect(`${ENV.CLIENT_URL}/login?error=server_error`);
   }
 };

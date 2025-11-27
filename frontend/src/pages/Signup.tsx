@@ -22,6 +22,10 @@ const Signup = () => {
     signup(formData);
   };
 
+  const handleGoogleLogin = () => {
+    window.location.href = "http://localhost:3000/auth/google";
+  };
+
   const { signup, isSigningUp } = useAuthStore();
 
   return (
@@ -91,13 +95,16 @@ const Signup = () => {
         <div className="flex flex-col gap-8 items-center">
           <h2 className="text-center text-text-secondary">
             Already have an account?{" "}
-            <Link className="hover:text-caramel-500 text-caramel-400 transition" to={"/login"}>
+            <Link
+              className="hover:text-caramel-500 text-caramel-400 transition"
+              to={"/login"}
+            >
               Login
             </Link>
           </h2>
           <button
-            disabled
-            className=" inline-flex text-md gap-2 items-center border border-border-medium p-3 bg-beige-100 text-text-tertiary cursor-not-allowed hover:border-border-medium transition rounded-lg w-full justify-center text-center"
+            onClick={handleGoogleLogin}
+            className=" inline-flex text-md gap-2 items-center border cursor-pointer border-border-medium p-3 bg-beige-100 text-text-tertiary hover:border-border-medium transition rounded-lg w-full justify-center text-center"
           >
             Continue with <AiOutlineGoogle className="size-8" />
           </button>

@@ -8,6 +8,7 @@ import { useAuthStore } from "./store/useAuthStore";
 import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import UserBookings from "./pages/UserBookings";
+import GoogleAuthSuccess from "./pages/GoogleAuthSuccess";
 
 const App = () => {
   const { authUser, checkAuth } = useAuthStore();
@@ -46,6 +47,7 @@ const App = () => {
           path="/my-bookings"
           element={authUser ? <UserBookings /> : <LandingPage />}
         />
+        <Route path="/auth/google/success" element={<GoogleAuthSuccess />} />
       </Routes>
     </div>
   );
