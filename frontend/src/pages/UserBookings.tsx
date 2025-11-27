@@ -19,14 +19,15 @@ const UserBookings = () => {
     isLoading,
   } = useBookingStore();
   const { authUser } = useAuthStore();
+
   const [updateOpen, setUpdateOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [formData, setFormData] = useState({
     bookingId: "",
-    bookingTime: {
-      start: "",
-      end: "",
-    },
+    date: null as Date | null,
+    startTime: "",
+    endTime: "",
+    tableNumber: "",
   });
 
   useEffect(() => {
@@ -39,24 +40,25 @@ const UserBookings = () => {
     }
   }, [myBookings]);
 
+  const toDateTime = (date: Date, time: string) => {
+    const [h, m] = time.split(":").map(Number);
+    const d = new Date(date);
+    d.setHours(h, m, 0, 0);
+    return d.toISOString();
+  };
+
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    if (
-      !formData.bookingId ||
-      !formData.bookingTime.start ||
-      !formData.bookingTime.end
-    ) {
-      toast.error("Please fill in both start and end times");
+    if (!formData.bookingId || !formData.date || !formData.startTime || !formData.endTime) {
+      toast.error("Please fill in all fields");
       return;
     }
 
-    updateUserBooking(
-      formData.bookingId,
-      formData.bookingTime.start,
-      formData.bookingTime.end
-    );
+    const startISO = toDateTime(formData.date, formData.startTime);
+    const endISO = toDateTime(formData.date, formData.endTime);
 
+    updateUserBooking(formData.bookingId, startISO, endISO);
     setUpdateOpen(false);
   };
 
@@ -64,10 +66,8 @@ const UserBookings = () => {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {[1, 2, 3].map(() => (
-            <div>
-              <CoffeDisplaySkeleton />
-            </div>
+          {[1, 2, 3].map((n) => (
+            <CoffeDisplaySkeleton key={n} />
           ))}
         </div>
       </div>
@@ -79,20 +79,21 @@ const UserBookings = () => {
       <div className="flex items-center justify-center h-screen w-screen bg-bg-primary">
         <Navbar />
         <div className="text-text-primary">
-          No bookings found, You can reserve a table{" "}
+          No bookings found. Reserve a table{" "}
           <Link
-            to={"/book-table"}
+            to="/book-table"
             className="underline ml-1 text-caramel-500 hover:text-caramel-400 transition"
           >
-            here.
+            here
           </Link>
+          .
         </div>
       </div>
     );
   }
 
   return (
-    <div className="flex justify p-5 justify-center bg-bg-primary">
+    <div className="flex justify-center p-5 bg-bg-primary">
       <Navbar />
       <div className="text-text-primary rounded-3xl overflow-hidden relative mt-40">
         <div className="flex flex-col md:flex-row gap-10">
@@ -104,7 +105,6 @@ const UserBookings = () => {
               transition={{ delay: 0.2 + i * 0.1 }}
             >
               <BookingCard
-                key={booking._id}
                 booking={booking}
                 authUser={authUser}
                 bookingQR={bookingQR}

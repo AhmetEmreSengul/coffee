@@ -1,102 +1,102 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useBookingStore } from "../store/useBookingStore";
 import TableCard from "../components/TableCard";
-import DateTimeInput from "../components/DateInput";
 import Navbar from "../components/Navbar";
-import { format } from "date-fns";
 import TableCardSkeleton from "../components/TableCardSkeleton";
+
+import DateInput from "../components/DateInput";
+import TimeInput from "../components/TimeInput";
 
 const BookTable = () => {
   const { tables, getTables, createBooking, isLoading } = useBookingStore();
+
   const [formData, setFormData] = useState({
+    date: null as Date | null,
+    startTime: "",
+    endTime: "",
     tableNumber: "",
-    bookingTime: {
-      start: "",
-      end: "",
-    },
   });
 
   useEffect(() => {
     getTables();
   }, [getTables]);
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    createBooking(formData);
+  const toDateTime = (date: Date, time: string) => {
+    const [h, m] = time.split(":").map(Number);
+    const d = new Date(date);
+    d.setHours(h, m, 0, 0);
+    return d;
   };
 
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    if (!formData.date || !formData.startTime || !formData.endTime) return;
+
+    const start = toDateTime(formData.date, formData.startTime);
+    const end = toDateTime(formData.date, formData.endTime);
+
+    createBooking({
+      tableNumber: formData.tableNumber,
+      bookingTime: {
+        start: start.toISOString(),
+        end: end.toISOString(),
+      },
+    });
+  };
+
+  const maxEndTime = (() => {
+    if (!formData.startTime) return "";
+    const [h, m] = formData.startTime.split(":").map(Number);
+    const d = new Date();
+    d.setHours(h + 4, m);
+    return d.toTimeString().slice(0, 5);
+  })();
+
   return (
-    <div className="min-h-screen flex flex-col bg-bg-primary items-center ">
+    <div className="min-h-screen flex flex-col bg-bg-primary items-center">
       <Navbar />
+
       {isLoading ? (
-       <TableCardSkeleton/>
+        <TableCardSkeleton />
       ) : (
-        <div className="mt-45">
+        <div className="mt-40">
           <form
-            className="flex items-center flex-col gap-3"
+            className="flex items-center flex-col gap-6"
             onSubmit={handleSubmit}
           >
-            <div className="p-3 md:p-0">
-              <TableCard
-                tableInfo={tables}
-                formData={formData}
-                setFormData={setFormData}
-              />
-            </div>
-            <h3 className="text-sm text-center font-light mt-5 text-text-secondary">
-              Tables are limited to four hours (09.00-13.00, 13.00-17.00 etc.)
-            </h3>
-            <div className="flex flex-col md:flex-row gap-4 justify-center mt-5">
-              <DateTimeInput
+            <TableCard
+              tableInfo={tables}
+              formData={formData}
+              setFormData={setFormData}
+            />
+
+            <DateInput
+              value={formData.date}
+              onChange={(date) => setFormData((prev) => ({ ...prev, date }))}
+            />
+
+            <div className="flex flex-col md:flex-row gap-6">
+              <TimeInput
                 label="Start Time"
-                value={formData.bookingTime.start}
-                onChange={(value) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    bookingTime: { ...prev.bookingTime, start: value },
-                  }))
+                value={formData.startTime}
+                onChange={(startTime) =>
+                  setFormData((prev) => ({ ...prev, startTime }))
                 }
               />
 
-              <DateTimeInput
+              <TimeInput
                 label="End Time"
-                value={formData.bookingTime.end}
-                onChange={(value) =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    bookingTime: { ...prev.bookingTime, end: value },
-                  }))
+                value={formData.endTime}
+                onChange={(endTime) =>
+                  setFormData((prev) => ({ ...prev, endTime }))
                 }
-                minDate={
-                  formData.bookingTime.start
-                    ? new Date(formData.bookingTime.start)
-                    : undefined
-                }
-                maxDate={
-                  formData.bookingTime.start
-                    ? new Date(formData.bookingTime.start)
-                    : undefined
-                }
-                minTime={
-                  formData.bookingTime.start
-                    ? format(new Date(formData.bookingTime.start), "HH:mm")
-                    : undefined
-                }
-                maxTime={
-                  formData.bookingTime.start
-                    ? format(
-                        new Date(
-                          new Date(formData.bookingTime.start).getTime() +
-                            4 * 60 * 60 * 1000
-                        ),
-                        "HH:mm"
-                      )
-                    : undefined
-                }
+                min={formData.startTime || "09:00"}
+                max={maxEndTime}
               />
             </div>
+
             <button
-              className="p-3 rounded-lg bg-caramel-200 border border-caramel-300 text-caramel-500 hover:bg-caramel-300 hover:border-caramel-400 transition cursor-pointer m-10 font-medium"
+              className="p-3 rounded-lg bg-caramel-200 border border-caramel-300 text-caramel-500 hover:bg-caramel-300 transition m-10 font-medium"
               type="submit"
             >
               Create Booking
