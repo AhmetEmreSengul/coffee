@@ -21,7 +21,7 @@ const GoogleAuthSuccess = () => {
   }, [checkAuth, navigate]);
 
   return (
-    <div style={{ textAlign: "center", marginTop: "100px" }}>
+    <div className="w-screen h-screen flex items-center justify-center text-3xl">
       <h2>Completing authentication...</h2>
       <p>Please wait while we log you in.</p>
     </div>
