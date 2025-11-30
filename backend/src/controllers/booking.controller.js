@@ -1,3 +1,4 @@
+import { sendBookingEmail } from "../emails/emailHandler.js";
 import Booking from "../models/Booking.js";
 import Table from "../models/Table.js";
 
@@ -74,6 +75,13 @@ export const createBooking = async (req, res) => {
 
     await booking.populate("user", "name email");
     await booking.populate("tableNumber", "number capacity");
+
+    sendBookingEmail(
+      booking.user.email,
+      booking.bookingTime.start,
+      booking.bookingTime.end,
+      booking.tableNumber.number
+    );
 
     res.status(201).json(booking);
   } catch (error) {
