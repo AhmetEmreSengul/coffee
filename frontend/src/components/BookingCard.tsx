@@ -19,8 +19,8 @@ interface BookingCardProps {
   setFormData: (data: any) => void;
   updateOpen: boolean;
   setUpdateOpen: (v: boolean) => void;
-  deleteOpen: boolean;
-  setDeleteOpen: (v: boolean) => void;
+  deleteBookingId: string | null;
+  setDeleteBookingId: (id: string | null) => void;
   deleteUserBooking: (id: string) => void;
   onSubmit: (e: FormEvent) => void;
   getUserBookings: () => void;
@@ -34,8 +34,8 @@ const BookingCard = ({
   setFormData,
   updateOpen,
   setUpdateOpen,
-  deleteOpen,
-  setDeleteOpen,
+  deleteBookingId,
+  setDeleteBookingId,
   deleteUserBooking,
   onSubmit,
   getUserBookings,
@@ -46,7 +46,7 @@ const BookingCard = ({
     setIsRipping(true);
     setTimeout(async () => {
       await deleteUserBooking(booking._id);
-      setDeleteOpen(false);
+      setDeleteBookingId(null);
       setIsRipping(false);
       getUserBookings();
     }, 800);
@@ -72,128 +72,129 @@ const BookingCard = ({
   };
 
   return (
-    <div className="relative z-5">
-      <AnimatePresence>
-        {!isRipping && (
-          <>
-            <motion.div
-              key="booking-info"
-              initial={{ y: 0, rotate: 0 }}
-              exit={{
-                y: -300,
-                x: -100,
-                rotate: -25,
-                opacity: 0,
-                transition: { duration: 0.8, ease: [0.6, 0.05, 0.01, 0.9] },
-              }}
-              className="bg-beige-100 rounded-t-lg relative z-10 border-border-light"
-            >
-              <div className="flex justify-between mb-10">
-                <div className="p-5">
-                  <p className="text-text-tertiary">Guest</p>
-                  <p className="font-bold text-text-primary">
-                    {authUser?.fullName}
-                  </p>
-                </div>
-                <div className="p-5">
-                  <p className="text-end text-text-tertiary">BOOKING ID</p>
-                  <p className="font-bold text-text-primary">{booking._id}</p>
-                </div>
-              </div>
-
-              <div className="flex justify-between">
-                <div className="pl-5">
-                  <p className="inline-flex gap-1 items-center text-text-secondary">
-                    <CiCalendar /> Date
-                  </p>
-                  <p className="font-bold text-text-primary">
-                    {new Date(booking.bookingTime.start).toLocaleDateString()}
-                  </p>
-                </div>
-
-                <div className="pr-5">
-                  <p className="inline-flex gap-1 items-center text-text-secondary">
-                    <CiClock1 /> Time
-                  </p>
-                  <p className="text-end font-bold text-text-primary">
-                    {new Date(booking.bookingTime.start)
-                      .toTimeString()
-                      .slice(0, 5)}
-                  </p>
-                </div>
-              </div>
-
-              <div className="p-5">
-                <p className="inline-flex items-center gap-1 text-text-secondary">
-                  <CiLocationOn /> Table
-                </p>
-                <p className="font-bold text-text-primary">
-                  T{booking.tableNumber.number}
-                </p>
-              </div>
-
-              <div className="flex justify-between px-5 pb-5">
-                <button
-                  className="p-2 bg-caramel-500 text-cream-50 font-bold rounded-lg hover:bg-caramel-400 transition"
-                  onClick={handleUpdateClick}
-                >
-                  Update
-                </button>
-
-                <button
-                  className="p-2 bg-amber-800 text-cream-50 font-bold rounded-lg hover:bg-amber-700 transition"
-                  onClick={() => setDeleteOpen(true)}
-                >
-                  Delete
-                </button>
-              </div>
-            </motion.div>
-
-            <motion.div
-              key="qr-code"
-              initial={{ y: 0, rotate: 0 }}
-              exit={{
-                y: 300,
-                x: 100,
-                rotate: 25,
-                opacity: 0,
-                transition: {
-                  duration: 0.8,
-                  ease: [0.6, 0.05, 0.01, 0.9],
-                },
-              }}
-              className="bg-beige-100 rounded-b-lg -mt-1 border border-border-light border-t-0"
-              style={{
-                clipPath: isRipping
-                  ? "polygon(5% 5%, 10% 0, 15% 5%, 20% 0, 25% 5%, 30% 0, 35% 5%, 40% 0, 45% 5%, 50% 0, 55% 5%, 60% 0, 65% 5%, 70% 0, 75% 5%, 80% 0, 85% 5%, 90% 0, 95% 5%, 100% 0, 100% 100%, 0 100%, 0 0)"
-                  : "none",
-              }}
-            >
-              {bookingQR
-                .filter((qrObj) => qrObj.booking._id === booking._id)
-                .map((qrObj, i) => (
-                  <div
-                    className="p-8 flex flex-col items-center justify-center space-y-4"
-                    key={i}
-                  >
-                    <div className="p-3 bg-cream-50 rounded-xl shadow-sm border border-border-light">
-                      <img
-                        src={qrObj.qrCode}
-                        alt="Entry QR Code"
-                        className="w-40 h-40 mix-blend-multiply opacity-90"
-                      />
-                    </div>
-                    <p className="text-xs text-center text-text-tertiary max-w-[200px]">
-                      Scan this code at the entrance to access your reserved
-                      table.
+    <>
+      <div className="relative z-5">
+        <AnimatePresence>
+          {!isRipping && (
+            <>
+              <motion.div
+                key="booking-info"
+                initial={{ y: 0, rotate: 0 }}
+                exit={{
+                  y: -300,
+                  x: -100,
+                  rotate: -25,
+                  opacity: 0,
+                  transition: { duration: 0.8, ease: [0.6, 0.05, 0.01, 0.9] },
+                }}
+                className="bg-beige-100 rounded-t-lg relative z-9 border-border-light"
+              >
+                <div className="flex justify-between mb-10">
+                  <div className="p-5">
+                    <p className="text-text-tertiary">Guest</p>
+                    <p className="font-bold text-text-primary">
+                      {authUser?.fullName}
                     </p>
                   </div>
-                ))}
-            </motion.div>
-          </>
-        )}
-      </AnimatePresence>
+                  <div className="p-5">
+                    <p className="text-end text-text-tertiary">BOOKING ID</p>
+                    <p className="font-bold text-text-primary">{booking._id}</p>
+                  </div>
+                </div>
 
+                <div className="flex justify-between">
+                  <div className="pl-5">
+                    <p className="inline-flex gap-1 items-center text-text-secondary">
+                      <CiCalendar /> Date
+                    </p>
+                    <p className="font-bold text-text-primary">
+                      {new Date(booking.bookingTime.start).toLocaleDateString()}
+                    </p>
+                  </div>
+
+                  <div className="pr-5">
+                    <p className="inline-flex gap-1 items-center text-text-secondary">
+                      <CiClock1 /> Time
+                    </p>
+                    <p className="text-end font-bold text-text-primary">
+                      {new Date(booking.bookingTime.start)
+                        .toTimeString()
+                        .slice(0, 5)}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-5">
+                  <p className="inline-flex items-center gap-1 text-text-secondary">
+                    <CiLocationOn /> Table
+                  </p>
+                  <p className="font-bold text-text-primary">
+                    T{booking.tableNumber.number}
+                  </p>
+                </div>
+
+                <div className="flex justify-between px-5 pb-5">
+                  <button
+                    className="p-2 bg-caramel-500 text-cream-50 font-bold rounded-lg hover:bg-caramel-400 transition"
+                    onClick={handleUpdateClick}
+                  >
+                    Update
+                  </button>
+
+                  <button
+                    className="p-2 bg-amber-800 text-cream-50 font-bold rounded-lg hover:bg-amber-700 transition"
+                    onClick={() => setDeleteBookingId(booking._id)}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </motion.div>
+
+              <motion.div
+                key="qr-code"
+                initial={{ y: 0, rotate: 0 }}
+                exit={{
+                  y: 300,
+                  x: 100,
+                  rotate: 25,
+                  opacity: 0,
+                  transition: {
+                    duration: 0.8,
+                    ease: [0.6, 0.05, 0.01, 0.9],
+                  },
+                }}
+                className="bg-beige-100 rounded-b-lg -mt-1 border border-border-light border-t-0"
+                style={{
+                  clipPath: isRipping
+                    ? "polygon(5% 5%, 10% 0, 15% 5%, 20% 0, 25% 5%, 30% 0, 35% 5%, 40% 0, 45% 5%, 50% 0, 55% 5%, 60% 0, 65% 5%, 70% 0, 75% 5%, 80% 0, 85% 5%, 90% 0, 95% 5%, 100% 0, 100% 100%, 0 100%, 0 0)"
+                    : "none",
+                }}
+              >
+                {bookingQR
+                  .filter((qrObj) => qrObj.booking._id === booking._id)
+                  .map((qrObj, i) => (
+                    <div
+                      className="p-8 flex flex-col items-center justify-center space-y-4"
+                      key={i}
+                    >
+                      <div className="p-3 bg-cream-50 rounded-xl shadow-sm border border-border-light">
+                        <img
+                          src={qrObj.qrCode}
+                          alt="Entry QR Code"
+                          className="w-40 h-40 mix-blend-multiply opacity-90"
+                        />
+                      </div>
+                      <p className="text-xs text-center text-text-tertiary max-w-[200px]">
+                        Scan this code at the entrance to access your reserved
+                        table.
+                      </p>
+                    </div>
+                  ))}
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
+      </div>
       <AnimatePresence>
         {updateOpen && (
           <div className="fixed inset-0 bg-black/30 flex items-center justify-center z-10">
@@ -256,10 +257,10 @@ const BookingCard = ({
             </motion.div>
           </div>
         )}
-        {deleteOpen && (
+        {deleteBookingId === booking._id && (
           <div
-            className="inset-0 fixed bg-black/40 h-screen w-screen flex items-center justify-center z-10"
-            onClick={() => setDeleteOpen(false)}
+            className="fixed inset-0 bg-black/40 flex items-center justify-center z-10"
+            onClick={() => setDeleteBookingId(null)}
           >
             <motion.div
               className="bg-cream-50/50 backdrop-blur-sm border border-border-light p-6 rounded-xl shadow-lg"
@@ -269,23 +270,21 @@ const BookingCard = ({
               onClick={(e) => e.stopPropagation()}
             >
               <h1 className="text-lg font-black">Cancel Booking</h1>
-              <h3 className="font-light w-70 md:w-90 h-20 text-text-primary mt-3">
-                Are you sure you want to cancel your booking? This action cannot
-                be undone.
+              <h3 className="font-light mt-3">
+                Are you sure you want to cancel your booking?
               </h3>
-              <div className="flex justify-between">
+
+              <div className="flex justify-between mt-4">
                 <button
-                  className="p-2 bg-caramel-400 text-cream-50 rounded-lg hover:bg-caramel-500 transition font-medium"
-                  onClick={() => {
-                    setDeleteOpen(false);
-                    handleDelete();
-                  }}
+                  className="p-2 bg-caramel-400 text-white rounded-lg"
+                  onClick={handleDelete}
                 >
                   Yes I'm sure.
                 </button>
+
                 <button
-                  className="p-2 bg-beige-300 text-text-secondary rounded-lg hover:bg-beige-400 transition font-medium"
-                  onClick={() => setDeleteOpen(false)}
+                  className="p-2 bg-beige-300 rounded-lg"
+                  onClick={() => setDeleteBookingId(null)}
                 >
                   Nevermind.
                 </button>
@@ -294,7 +293,7 @@ const BookingCard = ({
           </div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 };
 

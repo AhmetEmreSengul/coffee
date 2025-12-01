@@ -21,7 +21,7 @@ const UserBookings = () => {
   const { authUser } = useAuthStore();
 
   const [updateOpen, setUpdateOpen] = useState(false);
-  const [deleteOpen, setDeleteOpen] = useState(false);
+  const [deleteBookingId, setDeleteBookingId] = useState<string | null>("");
   const [formData, setFormData] = useState({
     bookingId: "",
     date: null as Date | null,
@@ -112,8 +112,8 @@ const UserBookings = () => {
                 setFormData={setFormData}
                 updateOpen={updateOpen}
                 setUpdateOpen={setUpdateOpen}
-                deleteOpen={deleteOpen}
-                setDeleteOpen={setDeleteOpen}
+                deleteBookingId={deleteBookingId}
+                setDeleteBookingId={setDeleteBookingId}
                 deleteUserBooking={deleteUserBooking}
                 onSubmit={handleSubmit}
                 getUserBookings={getUserBookings}
