@@ -108,7 +108,7 @@ const BookTable = () => {
                   >
                     <h2 className="mt-2 text-black text-lg">Booked For</h2>
 
-                    {tableBookings.map((table) => {
+                    {tableBookings.map((table, i) => {
                       const startDate = new Date(table.bookingTime.start);
                       const endDate = new Date(table.bookingTime.end);
 
@@ -123,7 +123,7 @@ const BookTable = () => {
                       });
 
                       return (
-                        <div className="border-b py-2 text-black">
+                        <div key={i} className="border-b py-2 text-black">
                           {date} — {start} - {end}
                         </div>
                       );

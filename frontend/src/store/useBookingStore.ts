@@ -140,11 +140,11 @@ export const useBookingStore = create<BookingStore>((set) => ({
   getTableBookings: async (id: string) => {
     try {
       const res = await axiosInstance.get(`/book/table-bookings/${id}`);
-
-      set({ tableBookings: res.data });
+      set({ tableBookings: Array.isArray(res.data) ? res.data : [] });
     } catch (error: any) {
       console.error("Error fetching bookings for this table");
       toast.error(error?.response?.data?.message);
+      set({ tableBookings: [] });
     }
   },
 
