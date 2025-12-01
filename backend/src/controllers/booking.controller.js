@@ -151,6 +151,21 @@ export const getUserBookings = async (req, res) => {
   }
 };
 
+export const getTableBookings = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const tableBookings = await Booking.find({ tableNumber: id }).sort({
+      "bookingTime.start": 1,
+    });
+
+    res.status(200).json(tableBookings);
+  } catch (error) {
+    console.error("Error fetching bookings for this table", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
 export const updateBooking = async (req, res) => {
   try {
     const { id } = req.params;

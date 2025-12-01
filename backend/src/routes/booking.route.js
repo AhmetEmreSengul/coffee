@@ -6,6 +6,7 @@ import {
   cancelBooking,
   getUserBookings,
   updateBooking,
+  getTableBookings,
 } from "../controllers/booking.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
 import { arcjetProtection } from "../middleware/arcjet.middleware.js";
@@ -19,6 +20,7 @@ router.post("/createBooking", protectRoute, createBooking);
 router.put("/updateBooking/:id", protectRoute, updateBooking);
 router.get("/bookingQR/:id", getBookingQrCode);
 router.get("/my-bookings", protectRoute, getUserBookings);
+router.get("/table-bookings/:id", protectRoute, getTableBookings);
 router.delete("/cancelBooking/:id", protectRoute, cancelBooking);
 
 export default router;
