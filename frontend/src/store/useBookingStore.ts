@@ -35,9 +35,17 @@ interface CreateBookingData {
   };
 }
 
+interface TableBookings {
+  bookingTime: {
+    start: string;
+    end: string;
+  };
+}
+
 interface BookingStore {
   tables: Table[];
   myBookings: UserBooking[];
+  tableBookings: TableBookings[];
   bookingQR: BookingQR[];
   isLoading: boolean;
 
@@ -50,6 +58,7 @@ interface BookingStore {
     startTime: string,
     endTime: string
   ) => Promise<void>;
+  getTableBookings: (id: string) => Promise<void>;
   deleteUserBooking: (id: string) => Promise<void>;
 }
 
@@ -57,6 +66,7 @@ export const useBookingStore = create<BookingStore>((set) => ({
   tables: [],
   myBookings: [],
   bookingQR: [],
+  tableBookings: [],
   isLoading: false,
 
   getTables: async () => {
@@ -124,6 +134,17 @@ export const useBookingStore = create<BookingStore>((set) => ({
     } catch (error: any) {
       console.error("Error updating booking", error);
       toast.error(error?.response?.data?.message || "Failed to update booking");
+    }
+  },
+
+  getTableBookings: async (id: string) => {
+    try {
+      const res = await axiosInstance.get(`/book/table-bookings/${id}`);
+
+      set({ tableBookings: res.data });
+    } catch (error: any) {
+      console.error("Error fetching bookings for this table");
+      toast.error(error?.response?.data?.message);
     }
   },
 

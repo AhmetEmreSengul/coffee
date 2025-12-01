@@ -155,9 +155,10 @@ export const getTableBookings = async (req, res) => {
   try {
     const { id } = req.params;
 
-    const tableBookings = await Booking.find({ tableNumber: id }).sort({
-      "bookingTime.start": 1,
-    });
+    const tableBookings = await Booking.find(
+      { tableNumber: id },
+      { "bookingTime.start": 1, "bookingTime.end": 1, _id: 0 }
+    ).sort({ "bookingTime.start": 1 });
 
     res.status(200).json(tableBookings);
   } catch (error) {
