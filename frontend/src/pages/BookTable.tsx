@@ -101,7 +101,7 @@ const BookTable = () => {
               <AnimatePresence>
                 {tableBookings.length !== 0 && (
                   <motion.div
-                    className="bg-beige-100 size-65 text-center rounded-xl shadow-2xl z-0 xl:absolute xl:top-0 xl:-right-70 mx-auto mt-5 xl:mt-0 overflow-y-scroll"
+                    className="bg-beige-100 size-65 text-center rounded-xl shadow-2xl z-0 xl:absolute xl:top-0 xl:-right-70 mx-auto mt-5 xl:mt-0 overflow-y-scroll scrollable"
                     initial={isXL ? { x: -300 } : { y: -300 }}
                     animate={isXL ? { x: 0 } : { y: 0 }}
                     exit={isXL ? { x: -300 } : { y: -300 }}

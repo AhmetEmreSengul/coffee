@@ -50,7 +50,12 @@ const UserBookings = () => {
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    if (!formData.bookingId || !formData.date || !formData.startTime || !formData.endTime) {
+    if (
+      !formData.bookingId ||
+      !formData.date ||
+      !formData.startTime ||
+      !formData.endTime
+    ) {
       toast.error("Please fill in all fields");
       return;
     }
@@ -95,7 +100,7 @@ const UserBookings = () => {
   return (
     <div className="flex justify-center p-5 bg-bg-primary">
       <Navbar />
-      <div className="text-text-primary rounded-3xl overflow-hidden relative mt-40">
+      <div className="text-text-primary rounded-3xl overflow-x-scroll relative mt-40 scrollable">
         <div className="flex flex-col md:flex-row gap-10">
           {myBookings.map((booking, i) => (
             <motion.div
