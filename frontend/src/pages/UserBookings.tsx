@@ -1,4 +1,4 @@
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useBookingStore } from "../store/useBookingStore";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -29,6 +29,19 @@ const UserBookings = () => {
     endTime: "",
     tableNumber: "",
   });
+
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [dragLimit, setDragLimit] = useState(0);
+
+  useEffect(() => {
+    const container = scrollRef.current;
+    if (container) {
+      const scrollWidth = container.scrollWidth;
+      const offsetWidth = container.offsetWidth;
+      const maxDrag = offsetWidth - scrollWidth;
+      setDragLimit(maxDrag < 0 ? maxDrag : 0);
+    }
+  }, [myBookings]);
 
   useEffect(() => {
     getUserBookings();
@@ -101,7 +114,13 @@ const UserBookings = () => {
     <div className="flex justify-center p-5 bg-bg-primary">
       <Navbar />
       <div className="text-text-primary rounded-3xl overflow-x-scroll relative mt-40 scrollable">
-        <div className="flex flex-col md:flex-row gap-10">
+        <motion.div
+          ref={scrollRef}
+          className="flex flex-row gap-10 cursor-grab"
+          drag="x"
+          dragConstraints={{ left: dragLimit, right: 0 }}
+          whileTap={{ cursor: "grabbing" }}
+        >
           {myBookings.map((booking, i) => (
             <motion.div
               key={booking._id}
@@ -125,7 +144,7 @@ const UserBookings = () => {
               />
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );
