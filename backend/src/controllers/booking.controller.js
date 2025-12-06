@@ -140,7 +140,12 @@ export const getUserBookings = async (req, res) => {
   try {
     const userId = req.user._id;
 
-    const bookings = await Booking.find({ user: userId })
+    const now = new Date();
+
+    const bookings = await Booking.find({
+      user: userId,
+      "bookingTime.end": { $gte: now },
+    })
       .populate("tableNumber", "number capacity")
       .sort({ "bookingTime.start": -1 });
 
@@ -155,8 +160,13 @@ export const getTableBookings = async (req, res) => {
   try {
     const { id } = req.params;
 
+    const now = new Date();
+
     const tableBookings = await Booking.find(
-      { tableNumber: id },
+      {
+        tableNumber: id,
+        "bookingTime.end": { $gte: now },
+      },
       { "bookingTime.start": 1, "bookingTime.end": 1, _id: 0 }
     ).sort({ "bookingTime.start": 1 });
 
