@@ -10,9 +10,9 @@ const tables = [
   { number: 5, capacity: 6, status: "active" },
   { number: 6, capacity: 2, status: "active" },
   { number: 7, capacity: 4, status: "active" },
-  { number: 8, capacity: 6, status: "disabled" },
+  { number: 8, capacity: 6, status: "active" },
   { number: 9, capacity: 2, status: "active" },
-  { number: 10, capacity: 2, status: "disabled" },
+  { number: 10, capacity: 2, status: "active" },
 ];
 
 const populateTables = async () => {
