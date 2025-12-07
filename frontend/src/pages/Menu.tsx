@@ -52,19 +52,19 @@ const Menu = () => {
             <div className="mt-7 flex flex-row md:flex-col justify-start items-start gap-3">
               <button
                 onClick={() => setText("hot")}
-                className="w-22 h-17 md:h-12 p-3 bg-caramel-300 text-caramel-500 rounded-lg hover:bg-caramel-400 transition cursor-pointer font-medium"
+                className="w-22 h-17 md:h-12 p-3 bg-caramel-300 text-black rounded-lg hover:bg-caramel-400 transition cursor-pointer font-medium"
               >
                 Hot
               </button>
               <button
                 onClick={() => setText("cold")}
-                className="w-22 h-17 md:h-12 p-3 bg-dusty-blue-300 text-dusty-blue-400 rounded-lg hover:bg-dusty-blue-400 transition cursor-pointer font-medium"
+                className="w-22 h-17 md:h-12 p-3 bg-dusty-blue-300 text-black rounded-lg hover:bg-dusty-blue-400 transition cursor-pointer font-medium"
               >
                 Cold
               </button>
               <button
                 onClick={() => setText("")}
-                className="w-22 h-17 md:h-12 p-3 rounded-lg bg-beige-300 text-text-secondary hover:bg-beige-400 transition cursor-pointer font-medium"
+                className="w-22 h-17 md:h-12 p-3 rounded-lg bg-beige-300 text-black hover:bg-beige-400 transition cursor-pointer font-medium"
               >
                 Reset
               </button>
