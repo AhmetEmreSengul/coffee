@@ -2,9 +2,15 @@ import { AiFillClockCircle, AiOutlineArrowRight } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { toast } from "react-toastify";
+import { motion } from "framer-motion";
 
 const Hero = () => {
   const { authUser } = useAuthStore();
+
+  const titleText = "The Time Slot";
+  const cafeText = "Café";
+  const descriptionText =
+    "A sanctuary for productivity and peace. Book your specific table,receive your digital key, and enter a world where time is respected.";
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-5 p-3 pt-30">
@@ -14,14 +20,43 @@ const Hero = () => {
       </div>
       <div>
         <h1 className="text-6xl md:text-8xl font-medium tracking-tight text-text-primary leading-tight font-serif text-center">
-          The Time Slot <br />
+          {titleText.split("").map((char, i) => (
+            <motion.span
+              key={i}
+              initial={{ y: "100%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: i * 0.05 }}
+            >
+              {char}
+            </motion.span>
+          ))}{" "}
+          <br />
           <span className="text-transparent bg-clip-text bg-linear-to-r from-caramel-400 to-caramel-500 text-center italic">
-            Café
+            {cafeText.split("").map((char, i) => (
+              <motion.span
+                key={i}
+                initial={{ y: "100%", opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ delay: i * 0.05 }}
+              >
+                {char}
+              </motion.span>
+            ))}
           </span>
         </h1>
         <p className="text-xl text-center my-5 text-text-secondary max-w-2xl mx-auto font-light">
-          A sanctuary for productivity and peace. Book your specific table,
-          receive your digital key, and enter a world where time is respected.
+          {descriptionText.split(" ").map((char, i) => (
+            <motion.span
+              key={i}
+              initial={{ y: "50%", opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: i * 0.09 }}
+              className="inline-flex"
+            >
+              {char}
+              <span>&nbsp;</span>
+            </motion.span>
+          ))}
         </p>
       </div>
       <Link
