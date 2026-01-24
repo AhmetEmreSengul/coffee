@@ -73,7 +73,7 @@ In production, the backend can also **serve the built frontend** (`frontend/dist
 
 ### Booking flow
 
-![Booking Page](./frontend/public/book-tablepng.png "Booking Page")
+![Booking Page](./frontend/public/book-table.png "Booking Page")
 
 - **Tables**
   - `GET /book/available-tables`: returns tables from MongoDB.
