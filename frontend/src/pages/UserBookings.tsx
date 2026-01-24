@@ -2,7 +2,6 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useBookingStore } from "../store/useBookingStore";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
-import Navbar from "../components/Navbar";
 import { useAuthStore } from "../store/useAuthStore";
 import BookingCard from "../components/BookingCard";
 import { motion } from "framer-motion";
@@ -95,7 +94,6 @@ const UserBookings = () => {
   if (myBookings.length === 0) {
     return (
       <div className="flex items-center justify-center h-screen w-screen bg-bg-primary">
-        <Navbar />
         <div className="text-text-primary">
           No bookings found. Reserve a table{" "}
           <Link
@@ -112,7 +110,6 @@ const UserBookings = () => {
 
   return (
     <div className="flex justify-center p-5 bg-bg-primary">
-      <Navbar />
       <div className="text-text-primary rounded-3xl overflow-x-scroll relative mt-40 scrollable">
         <motion.div
           ref={scrollRef}

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Navbar from "../components/Navbar";
 import { useCoffeeStore } from "../store/useCoffeeStore";
 import CoffeeCard from "../components/CoffeeCard";
 import { motion } from "framer-motion";
@@ -40,7 +39,6 @@ const Menu = () => {
 
   return (
     <div className="min-h-screen overflow-x-hidden items-center flex flex-col bg-bg-primary">
-      <Navbar />
       <div className="mt-35">
         <h1 className="text-5xl text-center mt-10 text-text-primary">MENU</h1>
         <div className="flex flex-col items-center md:items-start md:flex-row gap-3">

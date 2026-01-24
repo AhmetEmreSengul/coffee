@@ -43,6 +43,7 @@ const CoffeeDisplay = () => {
             <CoffeeCard
               title={coffee.title}
               key={coffee.id}
+              price={coffee.price}
               image={coffee.image}
               type={coffee.type}
               description={coffee.description}

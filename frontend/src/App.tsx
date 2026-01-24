@@ -9,6 +9,7 @@ import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
 import UserBookings from "./pages/UserBookings";
 import GoogleAuthSuccess from "./pages/GoogleAuthSuccess";
+import Navbar from "./components/Navbar";
 
 const App = () => {
   const { authUser, checkAuth } = useAuthStore();
@@ -19,6 +20,7 @@ const App = () => {
 
   return (
     <div className="font-[lato] min-h-screen bg-bg-primary text-text-primary">
+      <Navbar/>
       <ToastContainer
         position="bottom-right"
         autoClose={2000}

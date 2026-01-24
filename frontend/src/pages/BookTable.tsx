@@ -1,7 +1,7 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useBookingStore } from "../store/useBookingStore";
 import TableCard from "../components/TableCard";
-import Navbar from "../components/Navbar";
+
 import TableCardSkeleton from "../components/TableCardSkeleton";
 
 import DateInput from "../components/DateInput";
@@ -80,7 +80,7 @@ const BookTable = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-bg-primary items-center">
-      <Navbar />
+      
 
       {isLoading ? (
         <TableCardSkeleton />
