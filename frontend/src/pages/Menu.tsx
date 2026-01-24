@@ -30,8 +30,12 @@ const Menu = () => {
   }, []);
 
   useEffect(() => {
-    searchCoffee(text);
-    setPage(1);
+    const timer = setTimeout(() => {
+      searchCoffee(text);
+      setPage(1);
+    }, 500);
+
+    return () => clearTimeout(timer);
   }, [text]);
 
   return (
@@ -89,7 +93,7 @@ const Menu = () => {
               </div>
             ) : (
               <div>
-                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 px-15 gap-3">
+                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 p-5 md:p-0 gap-3">
                   {paginated.map((coffee, i) => (
                     <motion.div
                       initial={{ y: 10, opacity: 0 }}
@@ -99,6 +103,7 @@ const Menu = () => {
                       <CoffeeCard
                         key={coffee.id}
                         title={coffee.title}
+                        price={coffee.price}
                         description={coffee.description}
                         image={coffee.image}
                         type={coffee.type}
@@ -110,7 +115,10 @@ const Menu = () => {
                   {Array.from({ length: totalPages }, (_, i) => (
                     <button
                       key={i}
-                      onClick={() => setPage(i + 1)}
+                      onClick={() => {
+                        setPage(i + 1);
+                        window.scrollTo({ top: 0, behavior: "smooth" });
+                      }}
                       className={`px-4 py-2 rounded transition ${
                         currentPage === i + 1
                           ? "bg-caramel-400 text-cream-50"

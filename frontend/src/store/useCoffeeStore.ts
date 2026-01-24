@@ -5,6 +5,7 @@ interface Coffee {
   id: number;
   title: string;
   type: string;
+  price: number;
   image: string;
   description: string;
 }
@@ -26,7 +27,7 @@ export const useCoffeeStore = create<CoffeeStore>((set, get) => ({
   coffee: [],
   filteredCoffee: [],
   currentPage: 1,
-  coffeesPerPage: 8,
+  coffeesPerPage: 9,
 
   getCoffee: async () => {
     set({ isLoading: true });
@@ -52,7 +53,7 @@ export const useCoffeeStore = create<CoffeeStore>((set, get) => ({
     const filtered = list.filter(
       (item) =>
         item.title.toLowerCase().includes(data.toLowerCase()) ||
-        item.type.toLowerCase().includes(data.toLowerCase())
+        item.type.toLowerCase().includes(data.toLowerCase()),
     );
 
     set({ filteredCoffee: filtered });
