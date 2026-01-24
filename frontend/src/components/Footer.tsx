@@ -1,7 +1,7 @@
 const Footer = () => {
   return (
     <div className="bg-beige-100 w-full h-fit border-t border-border-light">
-      <div className="flex flex-col gap-5 md:gap-0 md:grid grid-cols-1 md:grid-cols-3 items-center">
+      <div className="flex flex-col gap-5 md:gap-0 md:grid grid-cols-1 md:grid-cols-3 items-center overflow-hidden">
         <div className="flex flex-col items-center ">
           <img className="size-72" src="./timeslot.png" alt="" />
           <p className="font-bold text-text-primary">Customer Support</p>

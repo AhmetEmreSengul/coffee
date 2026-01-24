@@ -1,10 +1,10 @@
 const AboutTimeSlot = () => {
   return (
-    <div className="flex flex-col-reverse md:flex-row min-h-screen justify-center mt-20">
+    <div className=" flex flex-col-reverse lg:flex-row min-h-screen justify-center mt-20 mb-30 lg:mb-0">
       <img className=" md:h-155 md:w-[1700px] " src="./shop.png" alt="" />
       <div className="flex flex-col w-full h-155 bg-beige-50 ">
         <div className="my-auto">
-          <h1 className="text-3xl  mt-10 md:text-6xl md:mt-0 inline-flex gap-2 mb-10 ml-20 font-medium tracking-tight text-text-primary leading-tight font-serif text-center">
+          <h1 className="text-3xl mt-10 md:text-6xl md:mt-0 inline-flex gap-2 mb-10 ml-20 font-medium tracking-tight text-text-primary leading-tight font-serif text-center">
             The Time Slot <br />
             <span className="text-transparent bg-clip-text bg-linear-to-r from-caramel-400 to-caramel-500 text-center italic">
               Café

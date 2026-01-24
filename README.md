@@ -1,5 +1,10 @@
 # Time Slot (Coffee Shop Booking) — Fullstack Monorepo
 
+A full-stack platform that lets cafés manage menus and table reservations.
+Customers book 4-hour time slots and receive QR codes for fast, contactless entry.
+
+![Time Slot](https://drive.google.com/file/d/1glb9Bi1n-yAThqnNIFQWu5pfDCrGeCss/view?usp=drive_link "Time Slot Cafe")
+
 This repo contains a **React (Vite) frontend** and an **Express + MongoDB backend** for a coffee shop site that supports:
 
 - Browsing a coffee menu (static JSON)
@@ -10,6 +15,8 @@ This repo contains a **React (Vite) frontend** and an **Express + MongoDB backen
 - Basic request protection (bot detection + rate limiting)
 
 ---
+
+![Booking Details](https://drive.google.com/file/d/1SfIotzt4iq_rZzslrHqVorrPNJ4b8GdQ/view?usp=sharing "Booking Details")
 
 ## Repo structure
 
@@ -65,6 +72,8 @@ In production, the backend can also **serve the built frontend** (`frontend/dist
   - Frontend page `/auth/google/success` calls `checkAuth()` to hydrate the user, then routes home.
 
 ### Booking flow
+
+![Booking Page](https://drive.google.com/file/d/1A_MKkgRgvKnalrHTwzKCokRc4SaZmf1v/view?usp=drive_link "Booking Page")
 
 - **Tables**
   - `GET /book/available-tables`: returns tables from MongoDB.
@@ -188,7 +197,7 @@ Frontend runs on `http://localhost:5173`.
 
 ---
 
-## Known limitations 
+## Known limitations
 
 ### Security & correctness
 
