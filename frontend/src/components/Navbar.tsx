@@ -26,11 +26,8 @@ const Navbar = () => {
       {width < 900 ? (
         <div>
           <div className="w-screen fixed h-23 bg-cream-50/50 backdrop-blur-sm flex items-center justify-between border-b border-border-light">
-            <div
-              onClick={() => setOpen(!open)}
-              className="px-8 text-text-primary flex items-center justify-center"
-            >
-              <AiOutlineMenu size={30} />
+            <div className="px-8 text-text-primary flex items-center justify-center">
+              <AiOutlineMenu size={30} onClick={() => setOpen(!open)} />
               <Link to={"/cart"} className="relative p-4">
                 <CiShoppingBasket className="size-10 hover:text-caramel-400 transition cursor-pointer" />
                 <span className="absolute top-0 right-0 bg-beige-400 rounded-full px-3 py-1 scale-75">
