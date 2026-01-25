@@ -99,12 +99,7 @@ const Menu = () => {
                       transition={{ delay: 0.2 + i * 0.1, duration: 0.5 }}
                     >
                       <CoffeeCard
-                        key={coffee.id}
-                        title={coffee.title}
-                        price={coffee.price}
-                        description={coffee.description}
-                        image={coffee.image}
-                        type={coffee.type}
+                        coffee={coffee}
                       />
                     </motion.div>
                   ))}

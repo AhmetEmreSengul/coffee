@@ -10,6 +10,7 @@ import { ToastContainer } from "react-toastify";
 import UserBookings from "./pages/UserBookings";
 import GoogleAuthSuccess from "./pages/GoogleAuthSuccess";
 import Navbar from "./components/Navbar";
+import Cart from "./pages/Cart";
 
 const App = () => {
   const { authUser, checkAuth } = useAuthStore();
@@ -49,6 +50,7 @@ const App = () => {
           path="/my-bookings"
           element={authUser ? <UserBookings /> : <LandingPage />}
         />
+        <Route path="/cart" element = {<Cart/>}/>
         <Route path="/auth/google/success" element={<GoogleAuthSuccess />} />
       </Routes>
     </div>
