@@ -40,7 +40,7 @@ const CoffeeDisplay = () => {
             transition={{ delay: 0.2 + i * 0.1 }}
             viewport={{ once: true }}
           >
-            <CoffeeCard coffee={coffee} />
+            <CoffeeCard key={coffee.id} coffee={coffee} />
           </motion.div>
         ))}
       </div>

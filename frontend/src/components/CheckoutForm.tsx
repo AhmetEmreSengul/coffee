@@ -7,6 +7,7 @@ import {
 } from "@stripe/react-stripe-js";
 import { useCartStore } from "../store/useCartStore";
 import { useState } from "react";
+import { useAuthStore } from "../store/useAuthStore";
 
 const CheckoutForm = ({
   setView,
@@ -16,6 +17,7 @@ const CheckoutForm = ({
   const stripe = useStripe();
   const elements = useElements();
   const cart = useCartStore((s) => s.cart);
+  const { authUser } = useAuthStore();
 
   const [cardComplete, setCardComplete] = useState({
     number: false,
@@ -36,7 +38,8 @@ const CheckoutForm = ({
     loading ||
     !cardComplete.number ||
     !cardComplete.expiry ||
-    !cardComplete.cvc;
+    !cardComplete.cvc ||
+    !authUser;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -93,6 +96,9 @@ const CheckoutForm = ({
         </div>
       </div>
 
+      {!authUser && (
+        <p className="text-red-400">You must be logged in to checkout.</p>
+      )}
       <button
         type="submit"
         disabled={isDisabled}

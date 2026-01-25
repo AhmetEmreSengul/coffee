@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import LandingPage from "./pages/LandingPage";
@@ -21,7 +21,7 @@ const App = () => {
 
   return (
     <div className="font-[lato] min-h-screen bg-bg-primary text-text-primary">
-      <Navbar/>
+      <Navbar />
       <ToastContainer
         position="bottom-right"
         autoClose={2000}
@@ -36,21 +36,24 @@ const App = () => {
       />
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/login" element={authUser ? <LandingPage /> : <Login />} />
+        <Route
+          path="/login"
+          element={authUser ? <Navigate to={"/"} /> : <Login />}
+        />
         <Route
           path="/signup"
-          element={authUser ? <LandingPage /> : <Signup />}
+          element={authUser ? <Navigate to={"/"} /> : <Signup />}
         />
         <Route path="/menu" element={<Menu />} />
         <Route
           path="/book-table"
-          element={authUser ? <BookTable /> : <LandingPage />}
+          element={authUser ? <BookTable /> : <Navigate to={"/login"} />}
         />
         <Route
           path="/my-bookings"
-          element={authUser ? <UserBookings /> : <LandingPage />}
+          element={authUser ? <UserBookings /> : <Navigate to={"/login"} />}
         />
-        <Route path="/cart" element = {<Cart/>}/>
+        <Route path="/cart" element={<Cart />} />
         <Route path="/auth/google/success" element={<GoogleAuthSuccess />} />
       </Routes>
     </div>

@@ -40,7 +40,7 @@ const Navbar = () => {
               <Link to={"/"}>
                 <img
                   className="size-30 rounded-xl"
-                  src="./timeslot.png"
+                  src="/timeslot.png"
                   alt=""
                 />
               </Link>
@@ -93,7 +93,7 @@ const Navbar = () => {
             <Link to={"/"}>
               <img
                 className="size-45 mt-4 rounded-xl"
-                src="./timeslot.png"
+                src="/timeslot.png"
                 alt=""
               />
             </Link>
