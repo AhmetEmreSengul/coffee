@@ -4,6 +4,7 @@ import { ENV } from "./lib/env.js";
 import { connectDB } from "./lib/db.js";
 import authRoutes from "./routes/auth.route.js";
 import bookingRoutes from "./routes/booking.route.js";
+import stripeRoutes from "./routes/stripe.route.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import passport from "./lib/google.js";
@@ -22,6 +23,7 @@ app.use(passport.initialize());
 
 app.use("/auth", authRoutes);
 app.use("/book", bookingRoutes);
+app.use("/stripe", stripeRoutes)
 
 if (ENV.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));

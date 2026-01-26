@@ -8,6 +8,9 @@ import {
 import { useCartStore } from "../store/useCartStore";
 import { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
+import { axiosInstance } from "../lib/axios";
+import { toast } from "react-toastify";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const CheckoutForm = ({
   setView,
@@ -43,17 +46,38 @@ const CheckoutForm = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
     if (isDisabled) return;
-
     setLoading(true);
 
     try {
-      const cardElement = elements!.getElement(CardNumberElement);
+      const res = await axiosInstance.post("/stripe/create-payment-intent", {
+        amount: Math.round(totalPrice * 100), // convert ₺ to kuruş
+      });
+
+      const { clientSecret } = res.data;
+
+      const cardElement = elements?.getElement(CardNumberElement);
 
       if (!cardElement) return;
 
-      setView("checkout");
+      const result = await stripe!.confirmCardPayment(clientSecret, {
+        payment_method: {
+          card: cardElement,
+          billing_details: {
+            email: authUser.email,
+          },
+        },
+      });
+
+      if (result.error) {
+        console.error(result.error.message);
+        toast.error(result.error.message);
+      } else if (result.paymentIntent?.status === "succeeded") {
+        setView("checkout");
+      }
+    } catch (err: any) {
+      console.error("Payment error:", err);
+      toast.error(err.response?.data?.message || "Payment failed");
     } finally {
       setLoading(false);
     }
@@ -108,7 +132,13 @@ const CheckoutForm = ({
             : "bg-caramel-400 text-white hover:bg-caramel-400/80 cursor-pointer"
         }`}
       >
-        {loading ? "Processing..." : `Pay ${totalPrice}₺`}
+        {loading ? (
+          <span className="inline-flex items-center gap-2">
+            Processing <AiOutlineLoading3Quarters className="animate-spin" />
+          </span>
+        ) : (
+          `Pay ${totalPrice}₺`
+        )}
       </button>
 
       <p className="text-sm text-gray-500">
