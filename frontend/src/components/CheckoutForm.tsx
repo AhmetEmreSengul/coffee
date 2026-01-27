@@ -51,7 +51,10 @@ const CheckoutForm = ({
 
     try {
       const res = await axiosInstance.post("/stripe/create-payment-intent", {
-        amount: Math.round(totalPrice * 100),
+        items: cart.map((item) => ({
+          id: item._id,
+          quantity: item.quantity,
+        })),
       });
 
       const { clientSecret } = res.data;
