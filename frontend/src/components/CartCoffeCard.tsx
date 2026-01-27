@@ -27,7 +27,7 @@ const CartCoffeCard = ({ coffee }: CoffeeCardProps) => {
         <p className="font-bold text-lg w-20 truncate md:overflow-visible">
           {coffee.title}
         </p>
-        <p className="text-sm">{coffee.price}TL</p>
+        <p className="text-sm">{coffee.price}₺</p>
       </div>
       <div className="w-40 items-center justify-center flex">
         <div className="flex flex-row">
@@ -49,7 +49,7 @@ const CartCoffeCard = ({ coffee }: CoffeeCardProps) => {
         </div>
       </div>
       <div className="hidden md:block w-40">
-        <p className="font-bold text-lg ml-20">{totalPrice}TL</p>
+        <p className="font-bold text-lg ml-20">{totalPrice}₺</p>
       </div>
     </div>
   );

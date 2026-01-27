@@ -70,7 +70,7 @@ const Cart = () => {
             <div className="mt-2">
               <p className="font-bold text-lg">Total Items: {totalItems}</p>
               <p className="font-bold text-lg mt-2">
-                Total Price: ${totalPrice}₺
+                Total Price: {totalPrice}₺
               </p>
             </div>
 

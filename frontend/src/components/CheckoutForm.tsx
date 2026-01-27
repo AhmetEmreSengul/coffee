@@ -20,7 +20,7 @@ const CheckoutForm = ({
 }) => {
   const stripe = useStripe();
   const elements = useElements();
-  const cart = useCartStore((s) => s.cart);
+  const { cart } = useCartStore();
   const { createOrder } = useOrderStore();
   const { authUser } = useAuthStore();
 
@@ -76,8 +76,6 @@ const CheckoutForm = ({
       if (result.error) {
         console.error(result.error.message);
         toast.error(result.error.message);
-      } else if (result.paymentIntent?.status === "succeeded") {
-        setView("checkout");
       }
     } catch (err: any) {
       console.error("Payment error:", err);
@@ -91,6 +89,7 @@ const CheckoutForm = ({
     e.preventDefault();
     await handlePayment();
     await createOrder(cart, totalPrice);
+    setView("checkout");
   };
 
   return (
