@@ -51,7 +51,7 @@ const CheckoutForm = ({
 
     try {
       const res = await axiosInstance.post("/stripe/create-payment-intent", {
-        amount: Math.round(totalPrice * 100), // convert ₺ to kuruş
+        amount: Math.round(totalPrice * 100),
       });
 
       const { clientSecret } = res.data;
