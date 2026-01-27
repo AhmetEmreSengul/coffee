@@ -11,6 +11,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import { axiosInstance } from "../lib/axios";
 import { toast } from "react-toastify";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { useOrderStore } from "../store/useOrderStore";
 
 const CheckoutForm = ({
   setView,
@@ -20,6 +21,7 @@ const CheckoutForm = ({
   const stripe = useStripe();
   const elements = useElements();
   const cart = useCartStore((s) => s.cart);
+  const { createOrder } = useOrderStore();
   const { authUser } = useAuthStore();
 
   const [cardComplete, setCardComplete] = useState({
@@ -44,8 +46,7 @@ const CheckoutForm = ({
     !cardComplete.cvc ||
     !authUser;
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handlePayment = async () => {
     if (isDisabled) return;
     setLoading(true);
 
@@ -84,6 +85,12 @@ const CheckoutForm = ({
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await handlePayment();
+    await createOrder(cart, totalPrice);
   };
 
   return (
