@@ -1,6 +1,5 @@
 [
   {
-    "id": 1,
     "title": "Espresso",
     "type": "Hot",
     "price": 140,
@@ -8,7 +7,6 @@
     "description": "A rich, concentrated shot of coffee with bold flavor and velvety crema."
   },
   {
-    "id": 2,
     "title": "Cappuccino",
     "type": "Hot",
     "price": 170,
@@ -16,7 +14,6 @@
     "description": "Equal parts espresso, steamed milk, and airy foam for a balanced, creamy taste."
   },
   {
-    "id": 3,
     "title": "Latte",
     "type": "Hot",
     "price": 180,
@@ -24,7 +21,6 @@
     "description": "Smooth espresso blended with plenty of steamed milk and a light topping of foam."
   },
   {
-    "id": 4,
     "title": "Iced Coffee",
     "type": "Cold",
     "price": 170,
@@ -32,7 +28,6 @@
     "description": "Freshly brewed coffee chilled and served over ice for a refreshing lift."
   },
   {
-    "id": 5,
     "title": "Mocha",
     "type": "Hot",
     "price": 200,
@@ -40,7 +35,6 @@
     "description": "A blend of espresso, chocolate, and steamed milk topped with whipped cream."
   },
   {
-    "id": 6,
     "title": "Macchiato",
     "type": "Hot",
     "price": 150,
@@ -48,7 +42,6 @@
     "description": "A bold espresso 'stained' with a small amount of silky milk foam."
   },
   {
-    "id": 7,
     "title": "Frappuccino",
     "type": "Cold",
     "price": 230,
@@ -56,7 +49,6 @@
     "description": "A sweet, blended coffee drink with ice, creaminess, and a dessert-like finish."
   },
   {
-    "id": 8,
     "title": "Americano",
     "type": "Hot",
     "price": 145,
@@ -64,7 +56,6 @@
     "description": "Espresso diluted with hot water for a smooth, lighter coffee flavor."
   },
   {
-    "id": 9,
     "title": "Flat White",
     "type": "Hot",
     "price": 185,
@@ -72,7 +63,6 @@
     "description": "Velvety microfoam poured over espresso for a creamy yet strong coffee taste."
   },
   {
-    "id": 10,
     "title": "Affogato",
     "type": "Cold",
     "price": 220,
@@ -80,7 +70,6 @@
     "description": "A scoop of vanilla ice cream ‘drowned’ with hot espresso—half dessert, half coffee."
   },
   {
-    "id": 11,
     "title": "Irish Coffee",
     "type": "Hot",
     "price": 250,
@@ -88,7 +77,6 @@
     "description": "Coffee mixed with Irish whiskey and topped with lightly whipped cream."
   },
   {
-    "id": 12,
     "title": "Cortado",
     "type": "Hot",
     "price": 165,
@@ -96,7 +84,6 @@
     "description": "Equal parts espresso and warm milk for a smooth, low-acidity drink."
   },
   {
-    "id": 13,
     "title": "Vienna Coffee",
     "type": "Hot",
     "price": 205,
@@ -104,7 +91,6 @@
     "description": "Strong coffee topped generously with whipped cream instead of milk."
   },
   {
-    "id": 14,
     "title": "Iced Latte",
     "type": "Cold",
     "price": 190,
@@ -112,7 +98,6 @@
     "description": "A chilled blend of espresso and cold milk poured over ice."
   },
   {
-    "id": 15,
     "title": "Nitro Cold Brew",
     "type": "Cold",
     "price": 260,
@@ -120,7 +105,6 @@
     "description": "Cold brew coffee infused with nitrogen for a creamy, frothy texture."
   },
   {
-    "id": 16,
     "title": "Ristretto",
     "type": "Hot",
     "price": 145,
@@ -128,7 +112,6 @@
     "description": "A shorter, more concentrated espresso shot with intense flavor."
   },
   {
-    "id": 17,
     "title": "Red Eye",
     "type": "Hot",
     "price": 185,
@@ -136,7 +119,6 @@
     "description": "Brewed coffee boosted with a shot of espresso for extra caffeine power."
   },
   {
-    "id": 18,
     "title": "Black Eye",
     "type": "Hot",
     "price": 200,
@@ -144,7 +126,6 @@
     "description": "Two shots of espresso added to drip coffee for maximum intensity."
   },
   {
-    "id": 19,
     "title": "Cafe au Lait",
     "type": "Hot",
     "price": 170,
@@ -152,7 +133,6 @@
     "description": "Brewed coffee mixed with warm steamed milk for a mild, smooth experience."
   },
   {
-    "id": 20,
     "title": "Iced Mocha",
     "type": "Cold",
     "price": 210,
@@ -160,7 +140,6 @@
     "description": "Chocolate, espresso, and cold milk shaken over ice—sweet and refreshing."
   },
   {
-    "id": 21,
     "title": "Cinnamon Latte",
     "type": "Hot",
     "price": 200,
@@ -168,7 +147,6 @@
     "description": "A classic latte infused with warm cinnamon spice."
   },
   {
-    "id": 22,
     "title": "Pumpkin Spice Latte",
     "type": "Hot",
     "price": 225,
@@ -176,7 +154,6 @@
     "description": "Espresso with pumpkin spice, steamed milk, and cozy seasonal flavors."
   },
   {
-    "id": 23,
     "title": "Caramel Macchiato",
     "type": "Hot",
     "price": 220,
@@ -184,7 +161,6 @@
     "description": "Steamed milk marked with espresso and drizzled with sweet caramel."
   },
   {
-    "id": 24,
     "title": "Iced Caramel Latte",
     "type": "Cold",
     "price": 230,
@@ -192,7 +168,6 @@
     "description": "Chilled espresso and milk enhanced with buttery caramel syrup."
   },
   {
-    "id": 25,
     "title": "Hazelnut Latte",
     "type": "Hot",
     "price": 205,
@@ -200,7 +175,6 @@
     "description": "A creamy latte sweetened with nutty hazelnut flavor."
   },
   {
-    "id": 26,
     "title": "Mocha Frappe",
     "type": "Cold",
     "price": 235,
@@ -208,7 +182,6 @@
     "description": "A blended chocolate-coffee drink with ice—smooth, sweet, and icy."
   },
   {
-    "id": 27,
     "title": "Vanilla Latte",
     "type": "Hot",
     "price": 200,
@@ -216,7 +189,6 @@
     "description": "A classic latte enriched with smooth, sweet vanilla syrup."
   },
   {
-    "id": 28,
     "title": "Iced Vanilla Latte",
     "type": "Cold",
     "price": 210,
@@ -224,7 +196,6 @@
     "description": "Cold milk and espresso poured over ice and flavored with vanilla."
   },
   {
-    "id": 29,
     "title": "Chai Latte",
     "type": "Hot",
     "price": 175,
@@ -232,7 +203,6 @@
     "description": "Spiced black tea mixed with steamed milk for a warm, aromatic drink."
   },
   {
-    "id": 30,
     "title": "Dirty Chai",
     "type": "Hot",
     "price": 195,
@@ -240,7 +210,6 @@
     "description": "A chai latte with a shot of espresso for a spiced caffeine kick."
   },
   {
-    "id": 31,
     "title": "Iced Chai Latte",
     "type": "Cold",
     "price": 185,
@@ -248,7 +217,6 @@
     "description": "Chilled, sweet chai tea mixed with cold milk and ice."
   },
   {
-    "id": 32,
     "title": "Matcha Latte",
     "type": "Hot",
     "price": 220,
@@ -256,7 +224,6 @@
     "description": "Japanese matcha green tea blended with steamed milk for earthy sweetness."
   },
   {
-    "id": 33,
     "title": "Iced Matcha Latte",
     "type": "Cold",
     "price": 230,
@@ -264,7 +231,6 @@
     "description": "Cool, refreshing matcha mixed with cold milk served over ice."
   },
   {
-    "id": 34,
     "title": "Black Coffee",
     "type": "Hot",
     "price": 130,
@@ -272,7 +238,6 @@
     "description": "Freshly brewed coffee served plain for pure, simple flavor."
   },
   {
-    "id": 35,
     "title": "Iced Black Coffee",
     "type": "Cold",
     "price": 145,
@@ -280,7 +245,6 @@
     "description": "Straight brewed coffee poured over ice—crisp and refreshing."
   },
   {
-    "id": 36,
     "title": "Mocha Latte",
     "type": "Hot",
     "price": 205,
@@ -288,7 +252,6 @@
     "description": "A latte combined with chocolate syrup for a sweet, rich twist."
   },
   {
-    "id": 37,
     "title": "Iced Mocha Latte",
     "type": "Cold",
     "price": 215,
@@ -296,7 +259,6 @@
     "description": "Cold milk, espresso, and chocolate served over ice for a cool treat."
   },
   {
-    "id": 38,
     "title": "Coconut Latte",
     "type": "Hot",
     "price": 215,
@@ -304,7 +266,6 @@
     "description": "A latte made with creamy coconut milk for a tropical touch."
   },
   {
-    "id": 39,
     "title": "Iced Coconut Latte",
     "type": "Cold",
     "price": 225,
@@ -312,7 +273,6 @@
     "description": "Coconut milk and espresso poured over ice—light and refreshing."
   },
   {
-    "id": 40,
     "title": "Almond Milk Latte",
     "type": "Hot",
     "price": 210,
@@ -320,7 +280,6 @@
     "description": "A plant-based latte featuring lightly nutty almond milk."
   },
   {
-    "id": 41,
     "title": "Iced Almond Latte",
     "type": "Cold",
     "price": 220,
@@ -328,7 +287,6 @@
     "description": "Chilled almond milk and espresso over ice for a smooth, dairy-free drink."
   },
   {
-    "id": 42,
     "title": "Honey Latte",
     "type": "Hot",
     "price": 200,
@@ -336,7 +294,6 @@
     "description": "A warm, soothing latte sweetened naturally with honey."
   },
   {
-    "id": 43,
     "title": "Iced Honey Latte",
     "type": "Cold",
     "price": 210,
