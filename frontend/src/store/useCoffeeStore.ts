@@ -1,8 +1,8 @@
-import axios from "axios";
 import { create } from "zustand";
+import { axiosInstance } from "../lib/axios";
 
 interface Coffee {
-  id: number;
+  _id: number;
   title: string;
   type: string;
   price: number;
@@ -32,7 +32,7 @@ export const useCoffeeStore = create<CoffeeStore>((set, get) => ({
   getCoffee: async () => {
     set({ isLoading: true });
     try {
-      const response = await axios.get<Coffee[]>("/coffee.json");
+      const response = await axiosInstance.get<Coffee[]>("/coffee");
       set({ coffee: response.data, filteredCoffee: response.data });
     } catch (error) {
       console.error("Error fetching coffes for some reason??", error);

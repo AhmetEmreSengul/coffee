@@ -61,7 +61,7 @@ const Cart = () => {
             </div>
             <div className="space-y-1 text-sm text-black">
               {cart.map((item) => (
-                <div key={item.id} className="flex justify-between">
+                <div key={item._id} className="flex justify-between">
                   <span>
                     {item.title} x{item.quantity}
                   </span>
@@ -113,7 +113,7 @@ const Cart = () => {
           ) : (
             <div className="max-h-120 space-y-2 overflow-y-auto">
               {cart.map((item) => (
-                <CartCoffeCard key={item.id} coffee={item} />
+                <CartCoffeCard key={item._id} coffee={item} />
               ))}
             </div>
           )}

@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface Coffee {
-  id: number;
+  _id: number;
   title: string;
   type: string;
   price: number;
@@ -30,12 +30,12 @@ export const useCartStore = create<CartStore>()(
 
       addToCart: (coffee) => {
         const cart = get().cart;
-        const existing = cart.find((item) => item.id === coffee.id);
+        const existing = cart.find((item) => item._id === coffee._id);
 
         if (existing) {
           set({
             cart: cart.map((item) =>
-              item.id === coffee.id
+              item._id === coffee._id
                 ? { ...item, quantity: item.quantity + 1 }
                 : item,
             ),
@@ -47,23 +47,23 @@ export const useCartStore = create<CartStore>()(
         }
       },
 
-      removeFromCart: (id) =>
+      removeFromCart: (_id) =>
         set({
-          cart: get().cart.filter((item) => item.id !== id),
+          cart: get().cart.filter((item) => item._id !== _id),
         }),
 
-      increaseQty: (id) =>
+      increaseQty: (_id) =>
         set({
           cart: get().cart.map((item) =>
-            item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
+            item._id === _id ? { ...item, quantity: item.quantity + 1 } : item,
           ),
         }),
 
-      decreaseQty: (id) =>
+      decreaseQty: (_id) =>
         set({
           cart: get()
             .cart.map((item) =>
-              item.id === id ? { ...item, quantity: item.quantity - 1 } : item,
+              item._id === _id ? { ...item, quantity: item.quantity - 1 } : item,
             )
             .filter((item) => item.quantity > 0),
         }),

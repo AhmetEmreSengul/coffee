@@ -3,7 +3,7 @@ import { useCartStore } from "../store/useCartStore";
 import { CiCircleMinus, CiCirclePlus } from "react-icons/ci";
 
 interface Coffee {
-  id: number;
+  _id: number;
   title: string;
   type: string;
   price: number;
@@ -18,7 +18,7 @@ interface CoffeeCardProps {
 const CoffeeCard = ({ coffee }: CoffeeCardProps) => {
   const { addToCart, increaseQty, decreaseQty, cart } = useCartStore();
 
-  const cartItem = cart.find((item) => item.id === coffee.id);
+  const cartItem = cart.find((item) => item._id === coffee._id);
 
   return (
     <div className="flex flex-col items-center justify-center bg-beige-100 p-6 rounded-3xl mt-10 border border-border-light shadow-2xl">
@@ -51,7 +51,7 @@ const CoffeeCard = ({ coffee }: CoffeeCardProps) => {
         ) : (
           <div className="w-full bg-beige-400 hover:bg-beige-400/70 transition cursor-pointer rounded-full p-2 flex items-center justify-center gap-10">
             <button
-              onClick={() => decreaseQty(coffee.id)}
+              onClick={() => decreaseQty(coffee._id)}
               className="text-xl font-bold cursor-pointer"
             >
               <CiCircleMinus className="size-7" />
@@ -60,7 +60,7 @@ const CoffeeCard = ({ coffee }: CoffeeCardProps) => {
             <span className="font-semibold">{cartItem.quantity}</span>
 
             <button
-              onClick={() => increaseQty(coffee.id)}
+              onClick={() => increaseQty(coffee._id)}
               className="text-xl font-bold cursor-pointer"
             >
               <CiCirclePlus className="size-7" />
