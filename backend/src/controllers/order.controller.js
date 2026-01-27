@@ -15,6 +15,11 @@ export const createOrder = async (req, res) => {
       totalPrice,
     });
 
+    const orderNumber = "ORD-" + order._id.toString().slice(-6).toUpperCase();
+
+    order.orderNumber = orderNumber;
+    await order.save();
+
     res.status(201).json(order);
   } catch (error) {
     console.error(error);
