@@ -2,14 +2,6 @@ import { IoMdCart } from "react-icons/io";
 import { useCartStore } from "../store/useCartStore";
 import { CiCircleMinus, CiCirclePlus } from "react-icons/ci";
 
-interface Coffee {
-  _id: string;
-  title: string;
-  type: string;
-  price: number;
-  image: string;
-  description: string;
-}
 
 interface CoffeeCardProps {
   coffee: Coffee;

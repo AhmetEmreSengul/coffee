@@ -1,18 +1,12 @@
 import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 import { useCartStore } from "../store/useCartStore";
 
-interface Coffee {
-  _id: string;
-  title: string;
-  type: string;
+interface CartCoffee extends Coffee {
   quantity: number;
-  price: number;
-  image: string;
-  description: string;
 }
 
 interface CoffeeCardProps {
-  coffee: Coffee;
+  coffee: CartCoffee;
 }
 
 const CartCoffeCard = ({ coffee }: CoffeeCardProps) => {

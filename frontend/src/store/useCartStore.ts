@@ -1,18 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
-interface Coffee {
-  _id: string;
-  title: string;
-  type: string;
-  price: number;
-  image: string;
-  description: string;
-}
-
-interface CartItem extends Coffee {
-  quantity: number;
-}
 
 interface CartStore {
   cart: CartItem[];

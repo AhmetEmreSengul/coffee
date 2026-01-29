@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaCalendarWeek, FaChevronDown, FaMugHot } from "react-icons/fa";
-import { useOrderStore, type OrderItem } from "../store/useOrderStore";
+import { useOrderStore } from "../store/useOrderStore";
 import { useCartStore } from "../store/useCartStore";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
