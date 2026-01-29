@@ -1,12 +1,10 @@
-import { FaCheckCircle } from "react-icons/fa";
-import { useOrderStore } from "../store/useOrderStore";
 import { useEffect } from "react";
+import { FaCheckCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { useCartStore } from "../store/useCartStore";
+import { useOrderStore } from "../store/useOrderStore";
 
 const CheckoutView = () => {
   const { getLastOrder, lastOrder } = useOrderStore();
-  const { clearCart } = useCartStore();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -64,10 +62,7 @@ const CheckoutView = () => {
         </div>
 
         <button
-          onClick={() => {
-            navigate("/menu");
-            clearCart();
-          }}
+          onClick={() => navigate("/menu")}
           className="bg-caramel-500 hover:bg-caramel-500/80 text-white cursor-pointer px-8 py-4 rounded-lg font-bold text-lg transition-colors"
         >
           Return to Menu

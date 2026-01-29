@@ -1,25 +1,15 @@
 import { Elements } from "@stripe/react-stripe-js";
-import { useEffect, useState } from "react";
-
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import CartCoffeCard from "../components/CartCoffeCard";
 import CheckoutForm from "../components/CheckoutForm";
 import { stripePromise } from "../lib/stripe";
 import { useCartStore } from "../store/useCartStore";
-import { useOrderStore } from "../store/useOrderStore";
 import CheckoutView from "../components/CheckoutView";
 
 const Cart = () => {
   const [view, setView] = useState("");
   const { cart } = useCartStore();
-
-  const { getLastOrder, lastOrder } = useOrderStore();
-
-  useEffect(() => {
-    getLastOrder();
-  }, []);
-
-  console.log(lastOrder);
 
   const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
   const totalPrice = cart.reduce(

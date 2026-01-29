@@ -20,7 +20,7 @@ const CheckoutForm = ({
 }) => {
   const stripe = useStripe();
   const elements = useElements();
-  const { cart } = useCartStore();
+  const { cart, clearCart } = useCartStore();
   const { createOrder } = useOrderStore();
   const { authUser } = useAuthStore();
 
@@ -93,6 +93,7 @@ const CheckoutForm = ({
     await handlePayment();
     await createOrder(cart, totalPrice);
     setView("checkout");
+    clearCart();
   };
 
   return (
