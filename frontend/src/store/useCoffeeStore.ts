@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 
 interface Coffee {
-  _id: number;
+  _id: string;
   title: string;
   type: string;
   price: number;

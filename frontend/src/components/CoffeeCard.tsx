@@ -3,7 +3,7 @@ import { useCartStore } from "../store/useCartStore";
 import { CiCircleMinus, CiCirclePlus } from "react-icons/ci";
 
 interface Coffee {
-  _id: number;
+  _id: string;
   title: string;
   type: string;
   price: number;

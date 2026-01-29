@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FaCalendarWeek, FaChevronDown, FaMugHot } from "react-icons/fa";
-import { useOrderStore } from "../store/useOrderStore";
+import { useOrderStore, type OrderItem } from "../store/useOrderStore";
 import { useCartStore } from "../store/useCartStore";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
@@ -34,7 +34,7 @@ const OrderHistory = () => {
     );
   }
 
-  const handleOrderAgain = (order) => {
+  const handleOrderAgain = (order: OrderItem[]) => {
     useCartStore.setState({ cart: order });
     toast.success("Cart Updated");
   };
@@ -77,10 +77,10 @@ const OrderHistory = () => {
             {orderId === order._id && (
               <div className="mt-3">
                 {order.orderItems.map((item) => (
-                  <div className="flex items-center">
+                  <div className="flex items-center border-b my-3">
                     <img
                       src={item.image}
-                      className="w-25 rounded-lg mb-3"
+                      className="size-35 rounded-lg mb-3"
                       alt=""
                     />
                     <div className="ml-2">

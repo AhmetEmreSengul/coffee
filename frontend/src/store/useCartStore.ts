@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 interface Coffee {
-  _id: number;
+  _id: string;
   title: string;
   type: string;
   price: number;
@@ -17,12 +17,11 @@ interface CartItem extends Coffee {
 interface CartStore {
   cart: CartItem[];
   addToCart: (coffee: Coffee) => void;
-  removeFromCart: (id: number) => void;
-  increaseQty: (id: number) => void;
-  decreaseQty: (id: number) => void;
+  removeFromCart: (id: string) => void;
+  increaseQty: (id: string) => void;
+  decreaseQty: (id: string) => void;
   clearCart: () => void;
 }
-
 export const useCartStore = create<CartStore>()(
   persist(
     (set, get) => ({
@@ -52,12 +51,20 @@ export const useCartStore = create<CartStore>()(
           cart: get().cart.filter((item) => item._id !== _id),
         }),
 
-      increaseQty: (_id) =>
-        set({
-          cart: get().cart.map((item) =>
-            item._id === _id ? { ...item, quantity: item.quantity + 1 } : item,
-          ),
-        }),
+      increaseQty: (_id) => {
+        const cart = get().cart;
+        const existing = cart.find((item) => item._id === _id);
+        if (existing && existing.quantity < 10) {
+          set({
+            cart: cart.map((item) =>
+              item._id === _id
+                ? { ...item, quantity: item.quantity + 1 }
+                : item,
+            ),
+          });
+        }
+      },
+      
 
       decreaseQty: (_id) =>
         set({

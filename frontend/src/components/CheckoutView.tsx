@@ -33,7 +33,7 @@ const CheckoutView = () => {
             </div>
             <div className="text-right">
               <div className="text-gray-600">Order Date</div>
-              {new Date(lastOrder!.createdAt).toLocaleDateString()}
+              {new Date(lastOrder?.createdAt ?? "").toLocaleDateString()}
               <div className="font-bold text-gray-900"></div>
             </div>
           </div>
@@ -50,7 +50,7 @@ const CheckoutView = () => {
             Order Details:
           </div>
           <div className="space-y-1 text-sm text-black">
-            {Object.values(lastOrder!.orderItems).map((item) => (
+            {Object.values(lastOrder?.orderItems ?? "").map((item) => (
               <div key={item._id} className="flex justify-between">
                 <span>
                   {item.title} x{item.quantity}

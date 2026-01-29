@@ -2,7 +2,7 @@ import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
 import { useCartStore } from "../store/useCartStore";
 
 interface Coffee {
-  _id: number;
+  _id: string;
   title: string;
   type: string;
   quantity: number;
@@ -21,8 +21,12 @@ const CartCoffeCard = ({ coffee }: CoffeeCardProps) => {
   const totalPrice = coffee.price * coffee.quantity;
 
   return (
-    <div className="flex :flex-row items-start md:items-center ">
-      <img className="w-25 md:w-40 mr-5 rounded-lg" src={coffee.image} alt="" />
+    <div className="flex :flex-row items-start md:items-center">
+      <img
+        className="size-40 md:w-40 mr-5 rounded-lg"
+        src={coffee.image}
+        alt=""
+      />
       <div className="w-30 md:w-50">
         <p className="font-bold text-lg w-20 truncate md:overflow-visible">
           {coffee.title}

@@ -2,10 +2,11 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import { toast } from "react-toastify";
 
-interface OrderItem {
-  _id: string | number;
+export interface OrderItem {
+  _id: string;
   title: string;
   type: string;
+  description: string;
   quantity: number;
   image: string;
   price: number;
