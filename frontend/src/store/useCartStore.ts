@@ -63,7 +63,9 @@ export const useCartStore = create<CartStore>()(
         set({
           cart: get()
             .cart.map((item) =>
-              item._id === _id ? { ...item, quantity: item.quantity - 1 } : item,
+              item._id === _id
+                ? { ...item, quantity: item.quantity - 1 }
+                : item,
             )
             .filter((item) => item.quantity > 0),
         }),

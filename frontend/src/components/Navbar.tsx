@@ -1,11 +1,11 @@
-import { Link } from "react-router-dom";
-import { useAuthStore } from "../store/useAuthStore";
-import { toast } from "react-toastify";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { AiOutlineMenu } from "react-icons/ai";
-import { AnimatePresence, motion } from "framer-motion";
-import { navItems } from "../Data";
 import { CiShoppingBasket } from "react-icons/ci";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { navItems } from "../Data";
+import { useAuthStore } from "../store/useAuthStore";
 import { useCartStore } from "../store/useCartStore";
 
 const Navbar = () => {
@@ -23,7 +23,7 @@ const Navbar = () => {
 
   return (
     <div className="z-10 fixed top-0 left-0">
-      {width < 900 ? (
+      {width < 1200 ? (
         <div>
           <div className="w-screen fixed h-23 bg-cream-50/50 backdrop-blur-sm flex items-center justify-between border-b border-border-light">
             <div className="px-8 text-text-primary flex items-center justify-center">

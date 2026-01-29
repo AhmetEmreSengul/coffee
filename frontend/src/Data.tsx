@@ -24,4 +24,10 @@ export const navItems: NavItemsTypes[] = [
     protected: true,
     requiresAuth: true,
   },
+  {
+    link: "/order-history",
+    title: "Order History",
+    protected: true,
+    requiresAuth: true,
+  },
 ];
