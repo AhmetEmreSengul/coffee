@@ -7,7 +7,10 @@ Customers book 4-hour time slots and receive QR codes for fast, contactless entr
 
 This repo contains a **React (Vite) frontend** and an **Express + MongoDB backend** for a coffee shop site that supports:
 
-- Browsing a coffee menu (static JSON)
+- Browsing a coffee menu (from MongoDB)
+- Shopping cart with persistent storage (localStorage)
+- Stripe payment processing for coffee orders
+- Order management and order history
 - User authentication (email/password + Google OAuth)
 - Table booking with overlap checks
 - Booking confirmation emails
@@ -33,12 +36,13 @@ In production, the backend can also **serve the built frontend** (`frontend/dist
 
 - **Vite + React 19 + TypeScript**: fast dev server, typed UI code.
 - **React Router** (`react-router-dom`): client-side routing.
-- **Zustand**: lightweight state management for auth + booking + coffee listing.
+- **Zustand**: lightweight state management for auth + booking + coffee listing + cart + orders.
 - **Axios**: API calls with `withCredentials: true` so cookie-based auth works.
 - **Tailwind CSS v4** + **daisyUI** (+ `tailwind-merge`, `clsx`): utility-first styling and component-friendly class composition.
 - **Framer Motion**: UI animations (page sections, booking card carousel, etc.).
 - **React Toastify**: user notifications.
 - **Radix UI Popover**: used for popovers (e.g., date/time UI).
+- **@stripe/react-stripe-js** + **@stripe/stripe-js**: Stripe payment integration with card elements.
 - **date-fns**: date formatting.
 
 ### Backend
@@ -49,6 +53,7 @@ In production, the backend can also **serve the built frontend** (`frontend/dist
 - **Passport Google OAuth 2.0**: Google login flow; successful callback sets cookie then redirects to frontend.
 - **Arcjet** (`@arcjet/node`, `@arcjet/inspect`) middleware: shield + bot detection + sliding window rate limiting applied to `/auth/*` and `/book/*`.
 - **Brevo (Sendinblue)** (`@getbrevo/brevo`): sends booking confirmation emails.
+- **Stripe** (`stripe`): payment processing for coffee orders (Payment Intents API).
 - **qrcode**: server-side QR code generation for a booking.
 - **bcryptjs**: password hashing.
 - **cors + cookie-parser**: cross-origin cookies & request parsing.
@@ -70,6 +75,39 @@ In production, the backend can also **serve the built frontend** (`frontend/dist
   - `GET /auth/google`: starts OAuth flow via Passport.
   - `GET /auth/google/callback`: Passport callback; sets cookie and redirects to `CLIENT_URL/auth/google/success`.
   - Frontend page `/auth/google/success` calls `checkAuth()` to hydrate the user, then routes home.
+
+### Coffee menu & shopping cart
+
+- **Coffee listing**
+  - `GET /coffee`: fetches all coffees from MongoDB (Coffee model).
+  - Frontend: `useCoffeeStore` manages coffee state with pagination support.
+  - Coffee cards display image, title, description, price, and cart controls.
+
+- **Cart functionality**
+  - Zustand store (`useCartStore`) with `persist` middleware stores cart in localStorage.
+  - Cart operations: `addToCart()`, `removeFromCart()`, `increaseQty()`, `decreaseQty()`, `clearCart()`.
+  - Quantity limits: max 10 per item, items removed when quantity reaches 0.
+  - Cart page (`/cart`) displays items with quantity controls and total price.
+  - Cart icon in navbar shows item count.
+
+### Payment & order flow
+
+
+- **Checkout process**
+  1. User adds coffees to cart from menu page.
+  2. Cart page shows items, quantities, and total price.
+  3. User fills Stripe card form (CardNumber, Expiry, CVC elements).
+  4. On submit: `POST /stripe/create-payment-intent` creates Payment Intent with cart items.
+  5. Backend calculates total from MongoDB coffee prices (validates items exist).
+  6. Frontend confirms payment via `stripe.confirmCardPayment()`.
+  7. On success: `POST /orders/create-order` creates order record.
+  8. Order number generated (format: `ORD-XXXXXX`).
+  9. Cart cleared, user redirected to checkout success page.
+
+- **Order history**
+  - `GET /orders/past-orders`: fetches all user orders sorted by date.
+  - Order history page displays orders with expandable details.
+  - "Order Again" button repopulates cart with previous order items.
 
 ### Booking flow
 
@@ -99,6 +137,29 @@ In production, the backend can also **serve the built frontend** (`frontend/dist
 
 - **QR code**
   - `GET /book/bookingQR/:id`: returns a QR image (data URL) containing JSON payload with booking id + token + time range.
+
+### Shopping cart & payments
+
+- **Cart management**
+  - Frontend: Zustand store (`useCartStore`) with localStorage persistence for cart state.
+  - Users can add coffees to cart, adjust quantities (max 10 per item), and remove items.
+  - Cart persists across browser sessions.
+
+- **Stripe payment flow**
+  - `POST /stripe/create-payment-intent` (protected): creates a Stripe Payment Intent from cart items, calculates total from MongoDB coffee prices, returns `clientSecret`.
+  - Frontend: `CheckoutForm` component uses Stripe Elements (CardNumber, CardExpiry, CardCvc) to collect payment details.
+  - Payment is confirmed via `stripe.confirmCardPayment()` with the client secret.
+  - Currency: TRY (Turkish Lira).
+
+- **Order management**
+  - `POST /orders/create-order` (protected): creates an order with orderItems, totalPrice, and generates an order number (format: `ORD-XXXXXX`).
+  - `GET /orders/past-orders` (protected): returns all past orders for the current user, sorted by creation date (newest first).
+  - `GET /orders/last-order` (protected): returns the most recent order for the current user.
+  - After successful payment, order is created and cart is cleared.
+  - Frontend: Order history page displays past orders with "Order Again" functionality.
+
+- **Coffee menu**
+  - `GET /coffee`: returns all coffees from MongoDB (replaces static JSON).
 
 ### Request protection (Arcjet)
 
@@ -131,6 +192,14 @@ GOOGLE_CLIENT_SECRET=...
 GOOGLE_CALLBACK_URL=http://localhost:3000/auth/google/callback
 
 BREVO_API_KEY=...
+
+STRIPE_SECRET_KEY=...
+```
+
+Frontend environment variables (create `frontend/.env`):
+
+```env
+VITE_STRIPE_PUBLISHABLE_KEY=...
 ```
 
 Notes:
@@ -195,6 +264,14 @@ Frontend runs on `http://localhost:5173`.
 - `GET /book/table-bookings/:id` (cookie auth)
 - `DELETE /book/cancelBooking/:id` (cookie auth)
 
+### Coffee & Orders
+
+- `GET /coffee`: get all coffees
+- `POST /stripe/create-payment-intent` (cookie auth): create Stripe payment intent
+- `POST /orders/create-order` (cookie auth): create order after payment
+- `GET /orders/past-orders` (cookie auth): get user's order history
+- `GET /orders/last-order` (cookie auth): get user's most recent order
+
 ---
 
 ## Known limitations
@@ -207,8 +284,9 @@ Frontend runs on `http://localhost:5173`.
 
 ### Frontend / configuration
 
-- **Hardcoded production URL**: frontend’s Axios baseURL uses a hardcoded production host in multiple places (`frontend/src/lib/axios.ts`, login/signup Google button logic), rather than an env-driven config.
+- **Hardcoded production URL**: frontend's Axios baseURL uses a hardcoded production host in multiple places (`frontend/src/lib/axios.ts`, login/signup Google button logic), rather than an env-driven config.
 - **No API typing contract**: frontend types are local interfaces; there is no shared schema/OpenAPI.
+- **Stripe test mode**: payment processing uses Stripe test environment; test card `4242 4242 4242 4242` can be used for testing.
 
 ### Operational / maintenance
 
