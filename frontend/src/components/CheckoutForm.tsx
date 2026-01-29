@@ -76,7 +76,10 @@ const CheckoutForm = ({
       if (result.error) {
         console.error(result.error.message);
         toast.error(result.error.message);
+        return false;
       }
+
+      return true;
     } catch (err: any) {
       console.error("Payment error:", err);
       toast.error(err.response?.data?.message || "Payment failed");

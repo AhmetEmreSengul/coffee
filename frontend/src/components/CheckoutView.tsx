@@ -5,12 +5,12 @@ import { useNavigate } from "react-router-dom";
 import { useCartStore } from "../store/useCartStore";
 
 const CheckoutView = () => {
-  const { getPastOrders, lastOrder } = useOrderStore();
+  const { getLastOrder, lastOrder } = useOrderStore();
   const { clearCart } = useCartStore();
   const navigate = useNavigate();
 
   useEffect(() => {
-    getPastOrders();
+    getLastOrder();
   }, []);
 
   return (
