@@ -46,18 +46,23 @@ const CheckoutView = () => {
         </div>
 
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-8 text-left">
-          <div className="font-semibold text-caramel-500 mb-2">
+          <div className="font-semibold text-caramel-500 mb-2 text-xl">
             Order Details:
           </div>
           <div className="space-y-1 text-sm text-black">
+            <h2 className="border-b font-bold text-lg">Items</h2>
             {Object.values(lastOrder?.orderItems ?? "").map((item) => (
               <div key={item._id} className="flex justify-between">
-                <span>
-                  {item.title} x{item.quantity}
+                <span className="inline-flex items-center gap-1">
+                  <p className="font-bold">{item.title}</p> x{item.quantity}
                 </span>
                 <span>{(item.price * item.quantity).toFixed(2)}₺</span>
               </div>
             ))}
+            <div>
+              <h2 className="border-b font-bold mt-5 text-lg">Order Note</h2>
+              <p>{lastOrder?.orderNote}</p>
+            </div>
           </div>
         </div>
 

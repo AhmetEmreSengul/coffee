@@ -23,6 +23,9 @@ const orderSchema = mongoose.Schema(
     orderNumber: {
       type: String,
     },
+    orderNote: {
+      type: String,
+    },
   },
   { timestamps: true },
 );

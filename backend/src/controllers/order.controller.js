@@ -3,7 +3,7 @@ import Order from "../models/Order.js";
 export const createOrder = async (req, res) => {
   try {
     const userId = req.user._id;
-    const { orderItems, totalPrice } = req.body;
+    const { orderItems, totalPrice, orderNote } = req.body;
 
     if (!Array.isArray(orderItems) || orderItems.length === 0 || !totalPrice) {
       return res.status(400).json({ message: "All fields are required" });
@@ -13,6 +13,7 @@ export const createOrder = async (req, res) => {
       user: userId,
       orderItems,
       totalPrice,
+      orderNote,
     });
 
     const orderNumber = "ORD-" + order._id.toString().slice(-6).toUpperCase();

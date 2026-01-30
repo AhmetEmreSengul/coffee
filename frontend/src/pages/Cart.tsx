@@ -64,21 +64,7 @@ const Cart = () => {
               </p>
             </div>
 
-            <textarea
-              className="border border-caramel-400 rounded-lg p-3 mt-6 w-full min-h-30 max-h-30"
-              placeholder="Order Note"
-            />
-
-            <div className="mt-5">
-              <p>
-                For testing enter
-                <span className="text-gray-400 font-mono font-bold mx-1">
-                  4242 4242 4242 4242
-                </span>
-                for the card number.
-              </p>
-              <p>Enter a future date and any CVC for for the rest.</p>
-            </div>
+          
 
             {cart.length > 0 && (
               <Elements stripe={stripePromise}>

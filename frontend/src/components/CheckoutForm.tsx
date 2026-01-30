@@ -18,6 +18,7 @@ const CheckoutForm = ({
 }: {
   setView: React.Dispatch<React.SetStateAction<string>>;
 }) => {
+  const [orderNote, setOrderNote] = useState("");
   const stripe = useStripe();
   const elements = useElements();
   const { cart, clearCart } = useCartStore();
@@ -91,13 +92,30 @@ const CheckoutForm = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     await handlePayment();
-    await createOrder(cart, totalPrice);
+    await createOrder(cart, totalPrice, orderNote);
     setView("checkout");
     clearCart();
   };
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4 mt-6">
+      <textarea
+        className="border border-caramel-400 rounded-lg p-3 mt-6 w-full min-h-30 max-h-30"
+        placeholder="Order Note"
+        value={orderNote}
+        onChange={(e) => setOrderNote(e.target.value)}
+      />
+
+      <div className="mt-5">
+        <p>
+          For testing enter
+          <span className="text-gray-400 font-mono font-bold mx-1">
+            4242 4242 4242 4242
+          </span>
+          for the card number.
+        </p>
+        <p>Enter a future date and any CVC for for the rest.</p>
+      </div>
       <div className="flex flex-col gap-1">
         <label className="text-sm font-medium">Card Number</label>
         <div className="border border-caramel-400 rounded-xl px-4 py-3 bg-white focus-within:ring-2 focus-within:ring-caramel-400 transition">

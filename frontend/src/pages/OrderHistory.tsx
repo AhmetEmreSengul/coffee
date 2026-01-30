@@ -39,6 +39,16 @@ const OrderHistory = () => {
     toast.success("Cart Updated");
   };
 
+  function formatDate(dateString: string) {
+    const date = new Date(dateString);
+    const options: Intl.DateTimeFormatOptions = {
+      month: "numeric",
+      day: "numeric",
+      year: "numeric",
+    };
+    return date.toLocaleString("en-US", options);
+  }
+
   return (
     <div className="pt-40 overflow-y-auto">
       <h1 className="text-3xl font-bold text-center mb-10">Order History</h1>
@@ -56,16 +66,15 @@ const OrderHistory = () => {
 
                 <div className="flex flex-col gap-2">
                   <p className="font-bold text-lg"> {order.orderNumber} </p>
-                  <p className="inline-flex items-center gap-1">
-                    <FaCalendarWeek className="size-5 text-caramel-300" />{" "}
-                    {new Date(order.createdAt).toLocaleDateString()}
-                  </p>
+                  <p className="text-2xl font-bold">{order.totalPrice}₺</p>
                 </div>
               </div>
               <div className="flex flex-row items-center justify-center gap-2">
                 <div className="flex flex-col items-center justify-center gap-1">
-                  <p className="text-caramel-500">Total</p>
-                  <p className="text-2xl font-bold">{order.totalPrice}₺</p>
+                  <p className="inline-flex items-center gap-1">
+                    <FaCalendarWeek className="size-5 text-caramel-300" />{" "}
+                    {formatDate(order.createdAt)}
+                  </p>
                 </div>
                 <span className="p-2">
                   <FaChevronDown
@@ -74,24 +83,45 @@ const OrderHistory = () => {
                 </span>
               </div>
             </div>
+
             {orderId === order._id && (
               <div className="mt-3">
                 {order.orderItems.map((item) => (
-                  <div className="flex items-center border-b my-3">
-                    <img
-                      src={item.image}
-                      className="size-35 rounded-lg mb-3"
-                      alt=""
-                    />
-                    <div className="ml-2">
-                      <div className="inline-flex items-center">
-                        <p className="mr-2 text-lg font-bold">{item.title}</p>
-                        <p className="mr-2 ">x{item.quantity}</p>
+                  <div className="flex items-center justify-between bg-caramel-200 rounded-lg my-3 p-2">
+                    <div className="flex items-center">
+                      <img
+                        src={item.image}
+                        className="size-20 rounded-lg aspect-square object-cover"
+                        alt=""
+                      />
+                      <div className="ml-2">
+                        <div className="inline-flex items-center">
+                          <p className="mr-2 text-lg font-bold">{item.title}</p>
+                        </div>
+                        <div className="flex gap-2">
+                          <p
+                            className={`rounded-lg w-12 text-center ${
+                              item.type === "Cold"
+                                ? "bg-dusty-blue-300"
+                                : "bg-caramel-300"
+                            }`}
+                          >
+                            {item.type}
+                          </p>
+                          <p className="mr-2 ">Qty:{item.quantity}</p>
+                        </div>
                       </div>
-                      <p>{item.price}₺</p>
+                    </div>
+                    <div>
+                      <p className="font-bold text-lg">{item.price}₺</p>
                     </div>
                   </div>
                 ))}
+                <div className="bg-caramel-200 border-l-4 border-caramel-400 p-3 rounded-lg">
+                  <p className="italic text-caramel-500 text-xl mx-5">
+                    {order.orderNote}
+                  </p>
+                </div>
               </div>
             )}
             <div className="flex  mt-3">

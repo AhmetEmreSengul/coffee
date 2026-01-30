@@ -2,11 +2,11 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import { toast } from "react-toastify";
 
-
 interface Order {
   _id: string;
   user: string;
   description: string;
+  orderNote: string;
   orderItems: OrderItem[];
   orderNumber: string;
   totalPrice: number;
@@ -17,7 +17,11 @@ interface Order {
 interface OrderStore {
   pastOrders: Order[];
   lastOrder: Order | null;
-  createOrder: (orderItems: OrderItem[], totalPrice: number) => Promise<void>;
+  createOrder: (
+    orderItems: OrderItem[],
+    totalPrice: number,
+    orderNote: string,
+  ) => Promise<void>;
   getPastOrders: () => Promise<void>;
   getLastOrder: () => Promise<void>;
 }
@@ -26,11 +30,12 @@ export const useOrderStore = create<OrderStore>((set) => ({
   pastOrders: [],
   lastOrder: null,
 
-  createOrder: async (orderItems, totalPrice) => {
+  createOrder: async (orderItems, totalPrice, orderNote) => {
     try {
       await axiosInstance.post("/orders/create-order", {
         orderItems,
         totalPrice,
+        orderNote,
       });
       toast.success("Order created");
     } catch (error: any) {
