@@ -2,14 +2,23 @@ import { useEffect } from "react";
 import { FaCheckCircle } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useOrderStore } from "../store/useOrderStore";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const CheckoutView = () => {
-  const { getLastOrder, lastOrder } = useOrderStore();
+  const { getLastOrder, lastOrder, isLoading } = useOrderStore();
   const navigate = useNavigate();
 
   useEffect(() => {
     getLastOrder();
   }, []);
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <AiOutlineLoading3Quarters className="animate-spin size-10" />
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-2xl mx-auto pt-30">
@@ -60,8 +69,14 @@ const CheckoutView = () => {
               </div>
             ))}
             <div>
-              <h2 className="border-b font-bold mt-5 text-lg">Order Note</h2>
-              <p>{lastOrder?.orderNote}</p>
+              {lastOrder?.orderNote.length !== 0 && (
+                <div>
+                  <h2 className="border-b font-bold mt-5 text-lg">
+                    Order Note
+                  </h2>
+                  <p>{lastOrder?.orderNote}</p>
+                </div>
+              )}
             </div>
           </div>
         </div>

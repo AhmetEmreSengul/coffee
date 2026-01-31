@@ -17,6 +17,7 @@ interface Order {
 interface OrderStore {
   pastOrders: Order[];
   lastOrder: Order | null;
+  isLoading: boolean;
   createOrder: (
     orderItems: OrderItem[],
     totalPrice: number,
@@ -29,6 +30,7 @@ interface OrderStore {
 export const useOrderStore = create<OrderStore>((set) => ({
   pastOrders: [],
   lastOrder: null,
+  isLoading: false,
 
   createOrder: async (orderItems, totalPrice, orderNote) => {
     try {
@@ -46,6 +48,7 @@ export const useOrderStore = create<OrderStore>((set) => ({
 
   getPastOrders: async () => {
     try {
+      set({ isLoading: true });
       const res = await axiosInstance.get<Order[]>("/orders/past-orders");
       set({ pastOrders: res.data });
     } catch (error: any) {
@@ -54,11 +57,14 @@ export const useOrderStore = create<OrderStore>((set) => ({
         error?.response?.data?.message,
       );
       toast.error(error?.response?.data?.message);
+    } finally {
+      set({ isLoading: false });
     }
   },
 
   getLastOrder: async () => {
     try {
+      set({ isLoading: true });
       const res = await axiosInstance.get<Order>("/orders/last-order");
       set({ lastOrder: res.data });
     } catch (error: any) {
@@ -67,6 +73,8 @@ export const useOrderStore = create<OrderStore>((set) => ({
         error?.response?.data?.message,
       );
       toast.error(error?.response?.data?.message);
+    } finally {
+      set({ isLoading: false });
     }
   },
 }));

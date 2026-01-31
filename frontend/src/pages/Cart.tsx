@@ -47,7 +47,7 @@ const Cart = () => {
               .
             </div>
           ) : (
-            <div className="max-h-120 space-y-2 overflow-y-auto">
+            <div className="max-h-120 space-y-2 overflow-y-auto ">
               {cart.map((item) => (
                 <CartCoffeCard key={item._id} coffee={item} />
               ))}
@@ -63,8 +63,6 @@ const Cart = () => {
                 Total Price: {totalPrice}₺
               </p>
             </div>
-
-          
 
             {cart.length > 0 && (
               <Elements stripe={stripePromise}>
