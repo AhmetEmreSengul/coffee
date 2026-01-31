@@ -62,16 +62,12 @@ const OrderHistory = () => {
     <div className="pt-40 overflow-y-auto">
       <h1 className="text-3xl font-bold text-center mb-10">Order History</h1>
       <div className="max-w-4xl mx-auto p-5 md:p-0">
-        {pastOrders.map((order, index) => (
+        {pastOrders.map((order) => (
           <div
             key={order._id}
             className="collapse collapse-arrow bg-beige-200 border border-beige-300 rounded-lg mb-5"
           >
-            <input
-              type="radio"
-              name="order-accordion"
-              defaultChecked={index === 0}
-            />
+            <input type="radio" name="order-accordion" />
 
             <div className="collapse-title p-3">
               <div className="flex justify-between">
