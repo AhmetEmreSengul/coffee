@@ -17,7 +17,7 @@ const CartCoffeCard = ({ coffee }: CoffeeCardProps) => {
   return (
     <div className="flex :flex-row items-start md:items-center">
       <img
-        className="size-40 aspect-square object-cover border border-caramel-300 md:w-40 mr-5 rounded-lg"
+        className="size-20 md:size-40 aspect-square object-cover border border-caramel-300 md:w-40 mr-5 rounded-lg"
         src={coffee.image}
         alt=""
       />
