@@ -1,12 +1,11 @@
 import { useEffect, useState, type FormEvent } from "react";
 import { useBookingStore } from "../store/useBookingStore";
 import TableCard from "../components/TableCard";
-
 import TableCardSkeleton from "../components/TableCardSkeleton";
-
 import DateInput from "../components/DateInput";
 import TimeInput from "../components/TimeInput";
 import { AnimatePresence, motion } from "framer-motion";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const BookTable = () => {
   const {
@@ -14,6 +13,7 @@ const BookTable = () => {
     getTables,
     createBooking,
     isLoading,
+    isCreating,
     getTableBookings,
     tableBookings,
   } = useBookingStore();
@@ -24,6 +24,13 @@ const BookTable = () => {
     endTime: "",
     tableNumber: "",
   });
+
+  const isDisabled =
+    !formData.date ||
+    !formData.startTime ||
+    !formData.endTime ||
+    !formData.tableNumber ||
+    isCreating;
 
   useEffect(() => {
     getTables();
@@ -54,6 +61,14 @@ const BookTable = () => {
         end: end.toISOString(),
       },
     });
+
+    setFormData({
+      ...formData,
+      date: null,
+      endTime: "",
+      startTime: "",
+      tableNumber: "",
+    });
   };
 
   const maxEndTime = (() => {
@@ -80,8 +95,6 @@ const BookTable = () => {
 
   return (
     <div className="min-h-screen flex flex-col bg-bg-primary items-center">
-      
-
       {isLoading ? (
         <TableCardSkeleton />
       ) : (
@@ -159,10 +172,18 @@ const BookTable = () => {
             </div>
 
             <button
-              className="p-3 rounded-lg bg-caramel-200 border border-caramel-300 text-caramel-500 hover:bg-caramel-300 transition m-10 font-medium"
+              className={`p-3 rounded-lg m-10 font-medium ${isDisabled ? "cursor-not-allowed bg-gray-300 text-gray-600 " : "cursor-pointer bg-caramel-200 border border-caramel-300 text-caramel-500 hover:bg-caramel-300 transition"}`}
               type="submit"
+              disabled={isDisabled}
             >
-              Create Booking
+              {isCreating ? (
+                <span className="inline-flex items-center gap-2">
+                  Booking Table{" "}
+                  <AiOutlineLoading3Quarters className="size-4 animate-spin" />
+                </span>
+              ) : (
+                "Create Booking"
+              )}
             </button>
           </form>
         </div>

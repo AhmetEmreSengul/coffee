@@ -4,11 +4,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useState, type FormEvent } from "react";
 import DateInput from "./DateInput";
 import TimeInput from "./TimeInput";
+import type { BookingQR, UserBooking } from "../store/useBookingStore";
+import type { AuthUser } from "../store/useAuthStore";
 
 interface BookingCardProps {
-  booking: any;
-  authUser: any;
-  bookingQR: any[];
+  booking: UserBooking;
+  authUser: AuthUser;
+  bookingQR: BookingQR[];
   formData: {
     bookingId: string;
     date: Date | null;

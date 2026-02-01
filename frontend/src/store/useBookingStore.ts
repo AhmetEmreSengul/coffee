@@ -9,7 +9,7 @@ interface Table {
   status: string;
 }
 
-interface UserBooking {
+export interface UserBooking {
   _id: string;
   bookingTime: {
     start: string;
@@ -22,7 +22,7 @@ interface UserBooking {
   };
 }
 
-interface BookingQR {
+export interface BookingQR {
   qrCode: string;
   booking: UserBooking;
 }
@@ -48,6 +48,7 @@ interface BookingStore {
   tableBookings: TableBookings[];
   bookingQR: BookingQR[];
   isLoading: boolean;
+  isCreating: boolean;
 
   getTables: () => Promise<void>;
   createBooking: (data: CreateBookingData) => Promise<void>;
@@ -56,7 +57,7 @@ interface BookingStore {
   updateUserBooking: (
     id: string,
     startTime: string,
-    endTime: string
+    endTime: string,
   ) => Promise<void>;
   getTableBookings: (id: string) => Promise<void>;
   deleteUserBooking: (id: string) => Promise<void>;
@@ -68,6 +69,7 @@ export const useBookingStore = create<BookingStore>((set) => ({
   bookingQR: [],
   tableBookings: [],
   isLoading: false,
+  isCreating: false,
 
   getTables: async () => {
     set({ isLoading: true });
@@ -83,12 +85,15 @@ export const useBookingStore = create<BookingStore>((set) => ({
   },
 
   createBooking: async (data) => {
+    set({ isCreating: true });
     try {
       await axiosInstance.post("/book/createBooking", data);
       toast.success("Booking created");
     } catch (error: any) {
       console.error("Error creating booking", error?.response?.data?.message);
       toast.error(error?.response?.data?.message);
+    } finally {
+      set({ isCreating: false });
     }
   },
 
@@ -112,7 +117,7 @@ export const useBookingStore = create<BookingStore>((set) => ({
 
       set((state) => {
         const exists = state.bookingQR.some(
-          (qr) => qr.booking._id === res.data.booking._id
+          (qr) => qr.booking._id === res.data.booking._id,
         );
         if (exists) return state;
 
