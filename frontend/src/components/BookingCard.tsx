@@ -9,7 +9,7 @@ import type { AuthUser } from "../store/useAuthStore";
 
 interface BookingCardProps {
   booking: UserBooking;
-  authUser: AuthUser;
+  authUser: AuthUser | null;
   bookingQR: BookingQR[];
   formData: {
     bookingId: string;
