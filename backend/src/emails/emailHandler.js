@@ -1,19 +1,22 @@
 import Brevo from "@getbrevo/brevo";
 import { ENV } from "../lib/env.js";
-import { createBookingEmailTemplate } from "./emailTemplate.js";
+import {
+  createBookingEmailTemplate,
+  createOrderEmailTemplate,
+} from "./emailTemplate.js";
 
 const apiInstance = new Brevo.TransactionalEmailsApi();
 
 apiInstance.setApiKey(
   Brevo.TransactionalEmailsApiApiKeys.apiKey,
-  ENV.BREVO_API_KEY
+  ENV.BREVO_API_KEY,
 );
 
 export const sendBookingEmail = async (
   email,
   startTime,
   endTime,
-  tableInfo
+  tableInfo,
 ) => {
   try {
     await apiInstance.sendTransacEmail({
@@ -24,10 +27,36 @@ export const sendBookingEmail = async (
         email,
         startTime,
         endTime,
-        tableInfo
+        tableInfo,
       ),
     });
   } catch (error) {
     console.error("Error sending booking email", error.message);
+  }
+};
+
+export const sendCreateOrderEmail = async (
+  email,
+  orderNumber,
+  orderDate,
+  orderTotal,
+  orderItems,
+  orderNote,
+) => {
+  try {
+    await apiInstance.sendTransacEmail({
+      sender: { name: "Time Slot", email: "ahmetemresengul.34@gmail.com" },
+      to: [{ email }],
+      subject: "Order Confirmation",
+      htmlContent: createOrderEmailTemplate(
+        orderNumber,
+        orderDate,
+        orderTotal,
+        orderItems,
+        orderNote,
+      ),
+    });
+  } catch (error) {
+    console.error("Error sending order creation email", error.message);
   }
 };

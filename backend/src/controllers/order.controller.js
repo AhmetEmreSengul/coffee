@@ -1,3 +1,4 @@
+import { sendCreateOrderEmail } from "../emails/emailHandler.js";
 import Order from "../models/Order.js";
 
 export const createOrder = async (req, res) => {
@@ -20,6 +21,15 @@ export const createOrder = async (req, res) => {
 
     order.orderNumber = orderNumber;
     await order.save();
+
+    sendCreateOrderEmail(
+      req.user.email,
+      orderNumber,
+      order.createdAt,
+      totalPrice,
+      orderItems,
+      orderNote,
+    );
 
     res.status(201).json(order);
   } catch (error) {
