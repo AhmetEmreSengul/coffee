@@ -117,7 +117,9 @@ const OrderHistory = () => {
                       </div>
                     </div>
                   </div>
-                  <p className="font-bold text-lg">{item.price}₺</p>
+                  <p className="font-bold text-lg">
+                    {item.price * item.quantity}₺
+                  </p>
                 </div>
               ))}
 
