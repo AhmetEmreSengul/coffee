@@ -1,11 +1,12 @@
 import { CiCalendar, CiClock1, CiLocationOn } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, type FormEvent } from "react";
+import { useState, useEffect, type FormEvent } from "react";
 import DateInput from "./DateInput";
 import TimeInput from "./TimeInput";
 import type { BookingQR, UserBooking } from "../store/useBookingStore";
 import type { AuthUser } from "../store/useAuthStore";
+import { TbClockExclamation } from "react-icons/tb";
 
 interface BookingCardProps {
   booking: UserBooking;
@@ -43,11 +44,12 @@ const BookingCard = ({
   getUserBookings,
 }: BookingCardProps) => {
   const [isRipping, setIsRipping] = useState(false);
+  const [timeLeft, setTimeLeft] = useState("");
 
   const handleDelete = async () => {
     setIsRipping(true);
     setTimeout(async () => {
-      await deleteUserBooking(booking._id);
+      deleteUserBooking(booking._id);
       setDeleteBookingId(null);
       setIsRipping(false);
       getUserBookings();
@@ -72,6 +74,34 @@ const BookingCard = ({
     });
     setUpdateOpen(true);
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const end = new Date(booking.bookingTime.end).getTime();
+
+      const diff = end - now;
+
+      if (diff <= 0) {
+        setTimeLeft("Expired");
+        clearInterval(interval);
+        return;
+      }
+
+      const hours = Math.floor(diff / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+      setTimeLeft(
+        `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
+          2,
+          "0",
+        )}:${String(seconds).padStart(2, "0")}`,
+      );
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [booking.bookingTime.end]);
 
   return (
     <>
@@ -126,13 +156,22 @@ const BookingCard = ({
                   </div>
                 </div>
 
-                <div className="p-5">
-                  <p className="inline-flex items-center gap-1 text-text-secondary">
-                    <CiLocationOn /> Table
-                  </p>
-                  <p className="font-bold text-text-primary">
-                    T{booking.tableNumber.number}
-                  </p>
+                <div className="p-5 flex justify-between">
+                  <div>
+                    <p className="inline-flex items-center gap-1 text-text-secondary">
+                      <CiLocationOn /> Table
+                    </p>
+                    <p className="font-bold text-text-primary">
+                      T{booking.tableNumber.number}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="inline-flex items-center gap-1">
+                      <TbClockExclamation />
+                      Invalid In
+                    </p>
+                    <p className="text-end font-bold"> {timeLeft} </p>
+                  </div>
                 </div>
 
                 <div className="flex justify-between px-5 pb-5">
