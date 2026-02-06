@@ -73,10 +73,16 @@ const BookTable = () => {
 
   const maxEndTime = (() => {
     if (!formData.startTime) return "";
+
     const [h, m] = formData.startTime.split(":").map(Number);
-    const d = new Date();
-    d.setHours(h + 4, m);
-    return d.toTimeString().slice(0, 5);
+
+    let totalMinutes = h * 60 + m + 240; // +4 hours
+    if (totalMinutes > 23 * 60 + 59) totalMinutes = 23 * 60 + 59; // clamp to 23:59
+
+    const newH = Math.floor(totalMinutes / 60);
+    const newM = totalMinutes % 60;
+
+    return `${String(newH).padStart(2, "0")}:${String(newM).padStart(2, "0")}`;
   })();
 
   function useIsXL() {
@@ -151,7 +157,7 @@ const BookTable = () => {
               onChange={(date) => setFormData((prev) => ({ ...prev, date }))}
             />
 
-            <div className="flex flex-col md:flex-row gap-6">
+            <div className="flex flex-row gap-6">
               <TimeInput
                 label="Start Time"
                 value={formData.startTime}
