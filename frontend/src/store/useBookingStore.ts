@@ -20,6 +20,8 @@ export interface UserBooking {
     number: number;
     capacity: number;
   };
+  checkedIn: boolean;
+  updatedAt: string;
 }
 
 export interface BookingQR {

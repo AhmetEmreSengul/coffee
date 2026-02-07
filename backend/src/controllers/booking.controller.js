@@ -36,6 +36,12 @@ export const createBooking = async (req, res) => {
         .json({ message: "End time must be after start time" });
     }
 
+    if (new Date(bookingTime.start) < new Date()) {
+      return res
+        .status(400)
+        .json({ message: "Start time must be in the future" });
+    }
+
     const table = await Table.findById(tableNumber);
 
     if (!table) {
