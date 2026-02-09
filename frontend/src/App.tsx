@@ -12,13 +12,25 @@ import OrderHistory from "./pages/OrderHistory";
 import Signup from "./pages/Signup";
 import UserBookings from "./pages/UserBookings";
 import { useAuthStore } from "./store/useAuthStore";
+import AdminPage from "./pages/AdminDashboard";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import AdminManageUsers from "./pages/AdminManageUsers";
 
 const App = () => {
-  const { authUser, checkAuth } = useAuthStore();
+  const { authUser, isCheckingAuth, checkAuth } = useAuthStore();
+  const isAdmin = authUser?.role === "admin";
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  if (isCheckingAuth) {
+    return (
+      <div className="h-screen w-screen flex items-center justify-center bg-bg-primary text-text-primary">
+        <AiOutlineLoading3Quarters className="size-10" />
+      </div>
+    );
+  }
 
   return (
     <div className="font-[lato] min-h-screen bg-bg-primary text-text-primary">
@@ -60,6 +72,14 @@ const App = () => {
           element={authUser ? <OrderHistory /> : <Navigate to={"/login"} />}
         />
         <Route path="/auth/google/success" element={<GoogleAuthSuccess />} />
+        <Route
+          path="/admin"
+          element={isAdmin ? <AdminPage /> : <Navigate to={"/"} />}
+        />
+        <Route
+          path="/admin/:id"
+          element={isAdmin ? <AdminManageUsers /> : <Navigate to={"/"} />}
+        />
       </Routes>
     </div>
   );

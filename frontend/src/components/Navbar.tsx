@@ -72,7 +72,7 @@ const Navbar = () => {
           <div className="flex flex-row gap-6 ml-20">
             {navItems.map((item) => {
               if (item.protected && !authUser) return null;
-
+              if (item.requireAdmin && authUser?.role !== "admin") return null;
               return (
                 <span
                   className="font-bold text-text-primary hover:text-caramel-500 transition"

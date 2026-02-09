@@ -2,7 +2,7 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import { toast } from "react-toastify";
 
-interface Order {
+export interface Order {
   _id: string;
   user: string;
   description: string;

@@ -3,9 +3,11 @@ import { axiosInstance } from "../lib/axios";
 import { toast } from "react-toastify";
 
 export interface AuthUser {
+  _id: string;
   fullName: string;
   email: string;
   password: string;
+  role: string;
 }
 
 export interface SignupData {
@@ -52,6 +54,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
 
   checkAuth: async () => {
     try {
+      set({ isCheckingAuth: true });
       const res = await axiosInstance.get<AuthUser>("/auth/check");
       set({ authUser: res.data });
     } catch (error) {
@@ -104,7 +107,7 @@ export const useAuthStore = create<AuthStore>((set) => ({
     try {
       const res = await axiosInstance.put<AuthUser>(
         "/auth/update-profile",
-        data
+        data,
       );
       set({ authUser: res.data });
       toast.success("Profile Updated");

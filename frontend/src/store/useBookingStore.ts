@@ -21,6 +21,7 @@ export interface UserBooking {
     capacity: number;
   };
   checkedIn: boolean;
+  createdAt: string;
   updatedAt: string;
 }
 
