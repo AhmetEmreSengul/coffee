@@ -15,7 +15,7 @@ export const getAllUsers = async (req, res) => {
 export const getUserBookingsById = async (req, res) => {
   try {
     const { id } = req.params;
-    const bookings = await Booking.find({ user: id });
+    const bookings = await Booking.find({ user: id }).sort({ createdAt: -1 });
 
     res.status(200).json(bookings);
   } catch (error) {
@@ -27,7 +27,7 @@ export const getUserBookingsById = async (req, res) => {
 export const getUserOrdersById = async (req, res) => {
   try {
     const { id } = req.params;
-    const orders = await Order.find({ user: id });
+    const orders = await Order.find({ user: id }).sort({ createdAt: -1 });
 
     res.status(200).json(orders);
   } catch (error) {

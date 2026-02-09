@@ -14,7 +14,7 @@ import UserBookings from "./pages/UserBookings";
 import { useAuthStore } from "./store/useAuthStore";
 import AdminPage from "./pages/AdminDashboard";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import AdminManageUsers from "./pages/AdminManageUsers";
+import AdminManageUsers from "./pages/UserActivity";
 
 const App = () => {
   const { authUser, isCheckingAuth, checkAuth } = useAuthStore();
