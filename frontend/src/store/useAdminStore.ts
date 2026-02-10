@@ -15,6 +15,7 @@ interface AdminStore {
   getAllUsers: () => Promise<void>;
   getAllUserBookings: (id: string) => Promise<void>;
   getAllUserOrders: (id: string) => Promise<void>;
+  banUser: (id: string) => Promise<void>;
 }
 
 export const useAdminStore = create<AdminStore>((set) => ({
@@ -61,6 +62,16 @@ export const useAdminStore = create<AdminStore>((set) => ({
       toast.error(error?.response?.data?.message);
     } finally {
       set({ ordersLoading: false });
+    }
+  },
+
+  banUser: async (id: string) => {
+    try {
+      await axiosInstance.post(`/admin/banUser/${id}`);
+      toast.success("User updated.");
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error?.response?.data?.message);
     }
   },
 }));

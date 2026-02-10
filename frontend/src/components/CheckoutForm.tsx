@@ -93,7 +93,9 @@ const CheckoutForm = ({
     e.preventDefault();
     await handlePayment();
     await createOrder(cart, totalPrice, orderNote);
-    setView("checkout");
+    if (authUser?.isBanned === false) {
+      setView("checkout");
+    }
     clearCart();
   };
 

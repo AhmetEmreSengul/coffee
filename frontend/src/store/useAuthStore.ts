@@ -8,6 +8,7 @@ export interface AuthUser {
   email: string;
   password: string;
   role: string;
+  isBanned: boolean;
 }
 
 export interface SignupData {

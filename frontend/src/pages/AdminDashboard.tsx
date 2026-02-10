@@ -2,13 +2,20 @@ import { useEffect } from "react";
 import { useAdminStore } from "../store/useAdminStore";
 import { Link } from "react-router-dom";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { toast } from "react-toastify";
 
 const AdminPage = () => {
-  const { getAllUsers, users, usersLoading } = useAdminStore();
+  const { getAllUsers, banUser, users, usersLoading } = useAdminStore();
 
   useEffect(() => {
     getAllUsers();
   }, []);
+
+  const handleBan = async (id: string) => {
+    banUser(id);
+    toast.success("User updated.");
+    window.location.reload();
+  };
 
   return (
     <div className="pt-40 bg-[#333] min-h-screen w-screen font-mono space-y-5 text-white">
@@ -35,8 +42,11 @@ const AdminPage = () => {
                   >
                     Activity
                   </Link>
-                  <button className="p-1 border-b border-red-500 cursor-pointer text-white/70 hover:text-red-600 transition">
-                    Ban User
+                  <button
+                    onClick={() => handleBan(user._id)}
+                    className={`p-1 border-b  cursor-pointer text-white/70 transition  ${user.isBanned ? "hover:text-green-600 border-green-500" : "hover:text-red-600 border-red-500"}`}
+                  >
+                    {user.isBanned ? "Unban User" : "Ban User"}
                   </button>
                 </div>
               </div>

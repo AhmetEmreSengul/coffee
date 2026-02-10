@@ -91,6 +91,23 @@ const UserBookings = () => {
     );
   }
 
+  if (authUser?.isBanned) {
+    return (
+      <div className="flex items-center justify-center h-screen w-screen bg-bg-primary">
+        <div className="text-text-primary">
+          You have been banned. If you think this is a mistake, Please contact
+          us at
+        </div>
+        <a
+          className="text-caramel-400 underline ml-1"
+          href="mailto:timeslot@support.com"
+        >
+          timeslot@support.com
+        </a>
+      </div>
+    );
+  }
+
   if (myBookings.length === 0) {
     return (
       <div className="flex items-center justify-center h-screen w-screen bg-bg-primary">
