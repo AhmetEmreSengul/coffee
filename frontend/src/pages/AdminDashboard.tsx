@@ -23,14 +23,14 @@ const AdminPage = () => {
             {users.map((user) => (
               <div
                 key={user._id}
-                className="text-white text-lg md:text-2xl flex gap-2 justify-between border p-1"
+                className="text-white text-lg md:text-2xl flex flex-col md:flex-row gap-2 justify-center md:justify-between border p-1"
               >
                 <p className="my-auto">
                   {user.fullName} - {user.email}
                 </p>
                 <div className="flex flex-col md:flex-row gap-2">
                   <Link
-                    className="p-0 md:p-1 border-b cursor-pointer text-white/70 hover:text-white transition"
+                    className="text-center p-0 md:p-1 border-b cursor-pointer text-white/70 hover:text-white transition"
                     to={user._id}
                   >
                     Activity

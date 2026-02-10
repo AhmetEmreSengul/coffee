@@ -35,3 +35,17 @@ export const getUserOrdersById = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const banUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findById(id);
+    user.isBanned = !user.isBanned;
+    await user.save();
+    res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};

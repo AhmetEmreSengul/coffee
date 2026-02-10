@@ -11,18 +11,20 @@ import {
 } from "../controllers/booking.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
 import { arcjetProtection } from "../middleware/arcjet.middleware.js";
+import { isBanned } from "../middleware/banned.middleware.js";
 
 const router = express.Router();
-
 router.use(arcjetProtection);
+router.use(protectRoute);
+router.use(isBanned);
 
 router.get("/available-tables", getTable);
-router.post("/createBooking", protectRoute, createBooking);
-router.post("/verifyBooking", protectRoute, verifyBookingQr);
-router.put("/updateBooking/:id", protectRoute, updateBooking);
+router.post("/createBooking", createBooking);
+router.post("/verifyBooking", verifyBookingQr);
+router.put("/updateBooking/:id", updateBooking);
 router.get("/bookingQR/:id", getBookingQrCode);
-router.get("/my-bookings", protectRoute, getUserBookings);
-router.get("/table-bookings/:id", protectRoute, getTableBookings);
-router.delete("/cancelBooking/:id", protectRoute, cancelBooking);
+router.get("/my-bookings", getUserBookings);
+router.get("/table-bookings/:id", getTableBookings);
+router.delete("/cancelBooking/:id", cancelBooking);
 
 export default router;
