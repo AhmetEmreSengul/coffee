@@ -14,9 +14,9 @@ const AdminPage = () => {
   }, []);
 
   const handleBan = async (id: string) => {
-    banUser(id);
+    await banUser(id);
     toast.success("User updated.");
-    window.location.reload();
+    await getAllUsers();
   };
 
   return (
