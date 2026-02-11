@@ -135,8 +135,9 @@ In production, the backend can also **serve the built frontend** (`frontend/dist
 - **Cancel booking**
   - `DELETE /book/cancelBooking/:id` (protected): deletes booking by id.
 
-- **QR code**
+- **QR code & check-in**
   - `GET /book/bookingQR/:id`: returns a QR image (data URL) containing JSON payload with booking id + token + time range.
+  - Booking documents include a `qrToken` and a `checkedIn` flag; QR codes are verified via `POST /admin/verifyBooking` from the admin dashboard, which marks valid bookings as checked in within a grace window.
 
 ### Shopping cart & payments
 
@@ -169,6 +170,28 @@ Rules include:
 - Shield: general protections
 - Bot detection: blocks bots except allowed categories
 - Sliding window rate limit: 100 requests / 60 seconds
+
+### Admin & moderation
+
+- **Roles & access control**
+  - Users have a `role` field (`"user"` or `"admin"`) and an `isBanned` flag.
+  - Backend middleware `isAdmin` ensures only admins can access `/admin/*` routes.
+  - Middleware `isBanned` blocks banned users from creating bookings, paying, or creating orders (booking, Stripe, and order routes apply this guard).
+
+- **Admin dashboard (frontend)**
+  - Admin-only routes: `/admin` (dashboard) and `/admin/:id` (per-user activity) are only accessible if `authUser.role === "admin"`.
+  - `/admin` shows:
+    - A QR scanner (HTML5 QR) that reads booking QR codes and triggers verification.
+    - A list of non-admin users with their ban status, an "Activity" link, and a "Ban/Unban" toggle button.
+  - `/admin/:id` shows:
+    - The selected user's order history with line items, totals, and timestamps.
+    - The selected user's bookings with checked-in status and booking time ranges.
+
+- **QR check-in flow**
+  - Staff opens the admin dashboard and scans the booking QR code.
+  - The frontend sends `bookingId` and `token` from the QR payload to `POST /admin/verifyBooking`.
+  - The backend verifies the token, ensures the booking exists, and checks that the current time is within the allowed window (30 minutes before to 60 minutes after the booking).
+  - On success, the booking's `checkedIn` flag is set to `true` and the response includes basic user and table information for confirmation.
 
 ---
 
@@ -264,6 +287,14 @@ Frontend runs on `http://localhost:5173`.
 - `GET /book/table-bookings/:id` (cookie auth)
 - `DELETE /book/cancelBooking/:id` (cookie auth)
 
+### Admin
+
+- `GET /admin/allUsers` (cookie auth + admin): list all non-admin users with basic info.
+- `GET /admin/userBookings/:id` (cookie auth + admin): get all bookings for a specific user.
+- `GET /admin/userOrders/:id` (cookie auth + admin): get all orders for a specific user.
+- `POST /admin/banUser/:id` (cookie auth + admin): toggle a user's `isBanned` status.
+- `POST /admin/verifyBooking` (cookie auth + admin): verify a booking QR token and mark the booking as checked in.
+
 ### Coffee & Orders
 
 - `GET /coffee`: get all coffees
@@ -280,7 +311,7 @@ Frontend runs on `http://localhost:5173`.
 
 - **Cookie settings vs local dev**: cookie uses `sameSite: "strict"`. This is OK for same-site usage, but cross-site deployments may require `sameSite: "none"` + `secure: true` and HTTPS.
 - **Arcjet in dev**: Arcjet protection is applied to auth/booking routes even in development; misconfigured keys can cause unexpected denials.
-- **QR token not verified anywhere**: QR payload includes `qrToken`, but there is no “check-in/verify QR” endpoint implemented.
+- **No audit log for admin actions**: banning/unbanning users and manual check-ins are not logged anywhere beyond the current database state.
 
 ### Frontend / configuration
 
