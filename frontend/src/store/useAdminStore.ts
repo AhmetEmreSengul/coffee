@@ -16,6 +16,7 @@ interface AdminStore {
   getAllUserBookings: (id: string) => Promise<void>;
   getAllUserOrders: (id: string) => Promise<void>;
   banUser: (id: string) => Promise<void>;
+  verifyBookingQr: (data: string) => Promise<void>;
 }
 
 export const useAdminStore = create<AdminStore>((set) => ({
@@ -69,6 +70,20 @@ export const useAdminStore = create<AdminStore>((set) => ({
     try {
       await axiosInstance.post(`/admin/banUser/${id}`);
       toast.success("User updated.");
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error?.response?.data?.message);
+    }
+  },
+
+  verifyBookingQr: async (data: string) => {
+    try {
+      const parsedData = JSON.parse(data);
+      await axiosInstance.post("/admin/verifyBooking", {
+        bookingId: parsedData.bookingId,
+        token: parsedData.token,
+      });
+      toast.success("Booking verified.");
     } catch (error: any) {
       console.error(error);
       toast.error(error?.response?.data?.message);
