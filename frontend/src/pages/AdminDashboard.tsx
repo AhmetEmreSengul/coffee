@@ -6,7 +6,8 @@ import { toast } from "react-toastify";
 import VerifyBooking from "../components/VerifyBookings";
 
 const AdminPage = () => {
-  const { getAllUsers, banUser, users, usersLoading, verifyBookingQr } = useAdminStore();
+  const { getAllUsers, banUser, users, usersLoading, verifyBookingQr } =
+    useAdminStore();
 
   useEffect(() => {
     getAllUsers();
@@ -28,7 +29,9 @@ const AdminPage = () => {
           </div>
         ) : (
           <div className="space-y-4 p-2 md:p-0">
+            <h2 className="text-center text-2xl mt-10">Verify a Booking</h2>
             <VerifyBooking onScan={verifyBookingQr} />
+            <h2 className="text-2xl text-center">Users</h2>
             {users.map((user) => (
               <div
                 key={user._id}
