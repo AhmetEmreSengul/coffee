@@ -6,6 +6,7 @@ import {
   getAllUsers,
   getUserBookingsById,
   getUserOrdersById,
+  verifyBookingQr,
 } from "../controllers/admin.controller.js";
 
 const router = express.Router();
@@ -16,5 +17,6 @@ router.get("/allUsers", getAllUsers);
 router.get("/userBookings/:id", getUserBookingsById);
 router.get("/userOrders/:id", getUserOrdersById);
 router.post("/banUser/:id", banUser);
+router.post("/verifyBooking", verifyBookingQr);
 
 export default router;

@@ -7,7 +7,6 @@ import {
   getUserBookings,
   updateBooking,
   getTableBookings,
-  verifyBookingQr,
 } from "../controllers/booking.controller.js";
 import { protectRoute } from "../middleware/auth.middleware.js";
 import { arcjetProtection } from "../middleware/arcjet.middleware.js";
@@ -20,7 +19,6 @@ router.use(isBanned);
 
 router.get("/available-tables", getTable);
 router.post("/createBooking", createBooking);
-router.post("/verifyBooking", verifyBookingQr);
 router.put("/updateBooking/:id", updateBooking);
 router.get("/bookingQR/:id", getBookingQrCode);
 router.get("/my-bookings", getUserBookings);
