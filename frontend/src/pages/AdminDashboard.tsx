@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useAdminStore } from "../store/useAdminStore";
 import { Link } from "react-router-dom";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
@@ -6,18 +6,37 @@ import { toast } from "react-toastify";
 import VerifyBooking from "../components/VerifyBookings";
 
 const AdminPage = () => {
-  const { getAllUsers, banUser, users, usersLoading, verifyBookingQr } =
-    useAdminStore();
+  const {
+    getAllUsers,
+    banUser,
+    searchUsers,
+    users,
+    filteredUsers,
+    usersLoading,
+    verifyBookingQr,
+  } = useAdminStore();
+
+  const [text, setText] = useState<string>("");
 
   useEffect(() => {
     getAllUsers();
   }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      searchUsers(text);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [text]);
 
   const handleBan = async (id: string) => {
     await banUser(id);
     toast.success("User updated.");
     await getAllUsers();
   };
+
+  const usersToDisplay = text.trim() ? filteredUsers : users;
 
   return (
     <div className="pt-40 bg-[#333] min-h-screen w-screen font-mono space-y-5 text-white">
@@ -32,7 +51,14 @@ const AdminPage = () => {
             <h2 className="text-center text-2xl mt-10">Verify a Booking</h2>
             <VerifyBooking onScan={verifyBookingQr} />
             <h2 className="text-2xl text-center">Users</h2>
-            {users.map((user) => (
+            <input
+              className="border p-2 w-"
+              type="text"
+              placeholder="Search by username/id"
+              value={text}
+              onChange={(e) => setText(e.target.value)}
+            />
+            {usersToDisplay.map((user) => (
               <div
                 key={user._id}
                 className="text-white text-lg md:text-2xl flex flex-col md:flex-row gap-2 justify-center md:justify-between border p-1"

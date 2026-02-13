@@ -7,6 +7,7 @@ import type { Order } from "./useOrderStore";
 
 interface AdminStore {
   users: AuthUser[];
+  filteredUsers: AuthUser[];
   allUserBookings: UserBooking[];
   allUserOrders: Order[];
   bookingsLoading: boolean;
@@ -17,12 +18,14 @@ interface AdminStore {
   getAllUserOrders: (id: string) => Promise<void>;
   banUser: (id: string) => Promise<void>;
   verifyBookingQr: (data: string) => Promise<void>;
+  searchUsers: (data: string) => void;
 }
 
-export const useAdminStore = create<AdminStore>((set) => ({
+export const useAdminStore = create<AdminStore>((set, get) => ({
   users: [],
   allUserBookings: [],
   allUserOrders: [],
+  filteredUsers: [],
   bookingsLoading: false,
   ordersLoading: false,
   usersLoading: false,
@@ -38,6 +41,18 @@ export const useAdminStore = create<AdminStore>((set) => ({
     } finally {
       set({ usersLoading: false });
     }
+  },
+
+  searchUsers: async (data: string) => {
+    const list = get().users;
+
+    const filtered = list.filter(
+      (item) =>
+        item.fullName.toLowerCase().includes(data.toLowerCase()) ||
+        item._id.toLowerCase().includes(data.toLowerCase()),
+    );
+
+    set({ filteredUsers: filtered });
   },
 
   getAllUserBookings: async (id: string) => {
