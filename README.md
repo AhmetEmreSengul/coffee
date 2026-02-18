@@ -92,7 +92,6 @@ In production, the backend can also **serve the built frontend** (`frontend/dist
 
 ### Payment & order flow
 
-
 - **Checkout process**
   1. User adds coffees to cart from menu page.
   2. Cart page shows items, quantities, and total price.
@@ -315,7 +314,6 @@ Frontend runs on `http://localhost:5173`.
 
 ### Frontend / configuration
 
-- **Hardcoded production URL**: frontend's Axios baseURL uses a hardcoded production host in multiple places (`frontend/src/lib/axios.ts`, login/signup Google button logic), rather than an env-driven config.
 - **No API typing contract**: frontend types are local interfaces; there is no shared schema/OpenAPI.
 - **Stripe test mode**: payment processing uses Stripe test environment; test card `4242 4242 4242 4242` can be used for testing.
 

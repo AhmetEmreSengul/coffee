@@ -16,13 +16,10 @@ const Login = () => {
     login(formData);
   };
 
-  const API_URL =
-    window.location.hostname === "localhost"
-      ? "http://localhost:3000"
-      : "https://timeslot-dtqf.onrender.com";
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
 
   const handleGoogleLogin = () => {
-    window.location.href = `${API_URL}/auth/google`;
+    window.location.href = `${BASE_URL}/auth/google`;
   };
 
   return (
