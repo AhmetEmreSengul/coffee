@@ -1,13 +1,27 @@
 import { sendCreateOrderEmail } from "../emails/emailHandler.js";
+import Coffee from "../models/Coffee.js";
 import Order from "../models/Order.js";
 
 export const createOrder = async (req, res) => {
   try {
     const userId = req.user._id;
-    const { orderItems, totalPrice, orderNote } = req.body;
+    const { orderItems, orderNote } = req.body;
 
-    if (!Array.isArray(orderItems) || orderItems.length === 0 || !totalPrice) {
+    if (!Array.isArray(orderItems) || orderItems.length === 0) {
       return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const coffees = await Coffee.find({
+      _id: { $in: orderItems.map((i) => i._id) },
+    });
+
+    let totalPrice = 0;
+
+    for (const item of orderItems) {
+      const coffee = coffees.find((c) => c._id.toString() === item._id);
+      if (!coffee) continue;
+
+      totalPrice += coffee.price * item.quantity;
     }
 
     const order = await Order.create({

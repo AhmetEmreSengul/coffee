@@ -91,12 +91,17 @@ const CheckoutForm = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await handlePayment();
-    await createOrder(cart, totalPrice, orderNote);
-    if (authUser?.isBanned === false) {
-      setView("checkout");
+    try {
+      await handlePayment();
+      await createOrder(cart, orderNote);
+      if (authUser?.isBanned === false) {
+        setView("checkout");
+      }
+      clearCart();
+    } catch (error) {
+      console.error(error);
+      toast.error("Checkout failed");
     }
-    clearCart();
   };
 
   return (

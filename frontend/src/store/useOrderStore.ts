@@ -18,11 +18,7 @@ interface OrderStore {
   pastOrders: Order[];
   lastOrder: Order | null;
   isLoading: boolean;
-  createOrder: (
-    orderItems: OrderItem[],
-    totalPrice: number,
-    orderNote: string,
-  ) => Promise<void>;
+  createOrder: (orderItems: OrderItem[], orderNote: string) => Promise<void>;
   getPastOrders: () => Promise<void>;
   getLastOrder: () => Promise<void>;
 }
@@ -32,17 +28,17 @@ export const useOrderStore = create<OrderStore>((set) => ({
   lastOrder: null,
   isLoading: false,
 
-  createOrder: async (orderItems, totalPrice, orderNote) => {
+  createOrder: async (orderItems, orderNote) => {
     try {
       await axiosInstance.post("/orders/create-order", {
         orderItems,
-        totalPrice,
         orderNote,
       });
       toast.success("Order created");
     } catch (error: any) {
       console.error("Error creating order", error?.response?.data?.message);
       toast.error(error?.response?.data?.message);
+      throw error;
     }
   },
 
