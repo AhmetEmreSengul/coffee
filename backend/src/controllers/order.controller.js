@@ -21,6 +21,14 @@ export const createOrder = async (req, res) => {
       const coffee = coffees.find((c) => c._id.toString() === item._id);
       if (!coffee) continue;
 
+      if (item.quantity > 10) {
+        return res.status(400).json({ message: "Quantity limit exceeded" });
+      }
+
+      if (item.quantity < 1) {
+        return res.status(400).json({ message: "Quantity must be at least 1" });
+      }
+
       totalPrice += coffee.price * item.quantity;
     }
 
