@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useAdminStore } from "../store/useAdminStore";
 import { Link } from "react-router-dom";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import { toast } from "react-toastify";
 import VerifyBooking from "../components/VerifyBookings";
 import { FaArrowRight } from "react-icons/fa";
 
@@ -33,7 +32,6 @@ const AdminPage = () => {
 
   const handleBan = async (id: string) => {
     await banUser(id);
-    toast.success("User updated.");
     await getAllUsers();
   };
 
