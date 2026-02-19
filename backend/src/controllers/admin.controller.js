@@ -1,4 +1,5 @@
 import Booking from "../models/Booking.js";
+import Coffee from "../models/Coffee.js";
 import Order from "../models/Order.js";
 import User from "../models/User.js";
 
@@ -102,6 +103,91 @@ export const verifyBookingQr = async (req, res) => {
     });
   } catch (error) {
     console.error("Error verifying QR code", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const addCoffee = async (req, res) => {
+  try {
+    const { title, type, price, image, description } = req.body;
+
+    if (!title || !type || !price || !image || !description) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const coffee = Coffee.create({
+      title,
+      type,
+      price,
+      image,
+      description,
+    });
+
+    res.status(201).json(coffee);
+  } catch (error) {
+    console.error("Error adding coffee", error.message);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getCoffeeById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const coffee = await Coffee.findById(id);
+
+    if (!coffee) {
+      return res.status(404).json({ message: "Coffee not found" });
+    }
+
+    res.status(200).json(coffee);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const editCoffee = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { title, type, price, image, description } = req.body;
+
+    if (!title || !type || !price || !image || !description) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    const coffee = await Coffee.findById(id);
+
+    if (!coffee) {
+      return res.status(404).json({ message: "Coffee not found" });
+    }
+
+    coffee.title = title;
+    coffee.type = type;
+    coffee.price = price;
+    coffee.image = image;
+    coffee.description = description;
+
+    await coffee.save();
+
+    res.status(200).json(coffee);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const deleteCoffee = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const coffee = await Coffee.findByIdAndDelete(id);
+
+    if (!coffee) {
+      return res.status(404).json({ message: "Coffee not found" });
+    }
+
+    res.status(200).json({ message: "Coffee deleted" });
+  } catch (error) {
+    console.error("Error deleting coffee", error.message);
     res.status(500).json({ message: "Internal server error" });
   }
 };

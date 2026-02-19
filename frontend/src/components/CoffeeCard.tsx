@@ -43,7 +43,7 @@ const CoffeeCard = ({ coffee }: CoffeeCardProps) => {
         ) : (
           <div className="w-full bg-beige-400 hover:bg-beige-400/70 transition cursor-pointer rounded-full p-2 flex items-center justify-center gap-10">
             <button
-              onClick={() => decreaseQty(coffee._id)}
+              onClick={() => decreaseQty(coffee._id!)}
               className="text-xl font-bold cursor-pointer"
             >
               <CiCircleMinus className="size-7" />
@@ -52,7 +52,7 @@ const CoffeeCard = ({ coffee }: CoffeeCardProps) => {
             <span className="font-semibold">{cartItem.quantity}</span>
 
             <button
-              onClick={() => increaseQty(coffee._id)}
+              onClick={() => increaseQty(coffee._id!)}
               className="text-xl font-bold cursor-pointer"
             >
               <CiCirclePlus className="size-7" />

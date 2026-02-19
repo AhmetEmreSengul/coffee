@@ -1,5 +1,5 @@
 interface Coffee {
-  _id: string;
+  _id?: string;
   title: string;
   type: string;
   price: number;

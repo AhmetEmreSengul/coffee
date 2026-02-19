@@ -30,7 +30,7 @@ const CartCoffeCard = ({ coffee }: CoffeeCardProps) => {
       <div className="w-40 items-center justify-center flex">
         <div className="flex flex-row">
           <button
-            onClick={() => decreaseQty(coffee._id)}
+            onClick={() => decreaseQty(coffee._id!)}
             className="text-caramel-400 hover:text-caramel-300 transition cursor-pointer rounded-full"
           >
             <FaMinusCircle className="size-4" />
@@ -39,7 +39,7 @@ const CartCoffeCard = ({ coffee }: CoffeeCardProps) => {
             {coffee.quantity}
           </p>
           <button
-            onClick={() => increaseQty(coffee._id)}
+            onClick={() => increaseQty(coffee._id!)}
             className="text-caramel-400 hover:text-caramel-300 transition cursor-pointer rounded-full"
           >
             <FaPlusCircle className="size-4" />

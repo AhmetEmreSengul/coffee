@@ -19,6 +19,9 @@ interface AdminStore {
   banUser: (id: string) => Promise<void>;
   verifyBookingQr: (data: string) => Promise<void>;
   searchUsers: (data: string) => void;
+  addCoffee: (data: Coffee) => Promise<void>;
+  editCoffee: (id: string, data: Coffee) => Promise<void>;
+  deleteCoffee: (id: string) => Promise<void>;
 }
 
 export const useAdminStore = create<AdminStore>((set, get) => ({
@@ -99,6 +102,36 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
         token: parsedData.token,
       });
       toast.success("Booking verified.");
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error?.response?.data?.message);
+    }
+  },
+
+  addCoffee: async (coffee: Coffee) => {
+    try {
+      await axiosInstance.post("/admin/addCoffee", coffee);
+      toast.success("Coffee added.");
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error?.response?.data?.message);
+    }
+  },
+
+  editCoffee: async (id: string, coffee: Coffee) => {
+    try {
+      await axiosInstance.put(`/admin/editCoffee/${id}`, coffee);
+      toast.success("Coffee edited.");
+    } catch (error: any) {
+      console.error(error);
+      toast.error(error?.response?.data?.message);
+    }
+  },
+
+  deleteCoffee: async (id: string) => {
+    try {
+      await axiosInstance.delete(`/admin/deleteCoffee/${id}`);
+      toast.success("Coffee deleted.");
     } catch (error: any) {
       console.error(error);
       toast.error(error?.response?.data?.message);

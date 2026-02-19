@@ -15,6 +15,7 @@ import { useAuthStore } from "./store/useAuthStore";
 import AdminPage from "./pages/AdminDashboard";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import AdminManageUsers from "./pages/UserActivity";
+import AdminManageCoffees from "./pages/AdminManageCoffees";
 
 const App = () => {
   const { authUser, isCheckingAuth, checkAuth } = useAuthStore();
@@ -79,6 +80,10 @@ const App = () => {
         <Route
           path="/admin/:id"
           element={isAdmin ? <AdminManageUsers /> : <Navigate to={"/"} />}
+        />
+        <Route
+          path="/admin/coffees"
+          element={isAdmin ? <AdminManageCoffees /> : <Navigate to={"/"} />}
         />
       </Routes>
     </div>
