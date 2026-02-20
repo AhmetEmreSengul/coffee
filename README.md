@@ -16,6 +16,7 @@ This repo contains a **React (Vite) frontend** and an **Express + MongoDB backen
 - Booking confirmation emails
 - Booking QR code generation
 - Basic request protection (bot detection + rate limiting)
+- Admin coffee menu management (add, edit, delete coffees)
 
 ---
 
@@ -41,7 +42,9 @@ In production, the backend can also **serve the built frontend** (`frontend/dist
 - **Tailwind CSS v4** + **daisyUI** (+ `tailwind-merge`, `clsx`): utility-first styling and component-friendly class composition.
 - **Framer Motion**: UI animations (page sections, booking card carousel, etc.).
 - **React Toastify**: user notifications.
-- **Radix UI Popover**: used for popovers (e.g., date/time UI).
+- **Skeleton loaders**: loading states for coffee grid and table cards (`CoffeDisplaySkeleton`, `TableCardSkeleton`).
+- **Radix UI Popover**: used for popovers where needed.
+- **react-day-picker**: date selection for table booking (next 7 days).
 - **@stripe/react-stripe-js** + **@stripe/stripe-js**: Stripe payment integration with card elements.
 - **date-fns**: date formatting.
 
@@ -116,6 +119,14 @@ In production, the backend can also **serve the built frontend** (`frontend/dist
   - `GET /book/available-tables`: returns tables from MongoDB.
   - `backend/src/scripts/seedTables.js`: seeds 10 tables (run via `npm run table` in `backend/`).
 
+- **Coffee menu (admin)**
+  - Admins can add, edit, and delete coffees from the menu via the admin dashboard.
+  - `GET /admin/coffee/:id`: get a single coffee by id (admin).
+  - `POST /admin/addCoffee`: create a new coffee (admin; body: title, type, price, image, description).
+  - `PUT /admin/editCoffee/:id`: update a coffee (admin).
+  - `DELETE /admin/deleteCoffee/:id`: delete a coffee (admin).
+  - Optional seeding: `backend/src/scripts/seedCoffees.js` reads `backend/src/data/coffee.json` and populates the Coffee collection (run with `node src/scripts/seedCoffees.js` from `backend/`).
+
 - **Create booking (with overlap prevention)**
   - `POST /book/createBooking` (protected):
     - Validates start/end time.
@@ -178,13 +189,16 @@ Rules include:
   - Middleware `isBanned` blocks banned users from creating bookings, paying, or creating orders (booking, Stripe, and order routes apply this guard).
 
 - **Admin dashboard (frontend)**
-  - Admin-only routes: `/admin` (dashboard) and `/admin/:id` (per-user activity) are only accessible if `authUser.role === "admin"`.
+  - Admin-only routes: `/admin` (dashboard), `/admin/:id` (per-user activity), and `/admin/coffees` (manage menu) are only accessible if `authUser.role === "admin"`.
   - `/admin` shows:
     - A QR scanner (HTML5 QR) that reads booking QR codes and triggers verification.
     - A list of non-admin users with their ban status, an "Activity" link, and a "Ban/Unban" toggle button.
+    - A "Manage Coffees" link to the coffee management page.
   - `/admin/:id` shows:
     - The selected user's order history with line items, totals, and timestamps.
     - The selected user's bookings with checked-in status and booking time ranges.
+  - `/admin/coffees` shows:
+    - Full CRUD for the coffee menu: add new coffee, edit existing (title, type, price, image, description), and delete. Uses `AdminCoffeForm` and `useAdminStore` (addCoffee, editCoffee, deleteCoffee).
 
 - **QR check-in flow**
   - Staff opens the admin dashboard and scans the booking QR code.
@@ -239,6 +253,7 @@ Notes:
 cd backend
 npm install
 npm run table   # optional: seed tables
+# optional: seed coffees (from backend dir): node src/scripts/seedCoffees.js
 npm run dev
 ```
 
@@ -293,6 +308,10 @@ Frontend runs on `http://localhost:5173`.
 - `GET /admin/userOrders/:id` (cookie auth + admin): get all orders for a specific user.
 - `POST /admin/banUser/:id` (cookie auth + admin): toggle a user's `isBanned` status.
 - `POST /admin/verifyBooking` (cookie auth + admin): verify a booking QR token and mark the booking as checked in.
+- `GET /admin/coffee/:id` (cookie auth + admin): get a single coffee by id.
+- `POST /admin/addCoffee` (cookie auth + admin): add a new coffee (body: title, type, price, image, description).
+- `PUT /admin/editCoffee/:id` (cookie auth + admin): edit a coffee.
+- `DELETE /admin/deleteCoffee/:id` (cookie auth + admin): delete a coffee.
 
 ### Coffee & Orders
 
