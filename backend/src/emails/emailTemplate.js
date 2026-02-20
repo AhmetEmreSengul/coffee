@@ -8,9 +8,9 @@ export function createBookingEmailTemplate(
 ) {
   const formattedStart = format(
     new Date(startTime),
-    "EEEE, MMM d, yyyy, hh:mm a",
+    "EEEE, MMM d, yyyy, HH:mm",
   );
-  const formattedEnd = format(new Date(endTime), "hh:mm a");
+  const formattedEnd = format(new Date(endTime), "HH:mm");
 
   return `
   <!DOCTYPE html>
