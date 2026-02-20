@@ -29,12 +29,14 @@ const AdminCoffeForm = ({
         placeholder="Title"
         value={formData.title}
         onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+        required
       />
       <label>Type</label>
       <select
         value={formData.type}
-        className="p-3"
+        className="p-3 bg-black"
         onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+        required
       >
         <option value="">Select Type</option>
         <option value="Hot">Hot</option>
@@ -52,6 +54,7 @@ const AdminCoffeForm = ({
             price: Number(e.target.value),
           })
         }
+        required
       />
       <label>Image Url</label>
       <input
@@ -60,6 +63,7 @@ const AdminCoffeForm = ({
         placeholder="Image"
         value={formData.image}
         onChange={(e) => setFormData({ ...formData, image: e.target.value })}
+        required
       />
       {formData.image && (
         <img
@@ -69,9 +73,8 @@ const AdminCoffeForm = ({
         />
       )}
       <label>Description</label>
-      <input
+      <textarea
         className="border p-2"
-        type="text"
         placeholder="Description"
         value={formData.description}
         onChange={(e) =>
@@ -80,11 +83,11 @@ const AdminCoffeForm = ({
             description: e.target.value,
           })
         }
+        required
       />
       <button type="submit">Submit</button>
     </form>
   );
 };
 
-
-export default AdminCoffeForm
+export default AdminCoffeForm;
