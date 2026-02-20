@@ -12,6 +12,7 @@ const UserBookings = () => {
   const { authUser } = useAuthStore();
 
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [dragActive, setDragActive] = useState(true);
   const [dragLimit, setDragLimit] = useState(0);
 
   useEffect(() => {
@@ -86,7 +87,7 @@ const UserBookings = () => {
         <motion.div
           ref={scrollRef}
           className="flex flex-row gap-10 cursor-grab"
-          drag="x"
+          drag={dragActive ? "x" : false}
           dragConstraints={{ left: dragLimit, right: 0 }}
           whileTap={{ cursor: "grabbing" }}
         >
@@ -103,6 +104,7 @@ const UserBookings = () => {
                   bookingQR.find((qr) => qr.booking._id === booking._id)
                     ?.qrCode ?? null
                 }
+                setDragActive={setDragActive}
               />
             </motion.div>
           ))}

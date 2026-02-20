@@ -13,9 +13,10 @@ import Countdown from "./Countdown";
 interface BookingCardProps {
   booking: UserBooking;
   qrCode: string | null;
+  setDragActive: (active: boolean) => void;
 }
 
-const BookingCard = ({ booking, qrCode }: BookingCardProps) => {
+const BookingCard = ({ booking, qrCode, setDragActive }: BookingCardProps) => {
   const { updateUserBooking, getUserBookings, deleteUserBooking } =
     useBookingStore();
   const { authUser } = useAuthStore();
@@ -76,6 +77,12 @@ const BookingCard = ({ booking, qrCode }: BookingCardProps) => {
       endTime: new Date(booking.bookingTime.end).toTimeString().slice(0, 5),
     });
     setUpdateOpen(true);
+    setDragActive(false);
+  };
+
+  const handleDeleteClick = () => {
+    setDeleteOpen(true);
+    setDragActive(false);
   };
 
   return (
@@ -178,7 +185,7 @@ const BookingCard = ({ booking, qrCode }: BookingCardProps) => {
 
                   <button
                     className="p-2 bg-amber-800 text-cream-50 font-bold rounded-lg hover:bg-amber-700 transition"
-                    onClick={() => setDeleteOpen(true)}
+                    onClick={handleDeleteClick}
                   >
                     Delete
                   </button>
