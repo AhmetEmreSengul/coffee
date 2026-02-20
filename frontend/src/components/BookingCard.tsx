@@ -1,57 +1,63 @@
 import { CiCalendar, CiClock1, CiLocationOn } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, useEffect, type FormEvent } from "react";
+import { useState, type FormEvent } from "react";
 import DateInput from "./DateInput";
 import TimeInput from "./TimeInput";
-import type { BookingQR, UserBooking } from "../store/useBookingStore";
-import type { AuthUser } from "../store/useAuthStore";
+import { useBookingStore, type UserBooking } from "../store/useBookingStore";
+import { useAuthStore } from "../store/useAuthStore";
 import { TbClockExclamation } from "react-icons/tb";
+import { toast } from "react-toastify";
+import Countdown from "./Countdown";
 
 interface BookingCardProps {
   booking: UserBooking;
-  authUser: AuthUser | null;
-  bookingQR: BookingQR[];
-  formData: {
-    bookingId: string;
-    date: Date | null;
-    startTime: string;
-    endTime: string;
-    tableNumber: string;
-  };
-  setFormData: (data: any) => void;
-  updateOpen: boolean;
-  setUpdateOpen: (v: boolean) => void;
-  deleteBookingId: string | null;
-  setDeleteBookingId: (id: string | null) => void;
-  deleteUserBooking: (id: string) => void;
-  onSubmit: (e: FormEvent) => void;
-  getUserBookings: () => void;
+  qrCode: string | null;
 }
 
-const BookingCard = ({
-  booking,
-  authUser,
-  bookingQR,
-  formData,
-  setFormData,
-  updateOpen,
-  setUpdateOpen,
-  deleteBookingId,
-  setDeleteBookingId,
-  deleteUserBooking,
-  onSubmit,
-  getUserBookings,
-}: BookingCardProps) => {
+const BookingCard = ({ booking, qrCode }: BookingCardProps) => {
+  const { updateUserBooking, getUserBookings, deleteUserBooking } =
+    useBookingStore();
+  const { authUser } = useAuthStore();
   const [isRipping, setIsRipping] = useState(false);
+  const [updateOpen, setUpdateOpen] = useState(false);
+  const [deleteOpen, setDeleteOpen] = useState(false);
+
+  const [formData, setFormData] = useState({
+    date: null as Date | null,
+    startTime: "",
+    endTime: "",
+  });
+
+  const toDateTime = (date: Date, time: string) => {
+    const [h, m] = time.split(":").map(Number);
+    const d = new Date(date);
+    d.setHours(h, m, 0, 0);
+    return d.toISOString();
+  };
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+
+    if (!formData.date || !formData.startTime || !formData.endTime) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    const startISO = toDateTime(formData.date, formData.startTime);
+    const endISO = toDateTime(formData.date, formData.endTime);
+
+    updateUserBooking(booking._id, startISO, endISO);
+    setUpdateOpen(false);
+  };
 
   const handleDelete = async () => {
     setIsRipping(true);
     setTimeout(async () => {
       deleteUserBooking(booking._id);
-      setDeleteBookingId(null);
+      setDeleteOpen(false);
       setIsRipping(false);
-      getUserBookings();
+      await getUserBookings();
     }, 800);
   };
 
@@ -65,11 +71,9 @@ const BookingCard = ({
 
   const handleUpdateClick = () => {
     setFormData({
-      bookingId: booking._id,
       date: new Date(booking.bookingTime.start),
       startTime: new Date(booking.bookingTime.start).toTimeString().slice(0, 5),
       endTime: new Date(booking.bookingTime.end).toTimeString().slice(0, 5),
-      tableNumber: booking.tableNumber.number,
     });
     setUpdateOpen(true);
   };
@@ -174,7 +178,7 @@ const BookingCard = ({
 
                   <button
                     className="p-2 bg-amber-800 text-cream-50 font-bold rounded-lg hover:bg-amber-700 transition"
-                    onClick={() => setDeleteBookingId(booking._id)}
+                    onClick={() => setDeleteOpen(true)}
                   >
                     Delete
                   </button>
@@ -201,26 +205,21 @@ const BookingCard = ({
                     : "none",
                 }}
               >
-                {bookingQR
-                  .filter((qrObj) => qrObj.booking._id === booking._id)
-                  .map((qrObj, i) => (
-                    <div
-                      className="p-8 flex flex-col items-center justify-center space-y-4"
-                      key={i}
-                    >
-                      <div className="p-3 bg-cream-50 rounded-xl shadow-sm border border-border-light">
-                        <img
-                          src={qrObj.qrCode}
-                          alt="Entry QR Code"
-                          className="w-40 h-40 mix-blend-multiply opacity-90"
-                        />
-                      </div>
-                      <p className="text-xs text-center text-text-tertiary max-w-[200px]">
-                        Scan this code at the entrance to access your reserved
-                        table.
-                      </p>
+                {qrCode && (
+                  <div className="p-8 flex flex-col items-center justify-center space-y-4">
+                    <div className="p-3 bg-cream-50 rounded-xl shadow-sm border border-border-light">
+                      <img
+                        src={qrCode}
+                        alt="Entry QR Code"
+                        className="w-40 h-40 mix-blend-multiply opacity-90"
+                      />
                     </div>
-                  ))}
+                    <p className="text-xs text-center text-text-tertiary max-w-[200px]">
+                      Scan this code at the entrance to access your reserved
+                      table.
+                    </p>
+                  </div>
+                )}
               </motion.div>
             </>
           )}
@@ -242,7 +241,7 @@ const BookingCard = ({
                 <IoMdClose size={30} />
               </p>
 
-              <form onSubmit={onSubmit} className="flex flex-col gap-4">
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <DateInput
                   value={formData.date}
                   onChange={(date) =>
@@ -272,7 +271,7 @@ const BookingCard = ({
                 <div className="flex justify-end gap-3 mt-3">
                   <button
                     type="submit"
-                    className="p-2 bg-sage-300 text-sage-400 font-bold rounded-lg hover:bg-sage-400 hover:text-cream-50 transition"
+                    className="p-2 bg-sage-300 text-text-secondary rounded-lg hover:bg-sage-400  transition"
                   >
                     Update
                   </button>
@@ -288,10 +287,10 @@ const BookingCard = ({
             </motion.div>
           </div>
         )}
-        {deleteBookingId === booking._id && (
+        {deleteOpen && (
           <div
             className="fixed inset-0 bg-black/40 flex items-center justify-center z-10"
-            onClick={() => setDeleteBookingId(null)}
+            onClick={() => setDeleteOpen(false)}
           >
             <motion.div
               className="bg-cream-50/50 backdrop-blur-sm border border-border-light p-6 rounded-xl shadow-lg"
@@ -315,7 +314,7 @@ const BookingCard = ({
 
                 <button
                   className="p-2 bg-beige-300 rounded-lg"
-                  onClick={() => setDeleteBookingId(null)}
+                  onClick={() => setDeleteOpen(false)}
                 >
                   Nevermind.
                 </button>
@@ -329,33 +328,3 @@ const BookingCard = ({
 };
 
 export default BookingCard;
-
-const Countdown = ({ endTime }: { endTime: string }) => {
-  const [timeLeft, setTimeLeft] = useState("");
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = new Date().getTime();
-      const end = new Date(endTime).getTime();
-      const diff = end - now;
-
-      if (diff <= 0) {
-        setTimeLeft("Expired");
-        clearInterval(interval);
-        return;
-      }
-
-      const hours = Math.floor(diff / (1000 * 60 * 60));
-      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-
-      setTimeLeft(
-        `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`,
-      );
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [endTime]);
-
-  return <span>{timeLeft}</span>;
-};

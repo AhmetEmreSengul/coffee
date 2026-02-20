@@ -1,6 +1,5 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useBookingStore } from "../store/useBookingStore";
-import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import BookingCard from "../components/BookingCard";
@@ -8,26 +7,9 @@ import { motion } from "framer-motion";
 import CoffeDisplaySkeleton from "../components/CoffeDisplaySkeleton";
 
 const UserBookings = () => {
-  const {
-    getUserBookings,
-    myBookings,
-    bookingQR,
-    getQRCode,
-    updateUserBooking,
-    deleteUserBooking,
-    isLoading,
-  } = useBookingStore();
+  const { getUserBookings, myBookings, bookingQR, getQRCode, isLoading } =
+    useBookingStore();
   const { authUser } = useAuthStore();
-
-  const [updateOpen, setUpdateOpen] = useState(false);
-  const [deleteBookingId, setDeleteBookingId] = useState<string | null>("");
-  const [formData, setFormData] = useState({
-    bookingId: "",
-    date: null as Date | null,
-    startTime: "",
-    endTime: "",
-    tableNumber: "",
-  });
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const [dragLimit, setDragLimit] = useState(0);
@@ -51,33 +33,6 @@ const UserBookings = () => {
       myBookings.forEach((b) => getQRCode(b._id));
     }
   }, [myBookings]);
-
-  const toDateTime = (date: Date, time: string) => {
-    const [h, m] = time.split(":").map(Number);
-    const d = new Date(date);
-    d.setHours(h, m, 0, 0);
-    return d.toISOString();
-  };
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-
-    if (
-      !formData.bookingId ||
-      !formData.date ||
-      !formData.startTime ||
-      !formData.endTime
-    ) {
-      toast.error("Please fill in all fields");
-      return;
-    }
-
-    const startISO = toDateTime(formData.date, formData.startTime);
-    const endISO = toDateTime(formData.date, formData.endTime);
-
-    updateUserBooking(formData.bookingId, startISO, endISO);
-    setUpdateOpen(false);
-  };
 
   if (isLoading) {
     return (
@@ -144,17 +99,10 @@ const UserBookings = () => {
             >
               <BookingCard
                 booking={booking}
-                authUser={authUser}
-                bookingQR={bookingQR}
-                formData={formData}
-                setFormData={setFormData}
-                updateOpen={updateOpen}
-                setUpdateOpen={setUpdateOpen}
-                deleteBookingId={deleteBookingId}
-                setDeleteBookingId={setDeleteBookingId}
-                deleteUserBooking={deleteUserBooking}
-                onSubmit={handleSubmit}
-                getUserBookings={getUserBookings}
+                qrCode={
+                  bookingQR.find((qr) => qr.booking._id === booking._id)
+                    ?.qrCode ?? null
+                }
               />
             </motion.div>
           ))}
