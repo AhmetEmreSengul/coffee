@@ -17,8 +17,7 @@ interface BookingCardProps {
 }
 
 const BookingCard = ({ booking, qrCode, setDragActive }: BookingCardProps) => {
-  const { updateUserBooking, getUserBookings, deleteUserBooking } =
-    useBookingStore();
+  const { updateUserBooking, deleteUserBooking } = useBookingStore();
   const { authUser } = useAuthStore();
   const [isRipping, setIsRipping] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
@@ -58,8 +57,7 @@ const BookingCard = ({ booking, qrCode, setDragActive }: BookingCardProps) => {
       deleteUserBooking(booking._id);
       setDeleteOpen(false);
       setIsRipping(false);
-      await getUserBookings();
-    }, 800);
+    }, 1000);
   };
 
   const maxEndTime = (() => {

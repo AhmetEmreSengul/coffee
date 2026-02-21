@@ -32,7 +32,6 @@ const AdminPage = () => {
 
   const handleBan = async (id: string) => {
     await banUser(id);
-    await getAllUsers();
   };
 
   const usersToDisplay = text.trim() ? filteredUsers : users;

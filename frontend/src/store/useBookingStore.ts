@@ -66,7 +66,7 @@ interface BookingStore {
   deleteUserBooking: (id: string) => Promise<void>;
 }
 
-export const useBookingStore = create<BookingStore>((set) => ({
+export const useBookingStore = create<BookingStore>((set, get) => ({
   tables: [],
   myBookings: [],
   bookingQR: [],
@@ -137,8 +137,8 @@ export const useBookingStore = create<BookingStore>((set) => ({
       await axiosInstance.put(`/book/updateBooking/${id}`, {
         bookingTime: { start: startTime, end: endTime },
       });
-
       toast.success("Booking updated successfully");
+      await get().getUserBookings();
     } catch (error: any) {
       console.error("Error updating booking", error);
       toast.error(error?.response?.data?.message || "Failed to update booking");
@@ -160,6 +160,7 @@ export const useBookingStore = create<BookingStore>((set) => ({
     try {
       await axiosInstance.delete(`/book/cancelBooking/${id}`);
       toast.success("Cancelled booking");
+      await get().getUserBookings();
     } catch (error: any) {
       console.error("Error deleting booking");
       toast.error(error?.response?.data?.message || "Failed to delete booking");

@@ -88,6 +88,7 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
     try {
       await axiosInstance.post(`/admin/banUser/${id}`);
       toast.success("User updated.");
+      await get().getAllUsers();
     } catch (error: any) {
       console.error(error);
       toast.error(error?.response?.data?.message);

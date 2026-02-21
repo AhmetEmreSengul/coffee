@@ -2,9 +2,10 @@ import { useEffect, useState, type FormEvent } from "react";
 import { useCoffeeStore } from "../store/useCoffeeStore";
 import { useAdminStore } from "../store/useAdminStore";
 import AdminCoffeForm from "../components/AdminCoffeForm";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const AdminManageCoffees = () => {
-  const { getCoffee, coffee: coffees } = useCoffeeStore();
+  const { getCoffee, coffee: coffees, isLoading } = useCoffeeStore();
   const { addCoffee, editCoffee, deleteCoffee } = useAdminStore();
 
   const [deleteId, setDeleteId] = useState("");
@@ -18,10 +19,15 @@ const AdminManageCoffees = () => {
     description: "",
   });
 
-  const handleEditSubmit = (e: FormEvent) => {
+  useEffect(() => {
+    getCoffee();
+  }, []);
+
+  const handleEditSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    editCoffee(editId, formData);
+    await editCoffee(editId, formData);
     setEditId("");
+    await getCoffee();
   };
 
   const handleEdit = (coffee: Coffee) => {
@@ -66,9 +72,12 @@ const AdminManageCoffees = () => {
     });
   };
 
-  useEffect(() => {
-    getCoffee();
-  }, []);
+  if (isLoading)
+    return (
+      <div className="h-screen w-screen flex items-center justify-center bg-[#333] text-white">
+        <AiOutlineLoading3Quarters className="size-10 animate-spin" />
+      </div>
+    );
 
   return (
     <div className="py-40 bg-[#333] min-h-screen w-screen font-mono gap-10 text-white flex flex-col items-center justify-center p-2">
