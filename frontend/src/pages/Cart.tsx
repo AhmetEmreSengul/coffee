@@ -6,6 +6,7 @@ import CheckoutForm from "../components/CheckoutForm";
 import { stripePromise } from "../lib/stripe";
 import { useCartStore } from "../store/useCartStore";
 import CheckoutView from "../components/CheckoutView";
+import { AnimatePresence, motion } from "framer-motion";
 
 const Cart = () => {
   const [view, setView] = useState("");
@@ -19,6 +20,21 @@ const Cart = () => {
 
   if (view === "checkout") {
     return <CheckoutView />;
+  }
+
+  if (cart.length === 0) {
+    return (
+      <div className="h-screen w-screen flex items-center justify-center">
+        No items in cart. Browse coffees from the
+        <Link
+          className="text-caramel-400 underline hover:text-caramel-300 transition ml-1"
+          to="/menu"
+        >
+          menu
+        </Link>
+        .
+      </div>
+    );
   }
 
   return (
@@ -35,24 +51,22 @@ const Cart = () => {
             </div>
           )}
 
-          {cart.length === 0 ? (
-            <div className="text-xl">
-              No items in cart. Browse coffees from the
-              <Link
-                className="text-caramel-400 underline hover:text-caramel-300 transition ml-1"
-                to="/menu"
-              >
-                menu
-              </Link>
-              .
-            </div>
-          ) : (
-            <div className="max-h-120 space-y-2 overflow-y-auto ">
-              {cart.map((item) => (
-                <CartCoffeCard key={item._id} coffee={item} />
+          <motion.div className="max-h-130 space-y-2 overflow-y-auto">
+            <AnimatePresence>
+              {cart.map((item, i) => (
+                <motion.div
+                  initial={{ opacity: 0, x: -50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.2 + i * 0.1, duration: 0.2 }}
+                  exit={{ opacity: 0, x: -50 }}
+                  key={item._id}
+                  layout
+                >
+                  <CartCoffeCard coffee={item} />
+                </motion.div>
               ))}
-            </div>
-          )}
+            </AnimatePresence>
+          </motion.div>
         </div>
 
         {cart.length > 0 && (

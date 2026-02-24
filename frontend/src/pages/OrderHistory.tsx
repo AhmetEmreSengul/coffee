@@ -33,14 +33,11 @@ const OrderHistory = () => {
 
   if (pastOrders.length === 0) {
     return (
-      <div className="pt-40">
-        <h1 className="text-3xl font-bold text-center mb-10">
-          No Order History
-        </h1>
-        <p className="text-center text-lg">
-          You can add coffees to your cart{" "}
+      <div className="h-screen w-screen flex items-center justify-center">
+        <p>
+          No orders found. You can add coffees to your cart
           <Link
-            className="text-caramel-400 hover:text-caramel-400/70 transition underline"
+            className="text-caramel-400 hover:text-caramel-400/70 transition underline ml-1"
             to={"/menu"}
           >
             here.
