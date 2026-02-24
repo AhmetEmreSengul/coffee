@@ -13,6 +13,8 @@ interface AdminStore {
   bookingsLoading: boolean;
   ordersLoading: boolean;
   usersLoading: boolean;
+  usersPerPage: number;
+  currentPage: number;
   getAllUsers: () => Promise<void>;
   getAllUserBookings: (id: string) => Promise<void>;
   getAllUserOrders: (id: string) => Promise<void>;
@@ -22,6 +24,7 @@ interface AdminStore {
   addCoffee: (data: Coffee) => Promise<void>;
   editCoffee: (id: string, data: Coffee) => Promise<void>;
   deleteCoffee: (id: string) => Promise<void>;
+  setPage: (page: number) => void;
 }
 
 export const useAdminStore = create<AdminStore>((set, get) => ({
@@ -32,12 +35,14 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
   bookingsLoading: false,
   ordersLoading: false,
   usersLoading: false,
+  usersPerPage: 9,
+  currentPage: 1,
 
   getAllUsers: async () => {
     try {
       set({ usersLoading: true });
       const res = await axiosInstance.get("/admin/allUsers");
-      set({ users: res.data });
+      set({ users: res.data, filteredUsers: res.data });
     } catch (error: any) {
       console.error(error);
       toast.error(error?.response?.data?.message);
@@ -57,6 +62,8 @@ export const useAdminStore = create<AdminStore>((set, get) => ({
 
     set({ filteredUsers: filtered });
   },
+
+  setPage: (page) => set({ currentPage: page }),
 
   getAllUserBookings: async (id: string) => {
     try {

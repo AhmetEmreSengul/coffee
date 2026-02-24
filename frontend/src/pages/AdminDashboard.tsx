@@ -11,10 +11,12 @@ const AdminPage = () => {
     getAllUsers,
     banUser,
     searchUsers,
-    users,
+    setPage,
+    verifyBookingQr,
     filteredUsers,
     usersLoading,
-    verifyBookingQr,
+    currentPage,
+    usersPerPage,
   } = useAdminStore();
   const { authUser } = useAuthStore();
 
@@ -36,7 +38,11 @@ const AdminPage = () => {
     await banUser(id);
   };
 
-  const usersToDisplay = text.trim() ? filteredUsers : users;
+  const indexOfLast = currentPage * usersPerPage;
+  const indexOfFirst = indexOfLast - usersPerPage;
+  const paginated = filteredUsers.slice(indexOfFirst, indexOfLast);
+
+  const totalPages = Math.ceil(filteredUsers.length / usersPerPage);
 
   return (
     <div className="py-40 bg-[#333] min-h-screen w-screen font-mono space-y-5 text-white">
@@ -72,7 +78,7 @@ const AdminPage = () => {
                 </span>
               </Link>
             </div>
-            {usersToDisplay.map((user) => (
+            {paginated.map((user) => (
               <div
                 key={user._id}
                 className="text-white text-lg md:text-2xl flex flex-col md:flex-row gap-2 justify-center md:justify-between border p-1"
@@ -96,6 +102,24 @@ const AdminPage = () => {
                 </div>
               </div>
             ))}
+            <div className="flex gap-2">
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i}
+                  onClick={() => {
+                    setPage(i + 1);
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                  }}
+                  className={`px-4 py-2 rounded transition ${
+                    currentPage === i + 1
+                      ? "bg-caramel-400 text-cream-50"
+                      : "bg-beige-200 text-text-secondary hover:bg-beige-300"
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+            </div>
           </div>
         )}
       </div>
