@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import VerifyBooking from "../components/VerifyBookings";
 import { FaArrowRight } from "react-icons/fa";
+import { useAuthStore } from "../store/useAuthStore";
 
 const AdminPage = () => {
   const {
@@ -15,6 +16,7 @@ const AdminPage = () => {
     usersLoading,
     verifyBookingQr,
   } = useAdminStore();
+  const { authUser } = useAuthStore();
 
   const [text, setText] = useState<string>("");
 
@@ -38,7 +40,10 @@ const AdminPage = () => {
 
   return (
     <div className="py-40 bg-[#333] min-h-screen w-screen font-mono space-y-5 text-white">
-      <h1 className="text-5xl font-bold text-center">Admin Dashboard</h1>
+      <h1 className="text-5xl font-bold text-center flex flex-col">
+        Admin Dashboard Logged in as
+        <span className="text-green-400">{authUser?.fullName} </span>
+      </h1>
       <div className="container max-w-6xl mx-auto space-y-4">
         {usersLoading ? (
           <div>

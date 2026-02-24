@@ -18,8 +18,8 @@ const CoffeeDisplay = () => {
     return (
       <div className="min-h-screen flex flex-col items-center py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {[1, 2, 3].map(() => (
-            <div>
+          {[1, 2, 3].map((idx) => (
+            <div key={idx}>
               <CoffeDisplaySkeleton />
             </div>
           ))}
@@ -39,6 +39,7 @@ const CoffeeDisplay = () => {
             whileInView={{ y: 0, opacity: 1 }}
             transition={{ delay: 0.2 + i * 0.1 }}
             viewport={{ once: true }}
+            key={coffee._id}
           >
             <CoffeeCard key={coffee._id} coffee={coffee} />
           </motion.div>

@@ -140,13 +140,16 @@ const AdminManageCoffees = () => {
             )}
 
             {editId === coffee._id && (
-              <div className="fixed inset-0 bg-black/90 flex flex-col items-center justify-center">
+              <div className="fixed inset-0 bg-black/90 flex flex-col items-center justify-center p-6 md:p-0">
                 <AdminCoffeForm
                   formData={formData}
                   setFormData={setFormData}
                   handleSubmit={handleEditSubmit}
                 />
-                <button onClick={() => setEditId("")} className="mt-5">
+                <button
+                  onClick={() => setEditId("")}
+                  className="mt-5 border p-2"
+                >
                   Cancel
                 </button>
               </div>
@@ -155,7 +158,7 @@ const AdminManageCoffees = () => {
         ))}
       </div>
       {isOpen && (
-        <div className="fixed inset-0 bg-black/90 flex flex-col items-center justify-center">
+        <div className="fixed inset-0 bg-black/90 flex flex-col items-center justify-center p-6 md:p-0">
           <AdminCoffeForm
             formData={formData}
             setFormData={setFormData}
