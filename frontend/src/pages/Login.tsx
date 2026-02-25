@@ -2,9 +2,10 @@ import { useState, type FormEvent } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
 import { AiFillEye, AiFillEyeInvisible, AiOutlineGoogle } from "react-icons/ai";
+import { FaFish } from "react-icons/fa";
 
 const Login = () => {
-  const { login, isLoggingIn } = useAuthStore();
+  const { login, forgotPassword, isLoggingIn } = useAuthStore();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -22,9 +23,14 @@ const Login = () => {
     window.location.href = `${BASE_URL}/auth/google`;
   };
 
+  const handleForgotPassword = async () => {
+    await forgotPassword(formData.email);
+    setFormData({ email: "", password: "" });
+  };
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen min-w-screen overflow-hidden bg-bg-primary">
-      <Link to={"/"}>
+      <Link to={"/"} className="hidden md:block">
         <div className="inline-flex items-center fixed top-0 left-0 md:p-20 p-5">
           <img className="size-20 md:size-30" src="/timeslot.png" alt="" />
           <h1 className="text-4xl font-serif text-caramel-500">Time Slot</h1>
@@ -68,9 +74,18 @@ const Login = () => {
             ) : (
               <AiFillEyeInvisible
                 onClick={() => setVisible(true)}
-                className="absolute right-5 top-1/3 size-6 text-text-secondary cursor-pointer"
+                className="absolute right-5 top-2/9 size-6 text-text-secondary cursor-pointer"
               />
             )}
+            <div>
+              <button
+                type="button"
+                onClick={handleForgotPassword}
+                className="hover:text-caramel-500 text-caramel-400 transition text inline-flex items-center gap-2 mt-2 cursor-pointer"
+              >
+                Forgot Password? <FaFish />
+              </button>
+            </div>
           </div>
           <button
             className="p-3 rounded-lg border border-caramel-300 bg-caramel-200 text-caramel-500 cursor-pointer hover:bg-caramel-300 hover:border-caramel-400 transition font-medium"

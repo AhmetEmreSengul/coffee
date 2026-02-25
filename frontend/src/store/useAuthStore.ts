@@ -9,6 +9,8 @@ export interface AuthUser {
   password: string;
   role: string;
   isBanned: boolean;
+  passwordResetToken: string;
+  passwordResetExpiresAt: Date;
 }
 
 export interface SignupData {
@@ -45,6 +47,8 @@ export interface AuthStore {
   login: (data: LoginData) => Promise<void>;
   logout: () => Promise<void>;
   updateProfile: (data: UpdateProfileData) => Promise<void>;
+  forgotPassword: (email: string) => Promise<void>;
+  resetPassword: (token: string, password: string) => Promise<void>;
 }
 
 export const useAuthStore = create<AuthStore>((set) => ({
@@ -114,6 +118,26 @@ export const useAuthStore = create<AuthStore>((set) => ({
       toast.success("Profile Updated");
     } catch (error) {
       toast.error("Error updating profile");
+    }
+  },
+
+  forgotPassword: async (email) => {
+    try {
+      await axiosInstance.post("/auth/forgot-password", { email });
+      toast.success("Password reset link sent to your email");
+    } catch (error) {
+      toast.error("Error sending password reset link");
+    }
+  },
+
+  resetPassword: async (token, password) => {
+    try {
+      await axiosInstance.post(`/auth/reset-password/${token}`, { password });
+      toast.success("Password reset successfully, Redirecting...");
+    } catch (error) {
+      console.error(error);
+      toast.error("Error resetting password");
+      throw error;
     }
   },
 }));

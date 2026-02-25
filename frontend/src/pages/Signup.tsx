@@ -32,7 +32,7 @@ const Signup = () => {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen min-w-screen overflow-hidden bg-bg-primary">
-      <Link to={"/"}>
+      <Link to={"/"} className="hidden md:block">
         <div className="inline-flex items-center fixed top-0 left-0 md:p-20 p-5">
           <img className="size-20 md:size-30" src="/timeslot.png" alt="" />
           <h1 className="text-4xl font-serif text-caramel-500">Time Slot</h1>

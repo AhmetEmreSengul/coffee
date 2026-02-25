@@ -16,6 +16,7 @@ import AdminPage from "./pages/AdminDashboard";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import AdminManageUsers from "./pages/UserActivity";
 import AdminManageCoffees from "./pages/AdminManageCoffees";
+import ResetPassword from "./pages/ResetPassword";
 
 const App = () => {
   const { authUser, isCheckingAuth, checkAuth } = useAuthStore();
@@ -71,6 +72,10 @@ const App = () => {
         <Route
           path="/order-history"
           element={authUser ? <OrderHistory /> : <Navigate to={"/login"} />}
+        />
+        <Route
+          path="/reset-password/:token"
+          element={<ResetPassword/>}
         />
         <Route path="/auth/google/success" element={<GoogleAuthSuccess />} />
         <Route
