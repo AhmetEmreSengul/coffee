@@ -1,8 +1,10 @@
 import express from "express";
 import {
+  forgotPassword,
   googleAuthCallback,
   login,
   logout,
+  resetPassword,
   signup,
   updateProfile,
 } from "../controllers/auth.controller.js";
@@ -17,6 +19,8 @@ router.use(arcjetProtection);
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", logout);
+router.post("/forgot-password", forgotPassword)
+router.post("/reset-password/:token", resetPassword)
 
 router.put("/update-profile", protectRoute, updateProfile);
 

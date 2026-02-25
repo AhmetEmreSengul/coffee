@@ -3,6 +3,8 @@ import { ENV } from "../lib/env.js";
 import {
   createBookingEmailTemplate,
   createOrderEmailTemplate,
+  createPasswordResetEmailTemplate,
+  createPasswordResetSuccessEmailTemplate,
 } from "./emailTemplate.js";
 
 const apiInstance = new Brevo.TransactionalEmailsApi();
@@ -58,5 +60,31 @@ export const sendCreateOrderEmail = async (
     });
   } catch (error) {
     console.error("Error sending order creation email", error.message);
+  }
+};
+
+export const sendPasswordResetEmail = async (email, resetToken) => {
+  try {
+    await apiInstance.sendTransacEmail({
+      sender: { name: "Time Slot", email: "ahmetemresengul.34@gmail.com" },
+      to: [{ email }],
+      subject: "Password Reset",
+      htmlContent: createPasswordResetEmailTemplate(resetToken),
+    });
+  } catch (error) {
+    console.error("Error sending password reset email", error.message);
+  }
+};
+
+export const sendPasswordResetSuccessEmail = async (email) => {
+  try {
+    await apiInstance.sendTransacEmail({
+      sender: { name: "Time Slot", email: "ahmetemresengul.34@gmail.com" },
+      to: [{ email }],
+      subject: "Password Reset Success",
+      htmlContent: createPasswordResetSuccessEmailTemplate(email),
+    });
+  } catch (error) {
+    console.error("Error sending password reset success email", error.message);
   }
 };

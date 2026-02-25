@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { ENV } from "../lib/env.js";
 
 export function createBookingEmailTemplate(
   email,
@@ -210,6 +211,175 @@ export function createOrderEmailTemplate(
       </p>
 
       <p style="margin-top: 25px; margin-bottom: 0;">
+        Warm regards,<br />
+        <strong>Time Slot ☕</strong>
+      </p>
+
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align: center; padding: 20px; color: #b5a89f; font-size: 12px;">
+      <p>© 2025 Time Slot Cafe. All rights reserved.</p>
+      <p>
+        <a href="#" style="color: #9f755b; text-decoration: none; margin: 0 10px;">Privacy Policy</a>
+        <a href="#" style="color: #9f755b; text-decoration: none; margin: 0 10px;">Terms</a>
+        <a href="#" style="color: #9f755b; text-decoration: none; margin: 0 10px;">Contact</a>
+      </p>
+    </div>
+
+  </body>
+  </html>
+  `;
+}
+
+export function createPasswordResetEmailTemplate(resetToken) {
+  const resetUrl = `${ENV.CLIENT_URL}/reset-password/${resetToken}`;
+
+  return `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Password Reset</title>
+  </head>
+
+  <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f7f3ee; padding: 20px; color: #4a3f35; max-width: 600px; margin: 0 auto;">
+
+    <!-- Header -->
+    <div style="background: linear-gradient(to right, #c9a27b, #9f755b); padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
+      <img 
+        src="https://cdn-icons-png.flaticon.com/512/3064/3064155.png" 
+        alt="Lock Icon"
+        style="width: 80px; height: 80px; margin-bottom: 15px;"
+      />
+      <h1 style="color: white; font-size: 26px; margin: 0; font-weight: 600;">
+        Password Reset Request
+      </h1>
+    </div>
+
+    <!-- Main Content -->
+    <div style="background-color: #ffffff; padding: 35px; border-radius: 0 0 12px 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.07);">
+
+      <p style="font-size: 18px; color: #8b5e3c;">
+        We received a request to reset your password.
+      </p>
+
+      <p>
+        If you made this request, click the button below to create a new password.
+        This link will expire shortly for security reasons.
+      </p>
+
+      <!-- Reset Button -->
+      <div style="text-align: center; margin: 30px 0;">
+        <a 
+          href="${resetUrl}" 
+          style="background: linear-gradient(to right, #c9a27b, #9f755b); 
+                 color: #ffffff; 
+                 padding: 14px 28px; 
+                 text-decoration: none; 
+                 border-radius: 8px; 
+                 font-weight: 600; 
+                 font-size: 16px;
+                 display: inline-block;">
+          Reset My Password
+        </a>
+      </div>
+
+      <!-- Fallback Link -->
+      <div style="background-color: #faf6f1; padding: 20px; border-radius: 10px; margin-top: 20px; border-left: 4px solid #c9a27b;">
+        <p style="margin: 0 0 10px; font-size: 14px;">
+          If the button above doesn't work, copy and paste this link into your browser:
+        </p>
+        <p style="word-break: break-all; font-size: 13px; color: #9b7c63;">
+          ${resetUrl}
+        </p>
+      </div>
+
+      <p style="margin-top: 25px;">
+        If you did not request a password reset, you can safely ignore this email.
+        Your account will remain secure.
+      </p>
+
+      <p style="margin-top: 25px; margin-bottom: 0;">
+        Warm regards,<br />
+        <strong>Time Slot ☕</strong>
+      </p>
+
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align: center; padding: 20px; color: #b5a89f; font-size: 12px;">
+      <p>© 2025 Time Slot Cafe. All rights reserved.</p>
+      <p>
+        <a href="#" style="color: #9f755b; text-decoration: none; margin: 0 10px;">Privacy Policy</a>
+        <a href="#" style="color: #9f755b; text-decoration: none; margin: 0 10px;">Terms</a>
+        <a href="#" style="color: #9f755b; text-decoration: none; margin: 0 10px;">Contact</a>
+      </p>
+    </div>
+
+  </body>
+  </html>
+  `;
+}
+
+export function createPasswordResetSuccessEmailTemplate(userEmail) {
+  return `
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Password Successfully Reset</title>
+  </head>
+
+  <body style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f7f3ee; padding: 20px; color: #4a3f35; max-width: 600px; margin: 0 auto;">
+
+    <!-- Header -->
+    <div style="background: linear-gradient(to right, #c9a27b, #9f755b); padding: 30px; text-align: center; border-radius: 12px 12px 0 0;">
+      <img 
+        src="https://cdn-icons-png.flaticon.com/512/845/845646.png" 
+        alt="Success Icon"
+        style="width: 80px; height: 80px; margin-bottom: 15px;"
+      />
+      <h1 style="color: white; font-size: 26px; margin: 0; font-weight: 600;">
+        Password Updated Successfully
+      </h1>
+    </div>
+
+    <!-- Main Content -->
+    <div style="background-color: #ffffff; padding: 35px; border-radius: 0 0 12px 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.07);">
+
+      <p style="font-size: 18px; color: #8b5e3c;">
+        Your password has been changed.
+      </p>
+
+      <p>
+        This email confirms that the password for the account associated with:
+      </p>
+
+      <div style="background-color: #faf6f1; padding: 20px; border-radius: 10px; margin: 20px 0; border-left: 4px solid #c9a27b;">
+        <p style="margin: 0; font-size: 15px; font-weight: 600; color: #4a3f35;">
+          ${userEmail}
+        </p>
+      </div>
+
+      <p>
+        If you made this change, no further action is required.
+      </p>
+
+      <p>
+        <strong>If you did not change your password</strong>, please reset it immediately and contact our support team.
+      </p>
+
+      <!-- Security Notice -->
+      <div style="margin-top: 25px; padding: 15px; background-color: #fff9f0; border-radius: 8px; border: 1px dashed #c9a27b;">
+        <p style="margin: 0; font-size: 14px;">
+          For security reasons, we recommend using a strong, unique password and never sharing it with anyone.
+        </p>
+      </div>
+
+      <p style="margin-top: 30px; margin-bottom: 0;">
         Warm regards,<br />
         <strong>Time Slot ☕</strong>
       </p>
