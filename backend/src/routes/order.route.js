@@ -1,6 +1,7 @@
 import express from "express";
 import {
   createOrder,
+  deleteOrder,
   getOrderByUserId,
   getUserLatestOrder,
 } from "../controllers/order.controller.js";
@@ -17,5 +18,6 @@ router.use(isBanned);
 router.post("/create-order", createOrder);
 router.get("/last-order", getUserLatestOrder);
 router.get("/past-orders", getOrderByUserId);
+router.delete("/delete-order/:id", deleteOrder);
 
 export default router;

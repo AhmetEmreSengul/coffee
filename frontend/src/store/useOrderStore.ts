@@ -18,15 +18,18 @@ interface OrderStore {
   pastOrders: Order[];
   lastOrder: Order | null;
   isLoading: boolean;
+  isDeleting: boolean;
   createOrder: (orderItems: OrderItem[], orderNote: string) => Promise<void>;
   getPastOrders: () => Promise<void>;
   getLastOrder: () => Promise<void>;
+  deleteOrder: (id: string) => Promise<void>;
 }
 
-export const useOrderStore = create<OrderStore>((set) => ({
+export const useOrderStore = create<OrderStore>((set, get) => ({
   pastOrders: [],
   lastOrder: null,
   isLoading: false,
+  isDeleting: false,
 
   createOrder: async (orderItems, orderNote) => {
     try {
@@ -71,6 +74,20 @@ export const useOrderStore = create<OrderStore>((set) => ({
       toast.error(error?.response?.data?.message);
     } finally {
       set({ isLoading: false });
+    }
+  },
+
+  deleteOrder: async (id) => {
+    try {
+      set({ isDeleting: true });
+      await axiosInstance.delete(`/orders/delete-order/${id}`);
+      toast.success("Order deleted.");
+      await get().getPastOrders();
+    } catch (error: any) {
+      console.error("Error deleting order", error);
+      toast.error(error?.response?.data?.message);
+    } finally {
+      set({ isDeleting: false });
     }
   },
 }));

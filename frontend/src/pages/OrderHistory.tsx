@@ -1,18 +1,27 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { FaCalendarWeek, FaMugHot } from "react-icons/fa";
 import { useOrderStore } from "../store/useOrderStore";
 import { useCartStore } from "../store/useCartStore";
 import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
+import { AnimatePresence, motion } from "framer-motion";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 
 const OrderHistory = () => {
-  const { getPastOrders, pastOrders, isLoading } = useOrderStore();
+  const { isDeleting, pastOrders, isLoading, deleteOrder, getPastOrders } =
+    useOrderStore();
   const { authUser } = useAuthStore();
+  const [deleteId, setDeleteId] = useState("");
 
   useEffect(() => {
     getPastOrders();
   }, []);
+
+  const handleDelete = async (id: string) => {
+    await deleteOrder(id);
+    setDeleteId("");
+  };
 
   if (authUser?.isBanned) {
     return (
@@ -145,16 +154,68 @@ const OrderHistory = () => {
                 </div>
               )}
 
-              <button
-                className="mt-4 bg-caramel-400 hover:bg-caramel-400/70 transition rounded-lg p-3"
-                onClick={() => handleOrderAgain(order.orderItems)}
-              >
-                Order Again
-              </button>
+              <div className="flex justify-between">
+                <button
+                  className="mt-4 bg-caramel-400 hover:bg-caramel-400/70 transition rounded-lg p-3 cursor-pointer"
+                  onClick={() => handleOrderAgain(order.orderItems)}
+                >
+                  Order Again
+                </button>
+                <button
+                  onClick={() => setDeleteId(order._id)}
+                  className="mt-4 text-white bg-red-400 hover:bg-red-400/70 transition rounded-lg p-3 cursor-pointer"
+                >
+                  Delete
+                </button>
+              </div>
             </div>
           </div>
         ))}
       </div>
+      <AnimatePresence>
+        {deleteId && (
+          <div
+            className="fixed inset-0 bg-black/40 flex items-center justify-center z-10"
+            onClick={() => setDeleteId("")}
+          >
+            <motion.div
+              className="bg-cream-50/50 backdrop-blur-sm border border-border-light p-6 rounded-xl shadow-lg"
+              initial={{ y: 50, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: 50, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h1 className="text-lg font-black">Delete Order</h1>
+              <h3 className="font-light mt-3">
+                Are you sure you want to delete this order?
+              </h3>
+
+              <div className="flex justify-between mt-4">
+                <button
+                  className={`p-2  rounded-lg cursor-pointer ${isDeleting ? "bg-gray-300 text-gray-600" : "bg-caramel-400 text-white"}`}
+                  onClick={() => handleDelete(deleteId)}
+                >
+                  {isDeleting ? (
+                    <span className="inline-flex items-center gap-2">
+                      Deleting
+                      <AiOutlineLoading3Quarters className="size-5 animate-spin" />
+                    </span>
+                  ) : (
+                    "Yes I'm sure."
+                  )}
+                </button>
+
+                <button
+                  className="p-2 bg-beige-300 rounded-lg"
+                  onClick={() => setDeleteId("")}
+                >
+                  Nevermind.
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
