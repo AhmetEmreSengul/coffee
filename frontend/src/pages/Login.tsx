@@ -69,7 +69,7 @@ const Login = () => {
             {visible ? (
               <AiFillEye
                 onClick={() => setVisible(false)}
-                className="absolute right-5 top-1/3 size-6 text-text-secondary cursor-pointer"
+                className="absolute right-5 top-2/9 size-6 text-text-secondary cursor-pointer"
               />
             ) : (
               <AiFillEyeInvisible
