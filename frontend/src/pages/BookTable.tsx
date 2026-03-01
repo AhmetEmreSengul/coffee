@@ -1,25 +1,25 @@
+import { format } from "date-fns";
+import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useState, type FormEvent } from "react";
-import { useBookingStore } from "../store/useBookingStore";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import TableCard from "../components/TableCard";
 import TableCardSkeleton from "../components/TableCardSkeleton";
-import DateInput from "../components/DateInput";
-import { AnimatePresence, motion } from "framer-motion";
-import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useAuthStore } from "../store/useAuthStore";
-import { format } from "date-fns";
+import { useBookingStore } from "../store/useBookingStore";
+import { useTableStore } from "../store/useTableStore";
+import DateInput from "../components/DateInput";
 
 const BookTable = () => {
+  const { createBooking, isCreating } = useBookingStore();
   const {
     tables,
-    getTables,
-    createBooking,
     isLoading,
-    isCreating,
-    getTableBookings,
-    tableBookings,
-    getTableSlots,
     tableSlots,
-  } = useBookingStore();
+    tableBookings,
+    getTableBookings,
+    getTableSlots,
+    getTables,
+  } = useTableStore();
   const { authUser } = useAuthStore();
 
   const [formData, setFormData] = useState({
@@ -83,7 +83,7 @@ const BookTable = () => {
 
     setSlotIdx(null);
 
-    useBookingStore.setState({ tableSlots: [] });
+    useTableStore.setState({ tableSlots: [] });
   };
 
   const handleSlotSelect = (start: Date, end: Date, idx: number) => {
