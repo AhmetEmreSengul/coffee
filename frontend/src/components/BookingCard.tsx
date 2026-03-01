@@ -1,14 +1,16 @@
 import { CiCalendar, CiClock1, CiLocationOn } from "react-icons/ci";
 import { IoMdClose } from "react-icons/io";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState, type FormEvent } from "react";
-import DateInput from "./DateInput";
-import TimeInput from "./TimeInput";
+import { useEffect, useState, type FormEvent } from "react";
+
 import { useBookingStore, type UserBooking } from "../store/useBookingStore";
 import { useAuthStore } from "../store/useAuthStore";
 import { TbClockExclamation } from "react-icons/tb";
 import { toast } from "react-toastify";
 import Countdown from "./Countdown";
+import DateInput from "./DateInput";
+import { useTableStore } from "../store/useTableStore";
+import { format } from "date-fns";
 
 interface BookingCardProps {
   booking: UserBooking;
@@ -18,22 +20,33 @@ interface BookingCardProps {
 
 const BookingCard = ({ booking, qrCode, setDragActive }: BookingCardProps) => {
   const { updateUserBooking, deleteUserBooking } = useBookingStore();
+  const { getTableSlots, tableSlots } = useTableStore();
   const { authUser } = useAuthStore();
   const [isRipping, setIsRipping] = useState(false);
   const [updateOpen, setUpdateOpen] = useState(false);
   const [deleteOpen, setDeleteOpen] = useState(false);
+  const [slotIdx, setSlotIdx] = useState<number | null>(null);
 
   const [formData, setFormData] = useState({
+    tableId: "",
     date: null as Date | null,
     startTime: "",
     endTime: "",
   });
 
+  useEffect(() => {
+    if (formData) {
+      getTableSlots(formData.tableId, formData.date!);
+    }
+  }, [formData]);
+
+  console.log(formData);
+
   const toDateTime = (date: Date, time: string) => {
     const [h, m] = time.split(":").map(Number);
     const d = new Date(date);
     d.setHours(h, m, 0, 0);
-    return d.toISOString();
+    return d;
   };
 
   const handleSubmit = (e: FormEvent) => {
@@ -44,11 +57,19 @@ const BookingCard = ({ booking, qrCode, setDragActive }: BookingCardProps) => {
       return;
     }
 
-    const startISO = toDateTime(formData.date, formData.startTime);
-    const endISO = toDateTime(formData.date, formData.endTime);
+    const start = toDateTime(formData.date, formData.startTime);
+    const end = toDateTime(formData.date, formData.endTime);
 
-    updateUserBooking(booking._id, startISO, endISO);
+    updateUserBooking(booking._id, start.toISOString(), end.toISOString());
+    setFormData({
+      tableId: "",
+      date: null,
+      startTime: "",
+      endTime: "",
+    });
     setUpdateOpen(false);
+
+    useTableStore.setState({ tableSlots: [] });
   };
 
   const handleDelete = async () => {
@@ -60,22 +81,23 @@ const BookingCard = ({ booking, qrCode, setDragActive }: BookingCardProps) => {
     }, 1000);
   };
 
-  const maxEndTime = (() => {
-    if (!formData.startTime) return "";
-    const [h, m] = formData.startTime.split(":").map(Number);
-    const d = new Date();
-    d.setHours(h + 4, m);
-    return d.toTimeString().slice(0, 5);
-  })();
-
   const handleUpdateClick = () => {
     setFormData({
+      ...formData,
+      tableId: booking.tableNumber._id,
       date: new Date(booking.bookingTime.start),
-      startTime: new Date(booking.bookingTime.start).toTimeString().slice(0, 5),
-      endTime: new Date(booking.bookingTime.end).toTimeString().slice(0, 5),
     });
     setUpdateOpen(true);
     setDragActive(false);
+  };
+
+  const handleSlotSelect = (start: Date, end: Date, idx: number) => {
+    setFormData({
+      ...formData,
+      startTime: format(start, "HH:mm"),
+      endTime: format(end, "HH:mm"),
+    });
+    setSlotIdx(idx);
   };
 
   const handleDeleteClick = () => {
@@ -253,24 +275,29 @@ const BookingCard = ({ booking, qrCode, setDragActive }: BookingCardProps) => {
                     setFormData((prev: any) => ({ ...prev, date }))
                   }
                 />
-                <div className="flex gap-3 justify-center ">
-                  <TimeInput
-                    label="Start Time"
-                    value={formData.startTime}
-                    onChange={(startTime) =>
-                      setFormData((prev: any) => ({ ...prev, startTime }))
-                    }
-                  />
 
-                  <TimeInput
-                    label="End Time"
-                    value={formData.endTime}
-                    onChange={(endTime) =>
-                      setFormData((prev: any) => ({ ...prev, endTime }))
-                    }
-                    min={formData.startTime || "09:00"}
-                    max={maxEndTime}
-                  />
+                <div className="grid grid-cols-3 gap-3">
+                  {tableSlots.map((slot, i) => (
+                    <div
+                      key={i}
+                      className={`p-2 rounded-lg transition cursor-pointer ${i === slotIdx ? "bg-caramel-300 scale-105 animate-bounce" : "bg-beige-300"}`}
+                    >
+                      <button
+                        type="button"
+                        className="flex flex-col md:flex-row items-center gap-2"
+                        onClick={() =>
+                          handleSlotSelect(slot.start, slot.end, i)
+                        }
+                      >
+                        <p className="cursor-pointer ">
+                          {format(new Date(slot.start), "HH:mm")} /
+                        </p>
+                        <p className="cursor-pointer ">
+                          {format(new Date(slot.end), "HH:mm")}
+                        </p>
+                      </button>
+                    </div>
+                  ))}
                 </div>
 
                 <div className="flex justify-end gap-3 mt-3">
