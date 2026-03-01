@@ -35,12 +35,10 @@ const BookingCard = ({ booking, qrCode, setDragActive }: BookingCardProps) => {
   });
 
   useEffect(() => {
-    if (formData) {
-      getTableSlots(formData.tableId, formData.date!);
+    if (formData.tableId && formData.date) {
+      getTableSlots(formData.tableId, formData.date);
     }
-  }, [formData]);
-
-  console.log(formData);
+  }, [formData.tableId, formData.date]);
 
   const toDateTime = (date: Date, time: string) => {
     const [h, m] = time.split(":").map(Number);
