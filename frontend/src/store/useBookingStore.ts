@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import { toast } from "react-toastify";
+import { format } from "date-fns";
 
 interface Table {
   _id: string;
@@ -45,10 +46,16 @@ interface TableBookings {
   };
 }
 
+interface TableSlots {
+  start: Date;
+  end: Date;
+}
+
 interface BookingStore {
   tables: Table[];
   myBookings: UserBooking[];
   tableBookings: TableBookings[];
+  tableSlots: TableSlots[];
   bookingQR: BookingQR[];
   isLoading: boolean;
   isCreating: boolean;
@@ -63,6 +70,7 @@ interface BookingStore {
     endTime: string,
   ) => Promise<void>;
   getTableBookings: (id: string) => Promise<void>;
+  getTableSlots: (id: string, date: Date) => Promise<void>;
   deleteUserBooking: (id: string) => Promise<void>;
 }
 
@@ -70,6 +78,7 @@ export const useBookingStore = create<BookingStore>((set, get) => ({
   tables: [],
   myBookings: [],
   bookingQR: [],
+  tableSlots: [],
   tableBookings: [],
   isLoading: false,
   isCreating: false,
@@ -142,6 +151,19 @@ export const useBookingStore = create<BookingStore>((set, get) => ({
     } catch (error: any) {
       console.error("Error updating booking", error);
       toast.error(error?.response?.data?.message || "Failed to update booking");
+    }
+  },
+
+  getTableSlots: async (id, date) => {
+    const formattedDate = format(date, "yyyy-MM-dd");
+    try {
+      const res = await axiosInstance.get(
+        `/book/available-slots/${id}/?date=${formattedDate}`,
+      );
+      set({ tableSlots: Array.isArray(res.data) ? res.data : [] });
+    } catch (error: any) {
+      console.error("Error fetching table slots", error);
+      toast.error(error?.response?.data?.message);
     }
   },
 

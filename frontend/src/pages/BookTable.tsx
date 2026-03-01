@@ -3,10 +3,10 @@ import { useBookingStore } from "../store/useBookingStore";
 import TableCard from "../components/TableCard";
 import TableCardSkeleton from "../components/TableCardSkeleton";
 import DateInput from "../components/DateInput";
-import TimeInput from "../components/TimeInput";
 import { AnimatePresence, motion } from "framer-motion";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import { useAuthStore } from "../store/useAuthStore";
+import { format } from "date-fns";
 
 const BookTable = () => {
   const {
@@ -17,6 +17,8 @@ const BookTable = () => {
     isCreating,
     getTableBookings,
     tableBookings,
+    getTableSlots,
+    tableSlots,
   } = useBookingStore();
   const { authUser } = useAuthStore();
 
@@ -26,6 +28,7 @@ const BookTable = () => {
     endTime: "",
     tableNumber: "",
   });
+  const [slotIdx, setSlotIdx] = useState<number | null>(null);
 
   const isDisabled =
     !formData.date ||
@@ -40,7 +43,13 @@ const BookTable = () => {
 
   useEffect(() => {
     getTableBookings(formData.tableNumber);
-  }, [formData]);
+  }, [formData.tableNumber]);
+
+  useEffect(() => {
+    if (formData.date && formData.tableNumber) {
+      getTableSlots(formData.tableNumber, formData.date!);
+    }
+  }, [formData.date, formData.tableNumber]);
 
   const toDateTime = (date: Date, time: string) => {
     const [h, m] = time.split(":").map(Number);
@@ -71,21 +80,20 @@ const BookTable = () => {
       startTime: "",
       tableNumber: "",
     });
+
+    setSlotIdx(null);
+
+    useBookingStore.setState({ tableSlots: [] });
   };
 
-  const maxEndTime = (() => {
-    if (!formData.startTime) return "";
-
-    const [h, m] = formData.startTime.split(":").map(Number);
-
-    let totalMinutes = h * 60 + m + 240; // +4 hours
-    if (totalMinutes > 23 * 60 + 59) totalMinutes = 23 * 60 + 59; // clamp to 23:59
-
-    const newH = Math.floor(totalMinutes / 60);
-    const newM = totalMinutes % 60;
-
-    return `${String(newH).padStart(2, "0")}:${String(newM).padStart(2, "0")}`;
-  })();
+  const handleSlotSelect = (start: Date, end: Date, idx: number) => {
+    setFormData({
+      ...formData,
+      startTime: format(start, "HH:mm"),
+      endTime: format(end, "HH:mm"),
+    });
+    setSlotIdx(idx);
+  };
 
   function useIsXL() {
     const [isXL, setIsXL] = useState(window.innerWidth >= 1280);
@@ -175,25 +183,26 @@ const BookTable = () => {
               value={formData.date}
               onChange={(date) => setFormData((prev) => ({ ...prev, date }))}
             />
-
-            <div className="flex flex-row gap-6">
-              <TimeInput
-                label="Start Time"
-                value={formData.startTime}
-                onChange={(startTime) =>
-                  setFormData((prev) => ({ ...prev, startTime }))
-                }
-              />
-
-              <TimeInput
-                label="End Time"
-                value={formData.endTime}
-                onChange={(endTime) =>
-                  setFormData((prev) => ({ ...prev, endTime }))
-                }
-                min={formData.startTime || "09:00"}
-                max={maxEndTime}
-              />
+            <div className="grid grid-cols-3 gap-3">
+              {tableSlots.map((slot, i) => (
+                <div
+                  key={i}
+                  className={`p-2 rounded-lg transition cursor-pointer ${i === slotIdx ? "bg-caramel-300 scale-105 animate-bounce" : "bg-beige-300"}`}
+                >
+                  <button
+                    type="button"
+                    className="flex flex-col md:flex-row items-center gap-2"
+                    onClick={() => handleSlotSelect(slot.start, slot.end, i)}
+                  >
+                    <p className="cursor-pointer ">
+                      {format(new Date(slot.start), "HH:mm")} /
+                    </p>
+                    <p className="cursor-pointer ">
+                      {format(new Date(slot.end), "HH:mm")}
+                    </p>
+                  </button>
+                </div>
+              ))}
             </div>
 
             <button
