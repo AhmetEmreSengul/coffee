@@ -94,10 +94,19 @@ export const getUserLatestOrder = async (req, res) => {
 export const deleteOrder = async (req, res) => {
   try {
     const { id } = req.params;
-    const order = await Order.findByIdAndDelete(id);
+    const userId = req.user._id;
+
+    const order = await Order.findById(id);
+
     if (!order) {
       return res.status(404).json({ message: "Order not found" });
     }
+
+    if (!order.user.equals(userId)) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    await Order.findByIdAndDelete(id);
 
     res.status(200).json({ message: "Order deleted" });
   } catch (error) {

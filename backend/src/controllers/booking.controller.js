@@ -113,20 +113,20 @@ export const cancelBooking = async (req, res) => {
 
     const booking = await Booking.findById(id);
 
-    if (booking.user.toString() !== userId) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" });
     }
 
+    if (!booking.user.equals(userId)) {
+      return res.status(403).json({ message: "Forbidden" });
+    }
+
     await Booking.findByIdAndDelete(id);
 
-    res.status(200).json({ message: "Booking deleted" });
+    return res.status(200).json({ message: "Booking deleted" });
   } catch (error) {
     console.error("Error deleting booking", error.message);
-    res.status(500).json({ message: "Internal server error" });
+    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
