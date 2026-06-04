@@ -109,12 +109,19 @@ export const getBookingQrCode = async (req, res) => {
 export const cancelBooking = async (req, res) => {
   try {
     const { id } = req.params;
+    const userId = req.user._id;
 
-    const booking = await Booking.findByIdAndDelete(id);
+    const booking = await Booking.findById(id);
+
+    if (booking.user.toString() !== userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
 
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" });
     }
+
+    await Booking.findByIdAndDelete(id);
 
     res.status(200).json({ message: "Booking deleted" });
   } catch (error) {

@@ -12,6 +12,9 @@ import adminRoutes from "./routes/admin.route.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import passport from "./lib/google.js";
+import dns from "dns";
+
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 const PORT = ENV.PORT || 3000;
 
@@ -30,7 +33,7 @@ app.use("/book", bookingRoutes);
 app.use("/stripe", stripeRoutes);
 app.use("/orders", orderRoutes);
 app.use("/coffee", coffeeRoutes);
-app.use("/table", tableRoutes)
+app.use("/table", tableRoutes);
 app.use("/admin", adminRoutes);
 
 if (ENV.NODE_ENV === "production") {
@@ -53,5 +56,4 @@ const startServer = async () => {
     process.exit(1);
   }
 };
-
 startServer();
