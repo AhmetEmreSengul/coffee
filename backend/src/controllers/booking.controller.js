@@ -1,3 +1,4 @@
+import { isValidObjectId } from "mongoose";
 import { sendBookingEmail } from "../emails/emailHandler.js";
 import Booking from "../models/Booking.js";
 import Table from "../models/Table.js";
@@ -9,22 +10,42 @@ export const createBooking = async (req, res) => {
     const userId = req.user._id;
     const { tableNumber, bookingTime } = req.body;
 
-    if (!tableNumber || !bookingTime.start || !bookingTime.end) {
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    if (
+      !bookingTime ||
+      !tableNumber ||
+      !bookingTime.start ||
+      !bookingTime.end
+    ) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
-    if (new Date(bookingTime.end) <= new Date(bookingTime.start)) {
+    if (!isValidObjectId(tableNumber)) {
+      return res.status(400).json({ message: "Invalid table number" });
+    }
+
+    const start = new Date(bookingTime.start);
+    const end = new Date(bookingTime.end);
+    const now = new Date();
+
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+      return res.status(400).json({ message: "Invalid date format" });
+    }
+
+    if (start >= end) {
       return res
         .status(400)
         .json({ message: "End time must be after start time" });
     }
 
-    if (new Date(bookingTime.start) < new Date()) {
+    if (start < now) {
       return res
         .status(400)
         .json({ message: "Start time must be in the future" });
     }
-
     const table = await Table.findById(tableNumber);
 
     if (!table) {
@@ -38,12 +59,8 @@ export const createBooking = async (req, res) => {
 
     const overlappingBooking = await Booking.findOne({
       tableNumber,
-      $or: [
-        {
-          "bookingTime.start": { $lt: new Date(bookingTime.end) },
-          "bookingTime.end": { $gt: new Date(bookingTime.start) },
-        },
-      ],
+      "bookingTime.start": { $lt: end },
+      "bookingTime.end": { $gt: start },
     });
 
     if (overlappingBooking) {
@@ -83,10 +100,24 @@ export const createBooking = async (req, res) => {
 export const getBookingQrCode = async (req, res) => {
   try {
     const { id } = req.params;
+    const userId = req.user._id;
+
+    if (!id) {
+      return res.status(400).json({ message: "Booking ID is required" });
+    }
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid booking ID" });
+    }
+
     const booking = await Booking.findById(id);
 
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" });
+    }
+
+    if (!booking.user.equals(userId)) {
+      return res.status(403).json({ message: "Forbidden" });
     }
 
     const qrData = JSON.stringify({
@@ -110,6 +141,14 @@ export const cancelBooking = async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user._id;
+
+    if (!id) {
+      return res.status(400).json({ message: "Booking ID is required" });
+    }
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid booking ID" });
+    }
 
     const booking = await Booking.findById(id);
 
@@ -155,24 +194,44 @@ export const updateBooking = async (req, res) => {
     const { id } = req.params;
     const { bookingTime } = req.body;
 
+    if (!bookingTime || !bookingTime.start || !bookingTime.end) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid booking ID" });
+    }
+
     const booking = await Booking.findById(id);
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" });
     }
 
-    if (bookingTime) {
-      if (new Date(bookingTime.end) <= new Date(bookingTime.start)) {
-        return res
-          .status(400)
-          .json({ message: "End time must be after start time" });
-      }
+    const start = new Date(bookingTime.start);
+    const end = new Date(bookingTime.end);
+    const now = new Date();
+
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+      return res.status(400).json({ message: "Invalid date format" });
+    }
+
+    if (start >= end) {
+      return res
+        .status(400)
+        .json({ message: "End time must be after start time" });
+    }
+
+    if (start < now) {
+      return res
+        .status(400)
+        .json({ message: "Start time must be in the future" });
     }
 
     const overlappingBooking = await Booking.findOne({
       _id: { $ne: id },
       tableNumber: booking.tableNumber,
-      "bookingTime.start": { $lt: new Date(bookingTime.end) },
-      "bookingTime.end": { $gt: new Date(bookingTime.start) },
+      "bookingTime.start": { $lt: start },
+      "bookingTime.end": { $gt: end },
     });
 
     if (overlappingBooking) {
