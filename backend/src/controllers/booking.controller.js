@@ -193,6 +193,7 @@ export const updateBooking = async (req, res) => {
   try {
     const { id } = req.params;
     const { bookingTime } = req.body;
+    const userId = req.user._id;
 
     if (!bookingTime || !bookingTime.start || !bookingTime.end) {
       return res.status(400).json({ message: "All fields are required" });
@@ -205,6 +206,10 @@ export const updateBooking = async (req, res) => {
     const booking = await Booking.findById(id);
     if (!booking) {
       return res.status(404).json({ message: "Booking not found" });
+    }
+
+    if (!booking.user.equals(userId)) {
+      return res.status(403).json({ message: "Forbidden" });
     }
 
     const start = new Date(bookingTime.start);
