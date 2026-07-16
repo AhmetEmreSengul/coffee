@@ -248,7 +248,7 @@ export const updateBooking = async (req, res) => {
     booking.bookingTime = bookingTime;
 
     await booking.save();
-    await booking.populate("user", "name email");
+    await booking.populate("user", "fullName email");
     await booking.populate("tableNumber", "number capacity");
 
     res.status(200).json({
