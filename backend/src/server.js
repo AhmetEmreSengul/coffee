@@ -1,53 +1,15 @@
-import express from "express";
-import path from "path";
+import dns from "dns";
 import { ENV } from "./lib/env.js";
 import { connectDB } from "./lib/db.js";
-import authRoutes from "./routes/auth.route.js";
-import bookingRoutes from "./routes/booking.route.js";
-import stripeRoutes from "./routes/stripe.route.js";
-import orderRoutes from "./routes/order.route.js";
-import coffeeRoutes from "./routes/coffee.route.js";
-import tableRoutes from "./routes/table.route.js";
-import adminRoutes from "./routes/admin.route.js";
-import cookieParser from "cookie-parser";
-import cors from "cors";
-import passport from "./lib/google.js";
-import dns from "dns";
+import app from "./app.js";
 
 dns.setServers(["1.1.1.1", "8.8.8.8"]);
 
 const PORT = ENV.PORT || 3000;
 
-const __dirname = path.resolve();
-
-const app = express();
-
-app.use(cors({ origin: ENV.CLIENT_URL, credentials: true }));
-app.use(express.json());
-app.use(cookieParser());
-app.set("trust proxy", 1);
-app.use(passport.initialize());
-
-app.use("/auth", authRoutes);
-app.use("/book", bookingRoutes);
-app.use("/stripe", stripeRoutes);
-app.use("/orders", orderRoutes);
-app.use("/coffee", coffeeRoutes);
-app.use("/table", tableRoutes);
-app.use("/admin", adminRoutes);
-
-if (ENV.NODE_ENV === "production") {
-  app.use(express.static(path.join(__dirname, "../frontend/dist")));
-
-  app.get(/.*/, (req, res) => {
-    res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
-  });
-}
-
 const startServer = async () => {
   try {
     await connectDB();
-
     app.listen(PORT, "0.0.0.0", () => {
       console.log(`Server running on port ${PORT}`);
     });
@@ -56,4 +18,5 @@ const startServer = async () => {
     process.exit(1);
   }
 };
+
 startServer();
