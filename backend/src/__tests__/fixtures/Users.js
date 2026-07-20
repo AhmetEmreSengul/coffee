@@ -10,7 +10,7 @@ export const createAndSaveTestUser = async (overrides = {}) => {
   const user = new User({
     email: `test.user.${emailCounter}@example.com`,
     fullName: "Test User",
-    password: "hashed-test-password", // gerçek hashleme burada gerekmez, schema zorunluluğu için
+    password: "hashed-test-password", 
     ...overrides,
   });
   return user.save();

@@ -235,8 +235,8 @@ export const updateBooking = async (req, res) => {
     const overlappingBooking = await Booking.findOne({
       _id: { $ne: id },
       tableNumber: booking.tableNumber,
-      "bookingTime.start": { $lt: start },
-      "bookingTime.end": { $gt: end },
+      "bookingTime.start": { $lt: end },
+      "bookingTime.end": { $gt: start },
     });
 
     if (overlappingBooking) {
