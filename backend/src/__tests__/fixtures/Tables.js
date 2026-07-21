@@ -1,14 +1,13 @@
-import Table from "../../models/Table.js";
+export const testTable = {
+  _id: "656f8a3b2e7c1a4d8f9b1003",
+  number: 1,
+  capacity: 4,
+  status: "active",
+};
 
-let tableCounter = 0;
-
-export const createTestTable = async (overrides = {}) => {
-  tableCounter += 1;
-  const table = new Table({
-    number: tableCounter,
-    capacity: 4,
-    status: "active",
-    ...overrides,
-  });
-  return table.save();
+export const testTableDisabled = {
+  _id: "656f8a3b2e7c1a4d8f9b1004",
+  number: 2,
+  capacity: 4,
+  status: "disabled",
 };

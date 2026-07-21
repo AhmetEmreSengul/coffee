@@ -1,95 +1,29 @@
-import { afterAll, afterEach, beforeAll, describe, jest } from "@jest/globals";
+import { afterAll, afterEach, beforeAll, describe } from "@jest/globals";
+import jwt from "jsonwebtoken";
+import mongoose from "mongoose";
 import supertest from "supertest";
 import app from "../../app";
-import mongoose from "mongoose";
-import jwt from "jsonwebtoken";
 import { ENV } from "../../lib/env";
-import { connectDB } from "../../lib/db";
-
+import Booking from "../../models/Booking";
+import Table from "../../models/Table";
+import User from "../../models/User";
+import {
+  bookingPayload,
+  overlappingBooking,
+  overlappingBookingPayload,
+  overlappingUpdateBooking,
+  unauthorizedBooking,
+} from "../fixtures/Bookings";
+import { testUser } from "../fixtures/Users";
 import {
   clearDatabase,
   closeDatabase,
   connectTestDB,
 } from "../setup/dbHandler";
-import User from "../../models/User";
-import Table from "../../models/Table";
-import Booking from "../../models/Booking";
+import { testTable, testTableDisabled } from "../fixtures/Tables";
 
 const userId = new mongoose.Types.ObjectId().toString();
 const userId2 = new mongoose.Types.ObjectId().toString();
-
-const testUser = {
-  _id: userId,
-  fullName: "Fake User",
-  email: "fake.user@example.com",
-  password: "hashed-test-password",
-};
-
-const bookingPayload = {
-  tableNumber: "656f8a3b2e7c1a4d8f9b1003",
-  bookingTime: {
-    start: "2028-01-15T14:00:00.000Z",
-    end: "2028-01-15T16:00:00.000Z",
-  },
-};
-
-const overlappingBooking = {
-  _id: "656f8a3b2e7c1a4d8f9b1007",
-  user: userId,
-  tableNumber: "656f8a3b2e7c1a4d8f9b1003",
-  bookingTime: {
-    start: "2027-01-15T14:00:00.000Z",
-    end: "2027-01-15T16:00:00.000Z",
-  },
-  qrToken: "test-qr-token",
-  checkedIn: false,
-};
-
-const unauthorizedBooking = {
-  _id: "656f8a3b2e7c1a4d8f9b1009",
-  user: userId2,
-  tableNumber: "656f8a3b2e7c1a4d8f9b1003",
-  bookingTime: {
-    start: "2027-01-15T14:00:00.000Z",
-    end: "2027-01-15T16:00:00.000Z",
-  },
-  qrToken: "test-qr-token3",
-  checkedIn: false,
-};
-
-const overlappingUpdateBooking = {
-  _id: "656f8a3b2e7c1a4d8f9b1008",
-  user: userId,
-  tableNumber: "656f8a3b2e7c1a4d8f9b1003",
-  bookingTime: {
-    start: "2027-01-15T14:00:00.000Z",
-    end: "2027-01-15T16:00:00.000Z",
-  },
-  qrToken: "test-qr-token2",
-  checkedIn: false,
-};
-
-const overlappingBookingPayload = {
-  tableNumber: "656f8a3b2e7c1a4d8f9b1003",
-  bookingTime: {
-    start: "2027-01-15T14:00:00.000Z",
-    end: "2027-01-15T16:00:00.000Z",
-  },
-};
-
-const testTable = {
-  _id: "656f8a3b2e7c1a4d8f9b1003",
-  number: 1,
-  capacity: 4,
-  status: "active",
-};
-
-const testTableDisabled = {
-  _id: "656f8a3b2e7c1a4d8f9b1004",
-  number: 2,
-  capacity: 4,
-  status: "disabled",
-};
 
 const token = jwt.sign({ userId }, ENV.JWT_SECRET, {
   expiresIn: "7d",
@@ -108,6 +42,78 @@ describe("booking", () => {
       overlappingUpdateBooking,
       unauthorizedBooking,
     ]);
+  });
+
+  describe("get booking route", () => {
+    describe("given the user is logged in", () => {
+      it("should return 200", async () => {
+        const { statusCode, body } = await supertest(app)
+          .get("/book/my-bookings")
+          .set("User-Agent", "jest")
+          .set("Cookie", [`jwt=${token}`]);
+
+        expect(statusCode).toBe(200);
+      });
+    });
+
+    describe("given the user is not logged in", () => {
+      it("should return 401 with a message of 'Unauthorized'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .get("/book/my-bookings")
+          .set("User-Agent", "jest");
+
+        expect(statusCode).toBe(401);
+        expect(body).toEqual({ message: "Unauthorized" });
+      });
+    });
+
+    describe("given the user is trying to get someone else's booking QR", () => {
+      it("should return 403 with a message of 'Forbidden'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .get("/book/bookingQR/656f8a3b2e7c1a4d8f9b1009")
+          .set("User-Agent", "jest")
+          .set("Cookie", [`jwt=${token}`]);
+
+        expect(statusCode).toBe(403);
+        expect(body).toEqual({ message: "Forbidden" });
+      });
+    });
+
+    describe("given the user provided a invalid booking ID when trying to get booking QR", () => {
+      it("should return 400 with a message of 'Invalid booking ID'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .get("/book/bookingQR/invalid-booking-id")
+          .set("User-Agent", "jest")
+          .set("Cookie", [`jwt=${token}`]);
+
+        expect(statusCode).toBe(400);
+        expect(body).toEqual({ message: "Invalid booking ID" });
+      });
+    });
+
+    describe("given the provided bookingID is not found", () => {
+      it("should return 404 with a message of 'Booking not found'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .get("/book/bookingQR/656f8a3b2e7c1a4d8f9b1003")
+          .set("User-Agent", "jest")
+          .set("Cookie", [`jwt=${token}`]);
+
+        expect(statusCode).toBe(404);
+        expect(body).toEqual({ message: "Booking not found" });
+      });
+    });
+
+    describe("given the user is trying to get someone else's booking QR", () => {
+      it("should return 403 with a message of 'Forbidden'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .get("/book/bookingQR/656f8a3b2e7c1a4d8f9b1009")
+          .set("User-Agent", "jest")
+          .set("Cookie", [`jwt=${token}`]);
+
+        expect(statusCode).toBe(403);
+        expect(body).toEqual({ message: "Forbidden" });
+      });
+    });
   });
 
   describe("create booking route", () => {
