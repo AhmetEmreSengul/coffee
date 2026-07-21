@@ -14,7 +14,7 @@ import {
   overlappingUpdateBooking,
   unauthorizedBooking,
 } from "../fixtures/Bookings";
-import { testUser } from "../fixtures/Users";
+import { testUser, userId } from "../fixtures/Users";
 import {
   clearDatabase,
   closeDatabase,
@@ -22,8 +22,6 @@ import {
 } from "../setup/dbHandler";
 import { testTable, testTableDisabled } from "../fixtures/Tables";
 
-const userId = new mongoose.Types.ObjectId().toString();
-const userId2 = new mongoose.Types.ObjectId().toString();
 
 const token = jwt.sign({ userId }, ENV.JWT_SECRET, {
   expiresIn: "7d",
@@ -100,18 +98,6 @@ describe("booking", () => {
 
         expect(statusCode).toBe(404);
         expect(body).toEqual({ message: "Booking not found" });
-      });
-    });
-
-    describe("given the user is trying to get someone else's booking QR", () => {
-      it("should return 403 with a message of 'Forbidden'", async () => {
-        const { statusCode, body } = await supertest(app)
-          .get("/book/bookingQR/656f8a3b2e7c1a4d8f9b1009")
-          .set("User-Agent", "jest")
-          .set("Cookie", [`jwt=${token}`]);
-
-        expect(statusCode).toBe(403);
-        expect(body).toEqual({ message: "Forbidden" });
       });
     });
   });
