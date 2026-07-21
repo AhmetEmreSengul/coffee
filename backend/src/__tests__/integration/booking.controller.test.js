@@ -22,7 +22,6 @@ import {
 } from "../setup/dbHandler";
 import { testTable, testTableDisabled } from "../fixtures/Tables";
 
-
 const token = jwt.sign({ userId }, ENV.JWT_SECRET, {
   expiresIn: "7d",
 });
@@ -100,6 +99,17 @@ describe("booking", () => {
         expect(body).toEqual({ message: "Booking not found" });
       });
     });
+
+    describe("given the user is not logged in and trying to get booking QR", () => {
+      it("should return 401 with a message of 'Unauthorized'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .get("/book/bookingQR/656f8a3b2e7c1a4d8f9b1003")
+          .set("User-Agent", "jest");
+
+        expect(statusCode).toBe(401);
+        expect(body).toEqual({ message: "Unauthorized" });
+      });
+    });
   });
 
   describe("create booking route", () => {
@@ -116,6 +126,7 @@ describe("booking", () => {
         expect(statusCode).toBe(201);
       });
     });
+
     describe("given the bookingTime is not provided", () => {
       it("should return 400 with a message of 'All fields required", async () => {
         const { statusCode, body } = await supertest(app)
@@ -269,6 +280,18 @@ describe("booking", () => {
       });
     });
 
+    describe("given the user is not logged in", () => {
+      it("should return 401 with a message of 'Unauthorized'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .put("/book/updateBooking/656f8a3b2e7c1a4d8f9b1007")
+          .set("User-Agent", "jest")
+          .send(bookingPayload);
+
+        expect(statusCode).toBe(401);
+        expect(body).toEqual({ message: "Unauthorized" });
+      });
+    });
+
     describe("given the end time is before the start time", () => {
       it("should return 400 with a message of 'End time must be after start time'", async () => {
         const { statusCode, body } = await supertest(app)
@@ -371,6 +394,17 @@ describe("booking", () => {
 
         expect(statusCode).toBe(403);
         expect(body).toEqual({ message: "Forbidden" });
+      });
+    });
+
+    describe("given the user is not logged in", () => {
+      it("should return 401 with a message of 'Unauthorized'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .delete("/book/cancelBooking/656f8a3b2e7c1a4d8f9b1007")
+          .set("User-Agent", "jest");
+
+        expect(statusCode).toBe(401);
+        expect(body).toEqual({ message: "Unauthorized" });
       });
     });
   });
