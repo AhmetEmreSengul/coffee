@@ -16,6 +16,7 @@ import Table from "../../models/Table";
 import Booking from "../../models/Booking";
 
 const userId = new mongoose.Types.ObjectId().toString();
+const userId2 = new mongoose.Types.ObjectId().toString();
 
 const testUser = {
   _id: userId,
@@ -41,6 +42,18 @@ const overlappingBooking = {
     end: "2027-01-15T16:00:00.000Z",
   },
   qrToken: "test-qr-token",
+  checkedIn: false,
+};
+
+const unauthorizedBooking = {
+  _id: "656f8a3b2e7c1a4d8f9b1009",
+  user: userId2,
+  tableNumber: "656f8a3b2e7c1a4d8f9b1003",
+  bookingTime: {
+    start: "2027-01-15T14:00:00.000Z",
+    end: "2027-01-15T16:00:00.000Z",
+  },
+  qrToken: "test-qr-token3",
   checkedIn: false,
 };
 
@@ -78,7 +91,7 @@ const testTableDisabled = {
   status: "disabled",
 };
 
-const token = jwt.sign({ userId: testUser._id }, ENV.JWT_SECRET, {
+const token = jwt.sign({ userId }, ENV.JWT_SECRET, {
   expiresIn: "7d",
 });
 
@@ -90,7 +103,11 @@ describe("booking", () => {
   beforeEach(async () => {
     await User.create(testUser);
     await Table.create([testTable, testTableDisabled]);
-    await Booking.create([overlappingBooking, overlappingUpdateBooking]);
+    await Booking.create([
+      overlappingBooking,
+      overlappingUpdateBooking,
+      unauthorizedBooking,
+    ]);
   });
 
   describe("create booking route", () => {
@@ -310,6 +327,58 @@ describe("booking", () => {
         expect(body).toEqual({
           message: "Table is already booked for this time slot",
         });
+      });
+    });
+
+    describe("given the user is trying to update someone else's booking", () => {
+      it("should return 403 with a message of 'Forbidden'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .put("/book/updateBooking/656f8a3b2e7c1a4d8f9b1009")
+          .set("User-Agent", "jest")
+          .set("Cookie", [`jwt=${token}`])
+          .send(bookingPayload);
+
+        expect(statusCode).toBe(403);
+        expect(body).toEqual({ message: "Forbidden" });
+      });
+    });
+
+    describe("given the user provided a invalid booking ID", () => {
+      it("should return 400 with a message of 'Invalid booking ID'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .put("/book/updateBooking/invalid-booking-id")
+          .set("User-Agent", "jest")
+          .set("Cookie", [`jwt=${token}`])
+          .send(bookingPayload);
+
+        expect(statusCode).toBe(400);
+        expect(body).toEqual({ message: "Invalid booking ID" });
+      });
+    });
+  });
+
+  describe("delete booking route", () => {
+    describe("given the booking ID is invalid", () => {
+      it("should return 400 with a message of 'Invalid booking ID'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .delete("/book/cancelBooking/invalid-booking-id")
+          .set("User-Agent", "jest")
+          .set("Cookie", [`jwt=${token}`]);
+
+        expect(statusCode).toBe(400);
+        expect(body).toEqual({ message: "Invalid booking ID" });
+      });
+    });
+
+    describe("given the user is trying to delete someone else's booking", () => {
+      it("should return 403 with a message of 'Forbidden'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .delete("/book/cancelBooking/656f8a3b2e7c1a4d8f9b1009")
+          .set("User-Agent", "jest")
+          .set("Cookie", [`jwt=${token}`]);
+
+        expect(statusCode).toBe(403);
+        expect(body).toEqual({ message: "Forbidden" });
       });
     });
   });
