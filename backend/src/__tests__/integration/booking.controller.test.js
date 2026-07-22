@@ -1,8 +1,14 @@
-import { afterAll, afterEach, beforeAll, describe } from "@jest/globals";
+import {
+  afterAll,
+  afterEach,
+  beforeAll,
+  describe,
+  it,
+  jest,
+} from "@jest/globals";
 import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 import supertest from "supertest";
-import app from "../../app";
 import { ENV } from "../../lib/env";
 import Booking from "../../models/Booking";
 import Table from "../../models/Table";
@@ -21,6 +27,12 @@ import {
   connectTestDB,
 } from "../setup/dbHandler";
 import { testTable, testTableDisabled } from "../fixtures/Tables";
+const actualEmailHandler = await import("../../emails/emailHandler");
+jest.unstable_mockModule("../../emails/emailHandler", () => ({
+  ...actualEmailHandler,
+  sendBookingEmail: jest.fn().mockResolvedValue(undefined),
+}));
+const { default: app } = await import("../../app");
 
 const token = jwt.sign({ userId }, ENV.JWT_SECRET, {
   expiresIn: "7d",
@@ -120,8 +132,6 @@ describe("booking", () => {
           .set("User-Agent", "jest")
           .set("Cookie", [`jwt=${token}`])
           .send(bookingPayload);
-
-        console.log(statusCode, body);
 
         expect(statusCode).toBe(201);
       });
