@@ -14,8 +14,14 @@ import {
   closeDatabase,
   connectTestDB,
 } from "../setup/dbHandler";
-import { createUserPayload } from "../fixtures/Users";
+import {
+  testUser,
+  createUserPayload,
+  loginUserPayload,
+} from "../fixtures/Users";
 import { response } from "express";
+import User from "../../models/User";
+import bcrypt from "bcryptjs";
 
 describe("user", () => {
   beforeAll(connectTestDB);
@@ -34,6 +40,34 @@ describe("user", () => {
         expect(body).toEqual({
           _id: expect.any(String),
           fullName: expect.any(String),
+          email: expect.any(String),
+        });
+
+        expect(headers["set-cookie"]).toBeDefined();
+
+        const jwtCookie = headers["set-cookie"].find((cookie) =>
+          cookie.startsWith("jwt="),
+        );
+
+        expect(jwtCookie).toBeDefined();
+      });
+    });
+  });
+
+  describe("user login route", () => {
+    describe("given the input is valid", () => {
+      it("should return 200 and the user date and set a jwt cookie", async () => {
+        const hashedPassword = await bcrypt.hash(testUser.password, 10);
+        await User.create({ ...testUser, password: hashedPassword });
+
+        const { statusCode, body, headers } = await supertest(app)
+          .post("/auth/login")
+          .set("User-Agent", "jest")
+          .send(loginUserPayload);
+
+        expect(statusCode).toBe(200);
+        expect(body).toEqual({
+          _id: expect.any(String),
           email: expect.any(String),
         });
 
