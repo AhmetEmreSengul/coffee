@@ -22,6 +22,8 @@ import {
 import { response } from "express";
 import User from "../../models/User";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import { ENV } from "../../lib/env";
 
 describe("user", () => {
   beforeAll(connectTestDB);
@@ -78,6 +80,27 @@ describe("user", () => {
         );
 
         expect(jwtCookie).toBeDefined();
+      });
+    });
+  });
+
+  describe("user logout route", () => {
+    describe("given the user is logged in trying to logout", () => {
+      it("should return 200", async () => {
+        const token = jwt.sign({ userId: testUser._id }, ENV.JWT_SECRET, {
+          expiresIn: "7d",
+        });
+
+        const { statusCode, body, headers } = await supertest(app)
+          .post("/auth/logout")
+          .set("User-Agent", "jest")
+          .set("Cookie", [`jwt=${token}`]);
+
+        expect(statusCode).toBe(200);
+        expect(body).toEqual({ message: "Logged out" });
+
+        expect(headers["set-cookie"]).toBeDefined();
+        expect(headers["set-cookie"][0]).toContain("jwt=");
       });
     });
   });
