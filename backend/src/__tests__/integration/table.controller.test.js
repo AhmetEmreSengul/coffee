@@ -11,7 +11,7 @@ import app from "../../app";
 import Booking from "../../models/Booking";
 import Table from "../../models/Table";
 import { overlappingBooking } from "../fixtures/Bookings";
-import { testTable } from "../fixtures/Tables";
+import { testTable, testTableDisabled } from "../fixtures/Tables";
 import {
   clearDatabase,
   closeDatabase,
@@ -24,7 +24,7 @@ describe("table", () => {
   afterAll(closeDatabase);
 
   beforeEach(async () => {
-    await Table.create(testTable);
+    await Table.create([testTable, testTableDisabled]);
     await Booking.create(overlappingBooking);
   });
 
@@ -42,7 +42,7 @@ describe("table", () => {
     describe("given the table has a booking", () => {
       it("should return 200", async () => {
         const { statusCode, body } = await supertest(app)
-          .get("/table/table-bookings/656f8a3b2e7c1a4d8f9b1003")
+          .get(`/table/table-bookings/${testTable._id}`)
           .set("User-Agent", "jest");
 
         expect(statusCode).toBe(200);
@@ -57,12 +57,45 @@ describe("table", () => {
       });
     });
 
+    describe("given the user provided a invalid table ID", () => {
+      it("should return 400 with a message of 'Invalid table ID'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .get("/table/table-bookings/invalid-table-id")
+          .set("User-Agent", "jest");
+
+        expect(statusCode).toBe(400);
+        expect(body).toEqual({ message: "Invalid table ID" });
+      });
+    });
+  });
+
+  describe("given the table is not found", () => {
+    it("should return 404 with a message of 'Table not available'", async () => {
+      const { statusCode, body } = await supertest(app)
+        .get("/table/table-bookings/656f8a3b2e7c1a4d8f9b9999")
+        .set("User-Agent", "jest");
+
+      expect(statusCode).toBe(404);
+      expect(body).toEqual({ message: "Table not available" });
+    });
+  });
+
+  describe("given the table is not active", () => {
+    it("should return 404 with a message of 'Table not available'", async () => {
+      const { statusCode, body } = await supertest(app)
+        .get(`/table/table-bookings/${testTableDisabled._id}`)
+        .set("User-Agent", "jest");
+
+      expect(statusCode).toBe(404);
+      expect(body).toEqual({ message: "Table not available" });
+    });
+  });
+
+  describe("generate time-slots route", () => {
     describe("given the table is active and has slots available", () => {
       it("should return available time slots", async () => {
         const { statusCode, body } = await supertest(app)
-          .get(
-            "/table/available-slots/656f8a3b2e7c1a4d8f9b1003/?date=2027-01-15",
-          )
+          .get(`/table/available-slots/${testTable._id}/?date=2027-01-15`)
           .set("User-Agent", "jest");
 
         expect(statusCode).toBe(200);
@@ -92,6 +125,54 @@ describe("table", () => {
             start: "2027-01-15T18:00:00.000Z",
           },
         ]);
+      });
+    });
+
+    describe("given the user provided a invalid table ID", () => {
+      it("should return 400 with a message of 'Invalid table ID'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .get("/table/available-slots/invalid-table-id/?date=2027-01-15")
+          .set("User-Agent", "jest");
+
+        expect(statusCode).toBe(400);
+        expect(body).toEqual({ message: "Invalid table ID" });
+      });
+    });
+
+    describe("given the user did not provide a date", () => {
+      it("should return 400 with a message of 'Date is required'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .get("/table/available-slots/656f8a3b2e7c1a4d8f9b9999/")
+          .set("User-Agent", "jest");
+
+        expect(statusCode).toBe(400);
+        expect(body).toEqual({ message: "Date is required" });
+      });
+    });
+
+    describe("given the table is not found", () => {
+      it("should return 404 with a message of 'Table not available'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .get(
+            "/table/available-slots/656f8a3b2e7c1a4d8f9b9999/?date=2027-01-15",
+          )
+          .set("User-Agent", "jest");
+
+        expect(statusCode).toBe(404);
+        expect(body).toEqual({ message: "Table not available" });
+      });
+    });
+
+    describe("given the table is not active", () => {
+      it("should return 404 with a message of 'Table not available'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .get(
+            `/table/available-slots/${testTableDisabled._id}/?date=2027-01-15`,
+          )
+          .set("User-Agent", "jest");
+
+        expect(statusCode).toBe(404);
+        expect(body).toEqual({ message: "Table not available" });
       });
     });
   });
