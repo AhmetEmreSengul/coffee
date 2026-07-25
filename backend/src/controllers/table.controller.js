@@ -35,6 +35,15 @@ export const getTableBookings = async (req, res) => {
 
     const now = new Date();
 
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid table ID" });
+    }
+
+    const table = await Table.findById(id);
+    if (!table || table.status !== "active") {
+      return res.status(404).json({ message: "Table not available" });
+    }
+
     const tableBookings = await Booking.find(
       {
         tableNumber: id,
@@ -54,6 +63,10 @@ export const getAvailableSlots = async (req, res) => {
   try {
     const { id } = req.params;
     const { date } = req.query;
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid table ID" });
+    }
 
     if (!date) {
       return res.status(400).json({ message: "Date is required" });
