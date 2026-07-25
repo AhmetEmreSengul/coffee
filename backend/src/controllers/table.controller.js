@@ -9,6 +9,7 @@ import {
 } from "date-fns";
 import Table from "../models/Table.js";
 import Booking from "../models/Booking.js";
+import { isValidObjectId } from "mongoose";
 
 const OPENING_HOUR = 9;
 const CLOSING_HOUR = 24;
