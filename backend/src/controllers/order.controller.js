@@ -1,3 +1,4 @@
+import { isValidObjectId } from "mongoose";
 import { sendCreateOrderEmail } from "../emails/emailHandler.js";
 import Coffee from "../models/Coffee.js";
 import Order from "../models/Order.js";
@@ -95,6 +96,10 @@ export const deleteOrder = async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user._id;
+
+    if(!isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid order ID" });
+    }
 
     const order = await Order.findById(id);
 
