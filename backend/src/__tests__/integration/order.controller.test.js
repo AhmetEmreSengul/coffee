@@ -245,6 +245,18 @@ describe("order", () => {
           expect(body).toEqual({ message: "Unauthorized" });
         });
       });
+
+      describe("given the order ID is invalid", () => {
+        it("should return 400 with a message of 'Invalid order ID'", async () => {
+          const { statusCode, body } = await supertest(app)
+            .delete(`/orders/delete-order/invalid-order-id`)
+            .set("User-Agent", "jest")
+            .set("Cookie", [`jwt=${token}`]);
+
+          expect(statusCode).toBe(400);
+          expect(body).toEqual({ message: "Invalid order ID" });
+        });
+      });
     });
   });
 });
