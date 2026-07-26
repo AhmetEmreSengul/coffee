@@ -10,6 +10,13 @@ export const testUser = {
   password: "hashed-test-password",
 };
 
+export const testUser2 = {
+  _id: userId2,
+  fullName: "Fake User 2",
+  email: "fake.user2@example.com",
+  password: "hashed-test-password",
+};
+
 export const createUserPayload = {
   fullName: "Fake User",
   email: "fake.user@example.com",
