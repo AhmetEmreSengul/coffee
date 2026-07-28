@@ -31,3 +31,12 @@ export const testOrder = {
   totalPrice: 240,
   orderNote: "Less sugar",
 };
+
+export const stripePayload = {
+  items: [
+    {
+      id: testCoffee._id,
+      quantity: 2,
+    },
+  ],
+};
