@@ -148,6 +148,11 @@ export const addCoffee = async (req, res) => {
 export const getCoffeeById = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid coffee ID" });
+    }
+
     const coffee = await Coffee.findById(id);
 
     if (!coffee) {
@@ -165,6 +170,10 @@ export const editCoffee = async (req, res) => {
   try {
     const { id } = req.params;
     const { title, type, price, image, description } = req.body;
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid coffee ID" });
+    }
 
     if (!title || !type || !price || !image || !description) {
       return res.status(400).json({ message: "All fields are required" });
@@ -194,6 +203,11 @@ export const editCoffee = async (req, res) => {
 export const deleteCoffee = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid coffee ID" });
+    }
+
     const coffee = await Coffee.findByIdAndDelete(id);
 
     if (!coffee) {
