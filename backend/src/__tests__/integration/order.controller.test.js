@@ -87,6 +87,9 @@ describe("order", () => {
               },
             ],
           });
+
+        expect(statusCode).toBe(400);
+        expect(body).toEqual({ message: "Quantity limit exceeded" });
       });
     });
 
@@ -105,6 +108,9 @@ describe("order", () => {
               },
             ],
           });
+          
+        expect(statusCode).toBe(400);
+        expect(body).toEqual({ message: "Quantity must be at least 1" });
       });
     });
   });
@@ -241,7 +247,7 @@ describe("order", () => {
             .set("User-Agent", "jest")
             .set("Cookie", [`jwt=${token2}`]);
 
-          expect(statusCode).toBe(401);
+          expect(statusCode).toBe(403);
           expect(body).toEqual({ message: "Unauthorized" });
         });
       });
