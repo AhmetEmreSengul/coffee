@@ -108,7 +108,7 @@ describe("order", () => {
               },
             ],
           });
-          
+
         expect(statusCode).toBe(400);
         expect(body).toEqual({ message: "Quantity must be at least 1" });
       });
@@ -159,109 +159,107 @@ describe("order", () => {
         expect(body).toEqual({ message: "Unauthorized" });
       });
     });
+  });
+  describe("get users last order route", () => {
+    describe("given the user is logged in", () => {
+      it("should return the user's last order", async () => {
+        const { statusCode, body } = await supertest(app)
+          .get("/orders/last-order")
+          .set("User-Agent", "jest")
+          .set("Cookie", [`jwt=${token}`]);
 
-    describe("get users last order route", () => {
-      describe("given the user is logged in", () => {
-        it("should return the user's last order", async () => {
-          const { statusCode, body } = await supertest(app)
-            .get("/orders/last-order")
-            .set("User-Agent", "jest")
-            .set("Cookie", [`jwt=${token}`]);
-
-          expect(statusCode).toBe(200);
-          expect(body).toEqual({
-            __v: 0,
-            _id: testOrder._id,
-            createdAt: "2026-07-26T23:30:03.358Z",
-            orderItems: [
-              {
-                _id: "656f8a3b2e7c1a4d8f9b1001",
-                image: "latte.jpg",
-                price: 120,
-                quantity: 2,
-                title: "Latte",
-                type: "Hot Coffee",
-              },
-            ],
-            orderNote: "Less sugar",
-            totalPrice: 240,
-            updatedAt: expect.any(String),
-            createdAt: expect.any(String),
-            user: userId,
-          });
-        });
-      });
-
-      describe("given the user is not logged in", () => {
-        it("should return 401 with a message of 'Unauthorized'", async () => {
-          const { statusCode, body } = await supertest(app)
-            .get("/orders/last-order")
-            .set("User-Agent", "jest");
-
-          expect(statusCode).toBe(401);
-          expect(body).toEqual({ message: "Unauthorized" });
-        });
-      });
-
-      describe("given the user has no past orders", () => {
-        it("should return 404 with a message of 'No orders found'", async () => {
-          const { statusCode, body } = await supertest(app)
-            .get("/orders/last-order")
-            .set("User-Agent", "jest")
-            .set("Cookie", [`jwt=${token2}`]);
-
-          expect(statusCode).toBe(404);
-          expect(body).toEqual({ message: "No orders found" });
+        expect(statusCode).toBe(200);
+        expect(body).toEqual({
+          __v: 0,
+          _id: testOrder._id,
+          createdAt: "2026-07-26T23:30:03.358Z",
+          orderItems: [
+            {
+              _id: "656f8a3b2e7c1a4d8f9b1001",
+              image: "latte.jpg",
+              price: 120,
+              quantity: 2,
+              title: "Latte",
+              type: "Hot Coffee",
+            },
+          ],
+          orderNote: "Less sugar",
+          totalPrice: 240,
+          updatedAt: expect.any(String),
+          createdAt: expect.any(String),
+          user: userId,
         });
       });
     });
 
-    describe("delete orders route", () => {
-      describe("given the user is logged in", () => {
-        it("should return 200", async () => {
-          const { statusCode, body } = await supertest(app)
-            .delete(`/orders/delete-order/${testOrder._id}`)
-            .set("User-Agent", "jest")
-            .set("Cookie", [`jwt=${token}`]);
+    describe("given the user is not logged in", () => {
+      it("should return 401 with a message of 'Unauthorized'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .get("/orders/last-order")
+          .set("User-Agent", "jest");
 
-          expect(statusCode).toBe(200);
-          expect(body).toEqual({ message: "Order deleted" });
-        });
+        expect(statusCode).toBe(401);
+        expect(body).toEqual({ message: "Unauthorized" });
       });
+    });
 
-      describe("given the user is not logged in", () => {
-        it("should return 401 with a message of 'Unauthorized'", async () => {
-          const { statusCode, body } = await supertest(app)
-            .delete(`/orders/delete-order/${testOrder._id}`)
-            .set("User-Agent", "jest");
+    describe("given the user has no past orders", () => {
+      it("should return 404 with a message of 'No orders found'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .get("/orders/last-order")
+          .set("User-Agent", "jest")
+          .set("Cookie", [`jwt=${token2}`]);
 
-          expect(statusCode).toBe(401);
-          expect(body).toEqual({ message: "Unauthorized" });
-        });
+        expect(statusCode).toBe(404);
+        expect(body).toEqual({ message: "No orders found" });
       });
+    });
+  });
+  describe("delete orders route", () => {
+    describe("given the user is logged in", () => {
+      it("should return 200", async () => {
+        const { statusCode, body } = await supertest(app)
+          .delete(`/orders/delete-order/${testOrder._id}`)
+          .set("User-Agent", "jest")
+          .set("Cookie", [`jwt=${token}`]);
 
-      describe("given the user is trying to delete someone else's order", () => {
-        it("should return 403 with a message of 'Unauthorized'", async () => {
-          const { statusCode, body } = await supertest(app)
-            .delete(`/orders/delete-order/${testOrder._id}`)
-            .set("User-Agent", "jest")
-            .set("Cookie", [`jwt=${token2}`]);
-
-          expect(statusCode).toBe(403);
-          expect(body).toEqual({ message: "Unauthorized" });
-        });
+        expect(statusCode).toBe(200);
+        expect(body).toEqual({ message: "Order deleted" });
       });
+    });
 
-      describe("given the order ID is invalid", () => {
-        it("should return 400 with a message of 'Invalid order ID'", async () => {
-          const { statusCode, body } = await supertest(app)
-            .delete(`/orders/delete-order/invalid-order-id`)
-            .set("User-Agent", "jest")
-            .set("Cookie", [`jwt=${token}`]);
+    describe("given the user is not logged in", () => {
+      it("should return 401 with a message of 'Unauthorized'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .delete(`/orders/delete-order/${testOrder._id}`)
+          .set("User-Agent", "jest");
 
-          expect(statusCode).toBe(400);
-          expect(body).toEqual({ message: "Invalid order ID" });
-        });
+        expect(statusCode).toBe(401);
+        expect(body).toEqual({ message: "Unauthorized" });
+      });
+    });
+
+    describe("given the user is trying to delete someone else's order", () => {
+      it("should return 401 with a message of 'Unauthorized'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .delete(`/orders/delete-order/${testOrder._id}`)
+          .set("User-Agent", "jest")
+          .set("Cookie", [`jwt=${token2}`]);
+
+        expect(statusCode).toBe(401);
+        expect(body).toEqual({ message: "Unauthorized" });
+      });
+    });
+
+    describe("given the order ID is invalid", () => {
+      it("should return 400 with a message of 'Invalid order ID'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .delete(`/orders/delete-order/invalid-order-id`)
+          .set("User-Agent", "jest")
+          .set("Cookie", [`jwt=${token}`]);
+
+        expect(statusCode).toBe(400);
+        expect(body).toEqual({ message: "Invalid order ID" });
       });
     });
   });

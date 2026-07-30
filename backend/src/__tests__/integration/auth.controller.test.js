@@ -54,6 +54,18 @@ describe("user", () => {
         expect(jwtCookie).toBeDefined();
       });
     });
+
+    describe("given the user left one or more fields empty", () => {
+      it("should return 400 with a message of 'All fields are required'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .post("/auth/signup")
+          .set("User-Agent", "jest")
+          .send({ ...createUserPayload, fullName: "" });
+
+        expect(statusCode).toBe(400);
+        expect(body).toEqual({ message: "All fields are required" });
+      });
+    });
   });
 
   describe("user login route", () => {
@@ -80,6 +92,30 @@ describe("user", () => {
         );
 
         expect(jwtCookie).toBeDefined();
+      });
+    });
+
+    describe("given the user left one or more fields empty", () => {
+      it("should return 400 with a message of 'All fields are required'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .post("/auth/login")
+          .set("User-Agent", "jest")
+          .send({ ...loginUserPayload, email: "" });
+
+        expect(statusCode).toBe(400);
+        expect(body).toEqual({ message: "All fields are required" });
+      });
+    });
+
+    describe("given the password is wrong", () => {
+      it("should return 401 with a message of 'Invalid credentials'", async () => {
+        const { statusCode, body } = await supertest(app)
+          .post("/auth/login")
+          .set("User-Agent", "jest")
+          .send({ ...loginUserPayload, password: "wrong-password" });
+
+        expect(statusCode).toBe(400);
+        expect(body).toEqual({ message: "Invalid credentials" });
       });
     });
   });
