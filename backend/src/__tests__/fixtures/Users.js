@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 export const userId = new mongoose.Types.ObjectId().toString();
 export const userId2 = new mongoose.Types.ObjectId().toString();
+export const userId3 = new mongoose.Types.ObjectId().toString();
 
 export const testUser = {
   _id: userId,
@@ -15,6 +16,14 @@ export const testUser2 = {
   fullName: "Fake User 2",
   email: "fake.user2@example.com",
   password: "hashed-test-password",
+};
+
+export const adminUser = {
+  _id: userId3,
+  fullName: "Admin User",
+  email: "admin.user@example.com",
+  password: "hashed-test-password",
+  role: "admin",
 };
 
 export const createUserPayload = {
