@@ -1,3 +1,4 @@
+import { isValidObjectId } from "mongoose";
 import Booking from "../models/Booking.js";
 import Coffee from "../models/Coffee.js";
 import Order from "../models/Order.js";
@@ -20,6 +21,11 @@ export const getAllUsers = async (req, res) => {
 export const getUserBookingsById = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
+
     const bookings = await Booking.find({ user: id }).sort({ createdAt: -1 });
 
     res.status(200).json(bookings);
@@ -32,6 +38,11 @@ export const getUserBookingsById = async (req, res) => {
 export const getUserOrdersById = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
+
     const orders = await Order.find({ user: id }).sort({ createdAt: -1 });
 
     res.status(200).json(orders);
@@ -44,6 +55,10 @@ export const getUserOrdersById = async (req, res) => {
 export const banUser = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({ message: "Invalid user ID" });
+    }
 
     const user = await User.findById(id);
     user.isBanned = !user.isBanned;
