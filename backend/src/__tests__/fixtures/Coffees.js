@@ -6,3 +6,11 @@ export const testCoffee = {
   description: "Fake description",
   price: 5.99,
 };
+
+export const coffeePayload = {
+  title: "Fake Coffee",
+  type: "Hot",
+  image: "image",
+  description: "Fake description",
+  price: 5.99,
+};
