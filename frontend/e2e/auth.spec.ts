@@ -18,8 +18,6 @@ test.describe("auth", () => {
 
     await page.getByRole("button", { name: "Create Account" }).click();
 
-    const cookies = await page.context().cookies();
-
     await expect(page).toHaveURL("http://localhost:5173");
     await expect(page.getByRole("button", { name: "Logout" })).toBeVisible();
   });
