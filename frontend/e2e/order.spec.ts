@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test.describe("order", () => {
+test.describe.serial("order", () => {
   test("user can login navigate the menu and place an order", async ({
     page,
   }) => {
