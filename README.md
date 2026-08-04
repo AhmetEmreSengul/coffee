@@ -47,6 +47,7 @@ In production, the backend can also **serve the built frontend** (`frontend/dist
 - **react-day-picker**: date selection for table booking (next 7 days).
 - **@stripe/react-stripe-js** + **@stripe/stripe-js**: Stripe payment integration with card elements.
 - **date-fns**: date formatting.
+- **Playwright**: end-to-end browser tests.
 
 ### Backend
 
@@ -60,6 +61,7 @@ In production, the backend can also **serve the built frontend** (`frontend/dist
 - **qrcode**: server-side QR code generation for a booking.
 - **bcryptjs**: password hashing.
 - **cors + cookie-parser**: cross-origin cookies & request parsing.
+- **Jest + SuperTest**: backend integration tests for API routes.
 
 ---
 
@@ -236,6 +238,8 @@ Frontend environment variables (create `frontend/.env`):
 
 ```env
 VITE_STRIPE_PUBLISHABLE_KEY=...
+E2E_ADMIN_EMAIL=...
+E2E_ADMIN_PASSWORD=...
 ```
 
 Notes:
@@ -278,6 +282,65 @@ Frontend runs on `http://localhost:5173`.
   - Typical flow: build frontend, deploy backend with `frontend/dist` present.
 
 ---
+
+## Integration Testing
+
+The backend is covered by an integration test suite built with **Jest** (native ESM) and **Supertest**, exercising every controller through real HTTP requests against a real Express app instance — auth included via actual JWT cookies through the `protectRoute` middleware, not mocked.
+
+### Approach
+
+Each controller was first tested manually (structured test cases: happy path, edge cases, error cases) before being automated. This surfaced and fixed several real bugs, including missing ownership checks, unhandled crashes from missing fields, incorrect `ObjectId` validation ordering, and sensitive fields (password hash) leaking in API responses.
+
+### Coverage
+
+| Suite | Flows covered |
+|---|---|
+| `admin.controller.test.js` | Admin-only access control, view all users, ban/unban a user, view a booking's check-in QR verification (including time-window and already-checked-in logic), view a user's orders |
+| `auth.controller.test.js` | Signup, login, logout |
+| `booking.controller.test.js` | Create, view, update, and cancel a table booking — including validation (missing fields, invalid dates, invalid/inactive table, overlapping time slots), ownership checks, and unauthorized access |
+| `coffee.controller.test.js` | Fetch coffee menu items |
+| `order.controller.test.js` | Create an order, view past orders, view last order, delete an order — including quantity validation and unauthorized/ownership checks |
+| `stripe.controller.test.js` | Payment intent creation with correct amount calculation, empty cart validation |
+| `table.controller.test.js` | Fetch available tables, fetch a table's bookings, fetch available time slots for a table — including invalid/inactive/not-found table handling |
+
+
+
+### Running the tests
+
+```bash
+cd backend
+npm test              # run the full suite
+npm test -- --verbose # list every test case individually
+npm test -- --coverage
+```
+
+## E2E Testing
+
+End-to-end coverage is provided by **Playwright**, driving a real browser against the running app (frontend + backend + a real Stripe test-mode integration) to verify complete user flows exactly as a real user would experience them.
+
+### Approach
+
+Unlike the backend integration tests (which run in isolation against an in-memory database), these tests exercise the full stack together — real login, real navigation, real Stripe Elements iframe for payment, and real admin actions — to catch issues that only appear when frontend, backend, and third-party services interact.
+
+### Coverage
+
+| Suite | Flows covered |
+|---|---|
+| `auth.spec.ts` | Signup, login, logout |
+| `booking.spec.ts` | Create, view, update, and cancel a table booking |
+| `order.spec.ts` | Browse menu, add to cart, checkout with Stripe, view order history, reorder, delete an order |
+| `admin.spec.ts` | Admin login, view all users, view a user's orders/bookings, ban/unban a user, add/edit/delete a coffee item |
+
+### Running the tests
+
+```bash
+cd frontend
+npx playwright test              # run the full suite
+npx playwright test --ui         # interactive mode
+npx playwright test admin.spec.ts # run a single suite
+```
+
+Requires the backend and frontend dev servers running locally, plus a seeded test user and admin account (see `.env.example` for the required `E2E_ADMIN_EMAIL` / `E2E_ADMIN_PASSWORD` variables). Payment flows use Stripe's test card (`4242 4242 4242 4242`).
 
 ## API quick reference
 
@@ -338,7 +401,6 @@ Frontend runs on `http://localhost:5173`.
 
 ### Operational / maintenance
 
-- **No tests** (unit/integration/e2e).
 - **No containerization** (no Docker config).
 - **No migrations**: Mongo schema changes are manual.
 - **Email template contains a hardcoded link** to the production domain.
