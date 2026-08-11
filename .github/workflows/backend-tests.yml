@@ -27,8 +27,9 @@ jobs:
       - name: Run Tests
         run: npm run test --prefix backend
         env:
-          NODE_ENV: test
+          NODE_ENV: development
           JWT_SECRET: test-secret
+          ARCJET_ENV: test
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
