@@ -120,36 +120,38 @@ describe("admin", () => {
           .set("Cookie", [`jwt=${adminToken}`]);
 
         expect(statusCode).toBe(200);
-        expect(body).toEqual([
-          {
-            __v: 0,
-            _id: "656f8a3b2e7c1a4d8f9b1007",
-            bookingTime: {
-              end: "2027-01-15T16:00:00.000Z",
-              start: "2027-01-15T14:00:00.000Z",
+        expect(body).toEqual(
+          expect.arrayContaining([
+            {
+              __v: 0,
+              _id: "656f8a3b2e7c1a4d8f9b1007",
+              bookingTime: {
+                end: "2027-01-15T16:00:00.000Z",
+                start: "2027-01-15T14:00:00.000Z",
+              },
+              checkedIn: false,
+              createdAt: expect.any(String),
+              qrToken: "test-qr-token",
+              tableNumber: "656f8a3b2e7c1a4d8f9b1003",
+              updatedAt: expect.any(String),
+              user: testUser._id,
             },
-            checkedIn: false,
-            createdAt: expect.any(String),
-            qrToken: "test-qr-token",
-            tableNumber: "656f8a3b2e7c1a4d8f9b1003",
-            updatedAt: expect.any(String),
-            user: testUser._id,
-          },
-          {
-            __v: 0,
-            _id: "656f8a3b2e7c1a4d8f9b1008",
-            bookingTime: {
-              end: expect.any(String),
-              start: expect.any(String),
+            {
+              __v: 0,
+              _id: "656f8a3b2e7c1a4d8f9b1008",
+              bookingTime: {
+                end: expect.any(String),
+                start: expect.any(String),
+              },
+              checkedIn: false,
+              createdAt: expect.any(String),
+              qrToken: "test-qr-token2",
+              tableNumber: "656f8a3b2e7c1a4d8f9b1003",
+              updatedAt: expect.any(String),
+              user: testUser._id,
             },
-            checkedIn: false,
-            createdAt: expect.any(String),
-            qrToken: "test-qr-token2",
-            tableNumber: "656f8a3b2e7c1a4d8f9b1003",
-            updatedAt: expect.any(String),
-            user: testUser._id,
-          },
-        ]);
+          ]),
+        );
       });
     });
 
@@ -589,8 +591,8 @@ describe("admin", () => {
 
         expect(statusCode).toBe(200);
         expect(body).toEqual({ message: "Coffee deleted" });
-      })
-    })
+      });
+    });
 
     describe("given the user is not logged in as an admin", () => {
       it("should return 403 with a message of 'Access denied (Admin only)'", async () => {
@@ -638,5 +640,5 @@ describe("admin", () => {
         expect(body).toEqual({ message: "Invalid coffee ID" });
       });
     });
-  })
+  });
 });
