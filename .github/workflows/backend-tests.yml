@@ -27,6 +27,7 @@ jobs:
       - name: Run Tests
         run: npm run test --prefix backend
         env:
+          TZ: "Europe/Istanbul"
           NODE_ENV: development
           JWT_SECRET: test-secret
           ARCJET_ENV: test
