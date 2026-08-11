@@ -26,3 +26,10 @@ jobs:
 
       - name: Run Tests
         run: npm run test --prefix backend
+        env:
+          NODE_ENV: test
+          JWT_SECRET: test-secret
+          STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_CALLBACK_URL: ${{ secrets.GOOGLE_CALLBACK_URL }}
