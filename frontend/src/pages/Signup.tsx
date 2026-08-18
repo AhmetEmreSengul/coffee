@@ -30,7 +30,7 @@ const Signup = () => {
     },
     validators: {
       onSubmit: formSchema,
-      onBlur: formSchema,
+      onChange: formSchema,
     },
   });
 

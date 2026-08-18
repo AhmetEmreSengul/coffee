@@ -24,7 +24,7 @@ const Login = () => {
     },
     validators: {
       onSubmit: formSchema,
-      onBlur: formSchema,
+      onChange: formSchema,
     },
   });
 
