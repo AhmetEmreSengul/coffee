@@ -1,21 +1,34 @@
-import { useState, type FormEvent } from "react";
-import { useAuthStore } from "../store/useAuthStore";
-import { Link } from "react-router-dom";
+import { useForm } from "@tanstack/react-form";
+import { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible, AiOutlineGoogle } from "react-icons/ai";
 import { FaFish } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { z } from "zod";
+import { useAuthStore } from "../store/useAuthStore";
 
 const Login = () => {
   const { login, forgotPassword, isLoggingIn } = useAuthStore();
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
-  const [visible, setVisible] = useState<boolean>(false);
 
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    login(formData);
-  };
+  const formSchema = z.object({
+    email: z.email().min(1, "Email is required"),
+    password: z.string().min(6, "Password must be at least 6 characters"),
+  });
+
+  const { Field, handleSubmit, getFieldValue } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    onSubmit: async ({ value }) => {
+      await login(value);
+    },
+    validators: {
+      onSubmit: formSchema,
+      onBlur: formSchema,
+    },
+  });
+
+  const [visible, setVisible] = useState<boolean>(false);
 
   const BASE_URL = import.meta.env.VITE_BASE_URL;
 
@@ -24,8 +37,12 @@ const Login = () => {
   };
 
   const handleForgotPassword = async () => {
-    await forgotPassword(formData.email);
-    setFormData({ email: "", password: "" });
+    const email = getFieldValue("email");
+    const result = z.email().safeParse(email);
+
+    if (!result.success) return;
+
+    await forgotPassword(email);
   };
 
   return (
@@ -40,32 +57,63 @@ const Login = () => {
       <div>
         <form
           className="flex flex-col gap-7 size-80 md:size-100 justify-center"
-          onSubmit={handleSubmit}
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit();
+          }}
         >
           <h1 className="text-center text-4xl text-text-primary">
             Welcome Back
           </h1>
-          <div>
-            <input
-              className="p-4 w-full border border-border-medium rounded-lg bg-cream-50 text-text-primary placeholder:text-text-tertiary hover:border-caramel-300 focus:border-caramel-400 focus:outline-none transition"
-              type="email"
-              placeholder="coffee@gmail.com"
-              value={formData.email}
-              onChange={(e) =>
-                setFormData({ ...formData, email: e.target.value })
-              }
-            />
-          </div>
+          <Field name="email">
+            {(field) => {
+              const { errors, isTouched } = field.state.meta;
+
+              return (
+                <div className="flex flex-col">
+                  <input
+                    value={field.state.value}
+                    onChange={(e) => field.handleChange(e.target.value)}
+                    onBlur={field.handleBlur}
+                    className="p-4 w-full border border-border-medium rounded-lg bg-cream-50 text-text-primary placeholder:text-text-tertiary hover:border-caramel-300 focus:border-caramel-400 focus:outline-none transition"
+                    type="text"
+                    placeholder="Email"
+                  />
+
+                  {errors.length > 0 && isTouched && (
+                    <span className="text-red-500 text-sm">
+                      {errors[0]?.message}
+                    </span>
+                  )}
+                </div>
+              );
+            }}
+          </Field>
           <div className="relative">
-            <input
-              className="p-4 w-full border border-border-medium rounded-lg hover:border-caramel-300 bg-cream-50 text-text-primary placeholder:text-text-tertiary focus:border-caramel-400 focus:outline-none transition"
-              type={`${visible ? "text" : "password"}`}
-              placeholder="Password"
-              value={formData.password}
-              onChange={(e) =>
-                setFormData({ ...formData, password: e.target.value })
-              }
-            />
+            <Field name="password">
+              {(field) => {
+                const { errors, isTouched } = field.state.meta;
+
+                return (
+                  <div className="flex flex-col">
+                    <input
+                      value={field.state.value}
+                      onChange={(e) => field.handleChange(e.target.value)}
+                      onBlur={field.handleBlur}
+                      className="p-4 w-full border border-border-medium rounded-lg bg-cream-50 text-text-primary placeholder:text-text-tertiary hover:border-caramel-300 focus:border-caramel-400 focus:outline-none transition"
+                      type="text"
+                      placeholder="Password"
+                    />
+
+                    {errors.length > 0 && isTouched && (
+                      <span className="text-red-500 text-sm">
+                        {errors[0]?.message}
+                      </span>
+                    )}
+                  </div>
+                );
+              }}
+            </Field>
             {visible ? (
               <AiFillEye
                 onClick={() => setVisible(false)}
