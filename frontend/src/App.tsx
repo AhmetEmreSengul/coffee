@@ -17,6 +17,7 @@ import { AiOutlineLoading3Quarters } from "react-icons/ai";
 import AdminManageUsers from "./pages/UserActivity";
 import AdminManageCoffees from "./pages/AdminManageCoffees";
 import ResetPassword from "./pages/ResetPassword";
+import NotFound from "./components/NotFound";
 
 const App = () => {
   const { authUser, isCheckingAuth, checkAuth } = useAuthStore();
@@ -90,6 +91,7 @@ const App = () => {
           path="/admin/coffees"
           element={isAdmin ? <AdminManageCoffees /> : <Navigate to={"/"} />}
         />
+        <Route path="*" element = {<NotFound/>}/>
       </Routes>
     </div>
   );
