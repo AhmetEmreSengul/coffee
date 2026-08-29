@@ -1,6 +1,10 @@
 import { ENV } from "./env.js";
 import arcjet, { shield, detectBot, slidingWindow } from "@arcjet/node";
 
+if (!ENV.ARCJET_KEY) {
+  throw new Error("ARCJET_KEY must be set");
+}
+
 const aj = arcjet({
   key: ENV.ARCJET_KEY,
   rules: [
