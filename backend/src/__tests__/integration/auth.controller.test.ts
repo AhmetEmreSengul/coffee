@@ -3,27 +3,25 @@ import {
   afterEach,
   beforeAll,
   describe,
-  it,
   expect,
+  it,
 } from "@jest/globals";
-import mongoose from "mongoose";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import supertest from "supertest";
-import app from "../../app";
+import app from "../../app.js";
+import { ENV } from "../../lib/env.js";
+import User from "../../models/User.js";
+import {
+  createUserPayload,
+  loginUserPayload,
+  testUser,
+} from "../fixtures/Users.js";
 import {
   clearDatabase,
   closeDatabase,
   connectTestDB,
-} from "../setup/dbHandler";
-import {
-  testUser,
-  createUserPayload,
-  loginUserPayload,
-} from "../fixtures/Users";
-import { response } from "express";
-import User from "../../models/User";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
-import { ENV } from "../../lib/env";
+} from "../setup/dbHandler.js";
 
 describe("user", () => {
   beforeAll(connectTestDB);
@@ -45,13 +43,19 @@ describe("user", () => {
           email: expect.any(String),
         });
 
-        expect(headers["set-cookie"]).toBeDefined();
+        const setCookies = headers["set-cookie"];
 
-        const jwtCookie = headers["set-cookie"].find((cookie) =>
-          cookie.startsWith("jwt="),
-        );
+        if (!setCookies) {
+          throw new Error("Expected set-cookie header");
+        }
 
-        expect(jwtCookie).toBeDefined();
+        const cookies = Array.isArray(setCookies) ? setCookies : [setCookies];
+
+        const jwtCookie = cookies.find((cookie) => cookie.startsWith("jwt="));
+
+        if (!jwtCookie) {
+          throw new Error("Expected JWT cookie");
+        }
       });
     });
 
@@ -85,13 +89,19 @@ describe("user", () => {
           email: expect.any(String),
         });
 
-        expect(headers["set-cookie"]).toBeDefined();
+        const setCookies = headers["set-cookie"];
 
-        const jwtCookie = headers["set-cookie"].find((cookie) =>
-          cookie.startsWith("jwt="),
-        );
+        if (!setCookies) {
+          throw new Error("Expected set-cookie header");
+        }
 
-        expect(jwtCookie).toBeDefined();
+        const cookies = Array.isArray(setCookies) ? setCookies : [setCookies];
+
+        const jwtCookie = cookies.find((cookie) => cookie.startsWith("jwt="));
+
+        if (!jwtCookie) {
+          throw new Error("Expected JWT cookie");
+        }
       });
     });
 
@@ -114,7 +124,7 @@ describe("user", () => {
           .set("User-Agent", "jest")
           .send({ ...loginUserPayload, password: "wrong-password" });
 
-        expect(statusCode).toBe(400);
+        expect(statusCode).toBe(401);
         expect(body).toEqual({ message: "Invalid credentials" });
       });
     });
@@ -123,7 +133,7 @@ describe("user", () => {
   describe("user logout route", () => {
     describe("given the user is logged in trying to logout", () => {
       it("should return 200", async () => {
-        const token = jwt.sign({ userId: testUser._id }, ENV.JWT_SECRET, {
+        const token = jwt.sign({ userId: testUser._id }, ENV.JWT_SECRET!, {
           expiresIn: "7d",
         });
 
@@ -136,7 +146,7 @@ describe("user", () => {
         expect(body).toEqual({ message: "Logged out" });
 
         expect(headers["set-cookie"]).toBeDefined();
-        expect(headers["set-cookie"][0]).toContain("jwt=");
+        expect(headers["set-cookie"]![0]).toContain("jwt=");
       });
     });
   });
