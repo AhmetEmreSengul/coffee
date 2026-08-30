@@ -1,6 +1,17 @@
 import mongoose from "mongoose";
 
-const bookingSchema = new mongoose.Schema(
+export interface IBooking {
+  user: mongoose.Types.ObjectId;
+  tableNumber: mongoose.Types.ObjectId;
+  bookingTime: {
+    start: Date;
+    end: Date;
+  };
+  qrToken: string;
+  checkedIn: boolean;
+}
+
+const bookingSchema = new mongoose.Schema<IBooking>(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -41,6 +52,6 @@ bookingSchema.index({
   "bookingTime.end": 1,
 });
 
-const Booking = mongoose.model("Booking", bookingSchema);
+const Booking = mongoose.model<IBooking>("Booking", bookingSchema);
 
 export default Booking;

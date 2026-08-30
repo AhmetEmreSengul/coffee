@@ -4,9 +4,23 @@ import Booking from "../models/Booking.js";
 import Table from "../models/Table.js";
 import crypto from "crypto";
 import qrcode from "qrcode";
+import type { Request, Response } from "express";
+import { IUser } from "../models/User.js";
 
-export const createBooking = async (req, res) => {
+interface BookingPaylod {
+  tableNumber: string;
+  bookingTime: { start: Date; end: Date };
+}
+
+export const createBooking = async (
+  req: Request<{}, {}, BookingPaylod>,
+  res: Response,
+) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const userId = req.user._id;
     const { tableNumber, bookingTime } = req.body;
 
@@ -80,26 +94,42 @@ export const createBooking = async (req, res) => {
 
     await booking.save();
 
-    await booking.populate("user", "name email");
+    await booking.populate("user", "fullName email");
     await booking.populate("tableNumber", "number capacity");
 
+    const populatedBooking = await booking.populate<{
+      user: IUser;
+      tableNumber: ITable;
+    }>([
+      { path: "user", select: "fullName email" },
+      { path: "tableNumber", select: "number capacity" },
+    ]);
+
     sendBookingEmail(
-      booking.user.email,
-      booking.bookingTime.start,
-      booking.bookingTime.end,
-      booking.tableNumber.number,
+      populatedBooking.user.email,
+      populatedBooking.bookingTime.start,
+      populatedBooking.bookingTime.end,
+      populatedBooking.tableNumber.number,
     );
 
     res.status(201).json(booking);
   } catch (error) {
-    console.error("Error booking table", error.message);
+    console.error("Error booking table", (error as Error).message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const getBookingQrCode = async (req, res) => {
+export const getBookingQrCode = async (
+  req: Request<{ id: string }>,
+  res: Response,
+) => {
   try {
     const { id } = req.params;
+
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const userId = req.user._id;
 
     if (!id) {
@@ -132,14 +162,22 @@ export const getBookingQrCode = async (req, res) => {
       booking,
     });
   } catch (error) {
-    console.error("Error getting QR code", error.message);
+    console.error("Error getting QR code", (error as Error).message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const cancelBooking = async (req, res) => {
+export const cancelBooking = async (
+  req: Request<{ id: string }>,
+  res: Response,
+) => {
   try {
     const { id } = req.params;
+
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const userId = req.user._id;
 
     if (!id) {
@@ -164,13 +202,17 @@ export const cancelBooking = async (req, res) => {
 
     return res.status(200).json({ message: "Booking deleted" });
   } catch (error) {
-    console.error("Error deleting booking", error.message);
+    console.error("Error deleting booking", (error as Error).message);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const getUserBookings = async (req, res) => {
+export const getUserBookings = async (req: Request, res: Response) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const userId = req.user._id;
 
     const now = new Date();
@@ -184,15 +226,23 @@ export const getUserBookings = async (req, res) => {
 
     res.status(200).json(bookings);
   } catch (error) {
-    console.error("Error getting bookings", error.message);
+    console.error("Error getting bookings", (error as Error).message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const updateBooking = async (req, res) => {
+export const updateBooking = async (
+  req: Request<{ id: string }, {}, { bookingTime: { start: Date; end: Date } }>,
+  res: Response,
+) => {
   try {
     const { id } = req.params;
     const { bookingTime } = req.body;
+
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const userId = req.user._id;
 
     if (!bookingTime || !bookingTime.start || !bookingTime.end) {
@@ -256,7 +306,7 @@ export const updateBooking = async (req, res) => {
       booking,
     });
   } catch (error) {
-    console.error("Error updating booking", error.message);
+    console.error("Error updating booking", (error as Error).message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
