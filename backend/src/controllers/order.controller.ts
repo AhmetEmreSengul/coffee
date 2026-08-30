@@ -4,9 +4,9 @@ import Coffee from "../models/Coffee.js";
 import Order from "../models/Order.js";
 import type { Request, Response } from "express";
 
-interface OrderPayload {
+export interface OrderPayload {
   orderItems: { _id: string; quantity: number }[];
-  orderNote: string;
+  orderNote?: string;
 }
 
 export const createOrder = async (
@@ -63,8 +63,8 @@ export const createOrder = async (
       orderNumber,
       order.createdAt,
       totalPrice,
-      orderItems,
-      orderNote,
+      { orderItems },
+      orderNote || "No order note provided.",
     );
 
     res.status(201).json(order);

@@ -6,8 +6,11 @@ import {
   createPasswordResetEmailTemplate,
   createPasswordResetSuccessEmailTemplate,
 } from "./emailTemplate.js";
+import { OrderPayload } from "../controllers/order.controller.js";
 
 const apiInstance = new Brevo.TransactionalEmailsApi();
+
+if (!ENV.BREVO_API_KEY) throw new Error("BREVO_API_KEY must be set");
 
 apiInstance.setApiKey(
   Brevo.TransactionalEmailsApiApiKeys.apiKey,
@@ -15,10 +18,10 @@ apiInstance.setApiKey(
 );
 
 export const sendBookingEmail = async (
-  email,
-  startTime,
-  endTime,
-  tableInfo,
+  email: string,
+  startTime: Date,
+  endTime: Date,
+  tableInfo: number,
 ) => {
   try {
     await apiInstance.sendTransacEmail({
@@ -33,17 +36,17 @@ export const sendBookingEmail = async (
       ),
     });
   } catch (error) {
-    console.error("Error sending booking email", error.message);
+    console.error("Error sending booking email", (error as Error).message);
   }
 };
 
 export const sendCreateOrderEmail = async (
-  email,
-  orderNumber,
-  orderDate,
-  orderTotal,
-  orderItems,
-  orderNote,
+  email : string,
+  orderNumber : string,
+  orderDate : string,
+  orderTotal : number,
+  orderItems : Pick<OrderPayload, "orderItems">,
+  orderNote : string,
 ) => {
   try {
     await apiInstance.sendTransacEmail({
@@ -59,11 +62,11 @@ export const sendCreateOrderEmail = async (
       ),
     });
   } catch (error) {
-    console.error("Error sending order creation email", error.message);
+    console.error("Error sending order creation email", (error as Error).message);
   }
 };
 
-export const sendPasswordResetEmail = async (email, resetToken) => {
+export const sendPasswordResetEmail = async (email : string, resetToken : string) => {
   try {
     await apiInstance.sendTransacEmail({
       sender: { name: "Time Slot", email: "ahmetemresengul.34@gmail.com" },
@@ -72,11 +75,11 @@ export const sendPasswordResetEmail = async (email, resetToken) => {
       htmlContent: createPasswordResetEmailTemplate(resetToken),
     });
   } catch (error) {
-    console.error("Error sending password reset email", error.message);
+    console.error("Error sending password reset email", (error as Error).message);
   }
 };
 
-export const sendPasswordResetSuccessEmail = async (email) => {
+export const sendPasswordResetSuccessEmail = async (email : string) => {
   try {
     await apiInstance.sendTransacEmail({
       sender: { name: "Time Slot", email: "ahmetemresengul.34@gmail.com" },
@@ -85,6 +88,6 @@ export const sendPasswordResetSuccessEmail = async (email) => {
       htmlContent: createPasswordResetSuccessEmailTemplate(email),
     });
   } catch (error) {
-    console.error("Error sending password reset success email", error.message);
+    console.error("Error sending password reset success email", (error as Error).message);
   }
 };
