@@ -3,11 +3,26 @@ import Booking from "../models/Booking.js";
 import Coffee from "../models/Coffee.js";
 import Order from "../models/Order.js";
 import User from "../models/User.js";
+import type { Request, Response } from "express";
 
-export const getAllUsers = async (req, res) => {
+interface CoffeeRequestBody {
+  title: string;
+  type: string;
+  price: number;
+  image: string;
+  description: string;
+}
+
+export const getAllUsers = async (req: Request, res: Response) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const userId = req.user._id;
+
     const users = await User.find({
-      _id: { $ne: req.user._id },
+      _id: { $ne: userId },
       role: "user",
     }).select("-password");
 
@@ -18,7 +33,10 @@ export const getAllUsers = async (req, res) => {
   }
 };
 
-export const getUserBookingsById = async (req, res) => {
+export const getUserBookingsById = async (
+  req: Request<{ id: string }>,
+  res: Response,
+) => {
   try {
     const { id } = req.params;
 
@@ -35,7 +53,10 @@ export const getUserBookingsById = async (req, res) => {
   }
 };
 
-export const getUserOrdersById = async (req, res) => {
+export const getUserOrdersById = async (
+  req: Request<{ id: string }>,
+  res: Response,
+) => {
   try {
     const { id } = req.params;
 
@@ -52,7 +73,7 @@ export const getUserOrdersById = async (req, res) => {
   }
 };
 
-export const banUser = async (req, res) => {
+export const banUser = async (req: Request<{ id: string }>, res: Response) => {
   try {
     const { id } = req.params;
 
@@ -61,6 +82,11 @@ export const banUser = async (req, res) => {
     }
 
     const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     user.isBanned = !user.isBanned;
     await user.save();
     res.status(200).json(user);
@@ -70,7 +96,10 @@ export const banUser = async (req, res) => {
   }
 };
 
-export const verifyBookingQr = async (req, res) => {
+export const verifyBookingQr = async (
+  req: Request<{}, {}, { bookingId: string; token: string }>,
+  res: Response,
+) => {
   try {
     const { bookingId, token } = req.body;
 
@@ -117,12 +146,15 @@ export const verifyBookingQr = async (req, res) => {
       table: booking.tableNumber,
     });
   } catch (error) {
-    console.error("Error verifying QR code", error.message);
+    console.error("Error verifying QR code", (error as Error).message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const addCoffee = async (req, res) => {
+export const addCoffee = async (
+  req: Request<{}, {}, CoffeeRequestBody>,
+  res: Response,
+) => {
   try {
     const { title, type, price, image, description } = req.body;
 
@@ -140,12 +172,15 @@ export const addCoffee = async (req, res) => {
 
     res.status(201).json(coffee);
   } catch (error) {
-    console.error("Error adding coffee", error.message);
+    console.error("Error adding coffee", (error as Error).message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const getCoffeeById = async (req, res) => {
+export const getCoffeeById = async (
+  req: Request<{ id: string }>,
+  res: Response,
+) => {
   try {
     const { id } = req.params;
 
@@ -166,7 +201,10 @@ export const getCoffeeById = async (req, res) => {
   }
 };
 
-export const editCoffee = async (req, res) => {
+export const editCoffee = async (
+  req: Request<{ id: string }, {}, CoffeeRequestBody>,
+  res: Response,
+) => {
   try {
     const { id } = req.params;
     const { title, type, price, image, description } = req.body;
@@ -200,7 +238,10 @@ export const editCoffee = async (req, res) => {
   }
 };
 
-export const deleteCoffee = async (req, res) => {
+export const deleteCoffee = async (
+  req: Request<{ id: string }>,
+  res: Response,
+) => {
   try {
     const { id } = req.params;
 
@@ -216,7 +257,7 @@ export const deleteCoffee = async (req, res) => {
 
     res.status(200).json({ message: "Coffee deleted" });
   } catch (error) {
-    console.error("Error deleting coffee", error.message);
+    console.error("Error deleting coffee", (error as Error).message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
