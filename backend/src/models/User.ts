@@ -1,6 +1,20 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema(
+export interface IUser extends mongoose.Document {
+  _id : mongoose.Types.ObjectId
+  email: string;
+  fullName: string;
+  password?: string;
+  googleId?: string;
+  avatar: string;
+  authProvider: "local" | "google";
+  role: "user" | "admin";
+  isBanned: boolean;
+  passwordResetToken?: string;
+  passwordResetExpiresAt?: Date;
+}
+
+const userSchema = new mongoose.Schema<IUser>(
   {
     email: {
       type: String,
@@ -20,7 +34,7 @@ const userSchema = new mongoose.Schema(
     googleId: {
       type: String,
       unique: true,
-      sparse: true, // Allows multiple null values
+      sparse: true,
     },
     avatar: {
       type: String,
@@ -46,6 +60,6 @@ const userSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const User = mongoose.model("User", userSchema);
+const User = mongoose.model<IUser>("User", userSchema);
 
 export default User;

@@ -11,6 +11,7 @@ import {
 import { protectRoute } from "../middleware/auth.middleware.js";
 import { arcjetProtection } from "../middleware/arcjet.middleware.js";
 import passport from "passport";
+import { ENV } from "../lib/env.js";
 
 const router = express.Router();
 
@@ -19,13 +20,13 @@ router.use(arcjetProtection);
 router.post("/signup", signup);
 router.post("/login", login);
 router.post("/logout", logout);
-router.post("/forgot-password", forgotPassword)
-router.post("/reset-password/:token", resetPassword)
+router.post("/forgot-password", forgotPassword);
+router.post("/reset-password/:token", resetPassword);
 
 router.put("/update-profile", protectRoute, updateProfile);
 
 router.get("/check", protectRoute, (req, res) =>
-  res.status(200).json(req.user)
+  res.status(200).json(req.user),
 );
 
 router.get(
@@ -33,16 +34,16 @@ router.get(
   passport.authenticate("google", {
     scope: ["profile", "email"],
     session: false,
-  })
+  }),
 );
 
 router.get(
   "/google/callback",
   passport.authenticate("google", {
     session: false,
-    failureRedirect: `${process.env.CLIENT_URL}/login?error=auth_failed`,
+    failureRedirect: `${ENV.CLIENT_URL}/login?error=auth_failed`,
   }),
-  googleAuthCallback
+  googleAuthCallback,
 );
 
 export default router;
