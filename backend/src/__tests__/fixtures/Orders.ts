@@ -1,5 +1,5 @@
-import { testCoffee } from "./Coffees";
-import { userId } from "./Users";
+import { testCoffee } from "./Coffees.js";
+import { userId } from "./Users.js";
 
 export const orderPayload = {
   orderItems: [

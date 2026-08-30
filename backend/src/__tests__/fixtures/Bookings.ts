@@ -1,4 +1,4 @@
-import { userId, userId2 } from "./Users";
+import { userId, userId2 } from "./Users.js";
 
 export const bookingPayload = {
   tableNumber: "656f8a3b2e7c1a4d8f9b1003",
