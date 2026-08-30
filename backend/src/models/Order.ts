@@ -1,6 +1,22 @@
 import mongoose from "mongoose";
 
-const orderSchema = mongoose.Schema(
+interface IOrder {
+  user: mongoose.Types.ObjectId;
+  orderItems: {
+    title: string;
+    type: string;
+    quantity: number;
+    image: string;
+    price: number;
+  }[];
+  totalPrice: number;
+  orderNumber: string;
+  orderNote: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+const orderSchema = new mongoose.Schema<IOrder>(
   {
     user: {
       type: mongoose.Schema.Types.ObjectId,
@@ -30,6 +46,6 @@ const orderSchema = mongoose.Schema(
   { timestamps: true },
 );
 
-const Order = mongoose.model("Order", orderSchema);
+const Order = mongoose.model<IOrder>("Order", orderSchema);
 
 export default Order;

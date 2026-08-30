@@ -2,9 +2,22 @@ import { isValidObjectId } from "mongoose";
 import { sendCreateOrderEmail } from "../emails/emailHandler.js";
 import Coffee from "../models/Coffee.js";
 import Order from "../models/Order.js";
+import type { Request, Response } from "express";
 
-export const createOrder = async (req, res) => {
+interface OrderPayload {
+  orderItems: { _id: string; quantity: number }[];
+  orderNote: string;
+}
+
+export const createOrder = async (
+  req: Request<{}, {}, OrderPayload>,
+  res: Response,
+) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const userId = req.user._id;
     const { orderItems, orderNote } = req.body;
 
@@ -60,21 +73,32 @@ export const createOrder = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-export const getOrderByUserId = async (req, res) => {
+export const getOrderByUserId = async (req: Request, res: Response) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const userId = req.user._id;
 
     const orders = await Order.find({ user: userId }).sort({ createdAt: -1 });
 
     res.status(200).json(orders);
   } catch (error) {
-    console.error("Error fetching orders by user ID:", error.message);
+    console.error(
+      "Error fetching orders by user ID:",
+      (error as Error).message,
+    );
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const getUserLatestOrder = async (req, res) => {
+export const getUserLatestOrder = async (req: Request, res: Response) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const userId = req.user._id;
 
     const order = await Order.findOne({ user: userId })
@@ -87,17 +111,27 @@ export const getUserLatestOrder = async (req, res) => {
 
     res.status(200).json(order);
   } catch (error) {
-    console.error("Error fetching latest order by user ID:", error.message);
+    console.error(
+      "Error fetching latest order by user ID:",
+      (error as Error).message,
+    );
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const deleteOrder = async (req, res) => {
+export const deleteOrder = async (
+  req: Request<{ id: string }>,
+  res: Response,
+) => {
   try {
+    if (!req.user) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
     const { id } = req.params;
     const userId = req.user._id;
 
-    if(!isValidObjectId(id)) {
+    if (!isValidObjectId(id)) {
       return res.status(400).json({ message: "Invalid order ID" });
     }
 
