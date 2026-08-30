@@ -31,11 +31,15 @@ jest.unstable_mockModule("../../emails/emailHandler", () => ({
 }));
 const { default: app } = await import("../../app.js");
 
-const token = jwt.sign({ userId: testUser._id }, ENV.JWT_SECRET!, {
+if (!ENV.JWT_SECRET) {
+  throw new Error("JWT_SECRET is not configured");
+}
+
+const token = jwt.sign({ userId: testUser._id }, ENV.JWT_SECRET, {
   expiresIn: "7d",
 });
 
-const token2 = jwt.sign({ userId: testUser2._id }, ENV.JWT_SECRET!, {
+const token2 = jwt.sign({ userId: testUser2._id }, ENV.JWT_SECRET, {
   expiresIn: "7d",
 });
 

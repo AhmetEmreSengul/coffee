@@ -40,7 +40,11 @@ jest.unstable_mockModule("stripe", () => ({
 
 const { default: app } = await import("../../app.js");
 
-const token = jwt.sign({ userId: testUser._id }, ENV.JWT_SECRET!, {
+if (!ENV.JWT_SECRET) {
+  throw new Error("JWT_SECRET is not configured");
+}
+
+const token = jwt.sign({ userId: testUser._id }, ENV.JWT_SECRET, {
   expiresIn: "7d",
 });
 
