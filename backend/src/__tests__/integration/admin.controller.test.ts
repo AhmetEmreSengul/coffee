@@ -9,25 +9,29 @@ import {
 } from "@jest/globals";
 import jwt from "jsonwebtoken";
 import supertest from "supertest";
-import app from "../../app";
-import { ENV } from "../../lib/env";
-import User from "../../models/User";
-import { adminUser, testUser, testUser2 } from "../fixtures/Users";
+import app from "../../app.js";
+import { ENV } from "../../lib/env.js";
+import User from "../../models/User.js";
+import { adminUser, testUser, testUser2 } from "../fixtures/Users.js";
 import {
   clearDatabase,
   closeDatabase,
   connectTestDB,
-} from "../setup/dbHandler";
-import Booking from "../../models/Booking";
+} from "../setup/dbHandler.js";
+import Booking from "../../models/Booking.js";
 import {
   checkedInBooking,
   inTimeBooking,
   overlappingBooking,
-} from "../fixtures/Bookings";
-import Order from "../../models/Order";
-import { testOrder } from "../fixtures/Orders";
-import { coffeePayload, testCoffee } from "../fixtures/Coffees";
-import Coffee from "../../models/Coffee";
+} from "../fixtures/Bookings.js";
+import Order from "../../models/Order.js";
+import { testOrder } from "../fixtures/Orders.js";
+import { coffeePayload, testCoffee } from "../fixtures/Coffees.js";
+import Coffee from "../../models/Coffee.js";
+
+if (!ENV.JWT_SECRET) {
+  throw new Error("JWT_SECRET is not configured");
+}
 
 const adminToken = jwt.sign({ userId: adminUser._id }, ENV.JWT_SECRET, {
   expiresIn: "7d",
