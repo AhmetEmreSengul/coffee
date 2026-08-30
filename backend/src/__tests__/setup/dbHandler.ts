@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { MongoMemoryServer } from "mongodb-memory-server";
 
-let mongoServer;
+let mongoServer : MongoMemoryServer;
 
 
 export const connectTestDB = async () => {
@@ -21,6 +21,6 @@ export const closeDatabase = async () => {
 export const clearDatabase = async () => {
   const collections = mongoose.connection.collections;
   for (const key in collections) {
-    await collections[key].deleteMany({});
+    await collections[key]!.deleteMany({});
   }
 };
