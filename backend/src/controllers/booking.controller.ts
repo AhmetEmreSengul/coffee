@@ -1,7 +1,7 @@
 import { isValidObjectId } from "mongoose";
 import { sendBookingEmail } from "../emails/emailHandler.js";
 import Booking from "../models/Booking.js";
-import Table from "../models/Table.js";
+import Table, { ITable } from "../models/Table.js";
 import crypto from "crypto";
 import qrcode from "qrcode";
 import type { Request, Response } from "express";

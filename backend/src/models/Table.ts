@@ -1,6 +1,12 @@
 import mongoose from "mongoose";
 
-const tableSchema = new mongoose.Schema({
+export interface ITable {
+  number: number;
+  capacity: number;
+  status: string;
+}
+
+const tableSchema = new mongoose.Schema<ITable>({
   number: {
     type: Number,
     required: true,
@@ -18,6 +24,6 @@ const tableSchema = new mongoose.Schema({
   },
 });
 
-const Table = mongoose.model("Table", tableSchema);
+const Table = mongoose.model<ITable>("Table", tableSchema);
 
 export default Table;
