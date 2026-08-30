@@ -10,12 +10,13 @@ import {
 import Table from "../models/Table.js";
 import Booking from "../models/Booking.js";
 import { isValidObjectId } from "mongoose";
+import type { Request, Response } from "express";
 
 const OPENING_HOUR = 9;
 const CLOSING_HOUR = 24;
 const SLOT_DURATION = 120;
 
-export const getTable = async (_, res) => {
+export const getTable = async (_: Request, res: Response) => {
   try {
     const tables = await Table.find();
 
@@ -25,12 +26,15 @@ export const getTable = async (_, res) => {
 
     res.status(200).json(tables);
   } catch (error) {
-    console.error("Error getting tables", error.message);
+    console.error("Error getting tables", (error as Error).message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
 
-export const getTableBookings = async (req, res) => {
+export const getTableBookings = async (
+  req: Request<{ id: string }>,
+  res: Response,
+) => {
   try {
     const { id } = req.params;
 
@@ -60,7 +64,10 @@ export const getTableBookings = async (req, res) => {
   }
 };
 
-export const getAvailableSlots = async (req, res) => {
+export const getAvailableSlots = async (
+  req: Request<{ id: string }, {}, {}, { date?: string }>,
+  res: Response,
+) => {
   try {
     const { id } = req.params;
     const { date } = req.query;
@@ -121,7 +128,7 @@ export const getAvailableSlots = async (req, res) => {
 
     res.status(200).json(slots);
   } catch (error) {
-    console.error("Error generating slots:", error.message);
+    console.error("Error generating slots:", (error as Error).message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
