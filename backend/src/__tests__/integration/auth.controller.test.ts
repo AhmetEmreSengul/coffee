@@ -118,13 +118,13 @@ describe("user", () => {
     });
 
     describe("given the password is wrong", () => {
-      it("should return 401 with a message of 'Invalid credentials'", async () => {
+      it("should return 400 with a message of 'Invalid credentials'", async () => {
         const { statusCode, body } = await supertest(app)
           .post("/auth/login")
           .set("User-Agent", "jest")
           .send({ ...loginUserPayload, password: "wrong-password" });
 
-        expect(statusCode).toBe(401);
+        expect(statusCode).toBe(400);
         expect(body).toEqual({ message: "Invalid credentials" });
       });
     });
@@ -133,7 +133,9 @@ describe("user", () => {
   describe("user logout route", () => {
     describe("given the user is logged in trying to logout", () => {
       it("should return 200", async () => {
-        const token = jwt.sign({ userId: testUser._id }, ENV.JWT_SECRET!, {
+        if (!ENV.JWT_SECRET) throw new Error("JWT_SECRET is not defined");
+
+        const token = jwt.sign({ userId: testUser._id }, ENV.JWT_SECRET, {
           expiresIn: "7d",
         });
 

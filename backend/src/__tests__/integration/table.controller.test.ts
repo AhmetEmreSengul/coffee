@@ -2,6 +2,7 @@ import {
   afterAll,
   afterEach,
   beforeAll,
+  beforeEach,
   describe,
   expect,
   it,
@@ -17,7 +18,7 @@ import {
   closeDatabase,
   connectTestDB,
 } from "../setup/dbHandler.js";
-import { beforeEach } from "node:test";
+
 
 describe("table", () => {
   beforeAll(connectTestDB);
@@ -32,7 +33,7 @@ describe("table", () => {
   describe("get table route", () => {
     describe("given the user either logged in or not", () => {
       it("should return 200", async () => {
-        const { statusCode } = await supertest(app)
+        const { statusCode, body } = await supertest(app)
           .get("/table/available-tables")
           .set("User-Agent", "jest");
 

@@ -2,6 +2,7 @@ import {
   afterAll,
   afterEach,
   beforeAll,
+  beforeEach,
   describe,
   expect,
   it,
@@ -21,7 +22,6 @@ import {
   closeDatabase,
   connectTestDB,
 } from "../setup/dbHandler.js";
-import { beforeEach } from "node:test";
 const actualEmailHandler = await import("../../emails/emailHandler.js");
 jest.unstable_mockModule("../../emails/emailHandler", () => ({
   ...actualEmailHandler,
