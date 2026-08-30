@@ -7,14 +7,14 @@ import {
   expect,
 } from "@jest/globals";
 import supertest from "supertest";
-import app from "../../app";
+import app from "../../app.js";
 import {
   clearDatabase,
   closeDatabase,
   connectTestDB,
-} from "../setup/dbHandler";
-import Coffee from "../../models/Coffee";
-import { testCoffee } from "../fixtures/Coffees";
+} from "../setup/dbHandler.js";
+import Coffee from "../../models/Coffee.js";
+import { testCoffee } from "../fixtures/Coffees.js";
 
 describe("coffee", () => {
   beforeAll(connectTestDB);
