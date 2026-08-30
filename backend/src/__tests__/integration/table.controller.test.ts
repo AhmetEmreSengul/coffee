@@ -7,16 +7,17 @@ import {
   it,
 } from "@jest/globals";
 import supertest from "supertest";
-import app from "../../app";
-import Booking from "../../models/Booking";
-import Table from "../../models/Table";
-import { overlappingBooking } from "../fixtures/Bookings";
-import { testTable, testTableDisabled } from "../fixtures/Tables";
+import app from "../../app.js";
+import Booking from "../../models/Booking.js";
+import Table from "../../models/Table.js";
+import { overlappingBooking } from "../fixtures/Bookings.js";
+import { testTable, testTableDisabled } from "../fixtures/Tables.js";
 import {
   clearDatabase,
   closeDatabase,
   connectTestDB,
-} from "../setup/dbHandler";
+} from "../setup/dbHandler.js";
+import { beforeEach } from "node:test";
 
 describe("table", () => {
   beforeAll(connectTestDB);
