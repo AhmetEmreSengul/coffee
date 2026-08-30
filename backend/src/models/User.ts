@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export interface IUser extends mongoose.Document {
-  _id : mongoose.Types.ObjectId
+  _id: mongoose.Types.ObjectId;
   email: string;
   fullName: string;
   password?: string;
@@ -27,7 +27,7 @@ const userSchema = new mongoose.Schema<IUser>(
     },
     password: {
       type: String,
-      required: function () {
+      required: function (this: IUser): boolean {
         return !this.googleId;
       },
     },
