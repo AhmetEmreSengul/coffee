@@ -1,6 +1,14 @@
 import mongoose from "mongoose";
 
-const coffeeSchema = new mongoose.Schema(
+interface ICoffee {
+  title: string;
+  type: string;
+  price: number;
+  image: string;
+  description: string;
+}
+
+const coffeeSchema = new mongoose.Schema<ICoffee>(
   {
     title: {
       type: String,
@@ -26,6 +34,6 @@ const coffeeSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-const Coffee = mongoose.model("Coffee", coffeeSchema);
+const Coffee = mongoose.model<ICoffee>("Coffee", coffeeSchema);
 
 export default Coffee;
