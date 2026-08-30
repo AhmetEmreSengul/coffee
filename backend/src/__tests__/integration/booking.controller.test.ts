@@ -2,39 +2,40 @@ import {
   afterAll,
   afterEach,
   beforeAll,
+  beforeEach,
   describe,
+  expect,
   it,
   jest,
 } from "@jest/globals";
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
 import supertest from "supertest";
-import { ENV } from "../../lib/env";
-import Booking from "../../models/Booking";
-import Table from "../../models/Table";
-import User from "../../models/User";
+import { ENV } from "../../lib/env.js";
+import Booking from "../../models/Booking.js";
+import Table from "../../models/Table.js";
+import User from "../../models/User.js";
 import {
   bookingPayload,
   overlappingBooking,
   overlappingBookingPayload,
   overlappingUpdateBooking,
   unauthorizedBooking,
-} from "../fixtures/Bookings";
-import { testUser, userId } from "../fixtures/Users";
+} from "../fixtures/Bookings.js";
+import { testTable, testTableDisabled } from "../fixtures/Tables.js";
+import { testUser, userId } from "../fixtures/Users.js";
 import {
   clearDatabase,
   closeDatabase,
   connectTestDB,
-} from "../setup/dbHandler";
-import { testTable, testTableDisabled } from "../fixtures/Tables";
-const actualEmailHandler = await import("../../emails/emailHandler");
+} from "../setup/dbHandler.js";
+const actualEmailHandler = await import("../../emails/emailHandler.js");
 jest.unstable_mockModule("../../emails/emailHandler", () => ({
   ...actualEmailHandler,
-  sendBookingEmail: jest.fn().mockResolvedValue(undefined),
+  sendBookingEmail: jest.fn<() => Promise<void>>().mockResolvedValue(undefined),
 }));
-const { default: app } = await import("../../app");
+const { default: app } = await import("../../app.js");
 
-const token = jwt.sign({ userId }, ENV.JWT_SECRET, {
+const token = jwt.sign({ userId }, ENV.JWT_SECRET!, {
   expiresIn: "7d",
 });
 
