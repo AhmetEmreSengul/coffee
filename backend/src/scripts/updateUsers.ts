@@ -4,6 +4,10 @@ import { ENV } from "../lib/env.js";
 
 const updateUserFields = async () => {
   try {
+    if (!ENV.MONGO_URI) {
+      throw new Error("MONGO_URI must be set");
+    }
+
     await mongoose.connect(ENV.MONGO_URI);
     await User.updateMany(
       { role: { $exists: false } },

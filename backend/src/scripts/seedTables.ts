@@ -17,6 +17,11 @@ const tables = [
 
 const populateTables = async () => {
   try {
+
+    if (!ENV.MONGO_URI) {
+      throw new Error("MONGO_URI is not defined");
+    }
+
     await mongoose.connect(ENV.MONGO_URI);
 
     await Table.deleteMany({});
@@ -24,7 +29,7 @@ const populateTables = async () => {
     const insertedTables = await Table.insertMany(tables);
     console.log(`Inserted ${insertedTables.length} tables`);
   } catch (error) {
-    console.error("Error inserting tables", error.message);
+    console.error("Error inserting tables", (error as Error).message);
   }
 };
 

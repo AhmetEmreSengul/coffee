@@ -7,6 +7,11 @@ const coffees = JSON.parse(fs.readFileSync("./src/data/coffee.json", "utf-8"));
 
 const seedCoffees = async () => {
   try {
+
+    if (!ENV.MONGO_URI) {
+      throw new Error("MONGO_URI must be set");
+    }
+
     await mongoose.connect(ENV.MONGO_URI);
 
     await Coffee.deleteMany({});
