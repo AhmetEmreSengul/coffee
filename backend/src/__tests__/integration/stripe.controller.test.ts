@@ -6,22 +6,29 @@ import {
   describe,
   it,
   expect,
+  beforeEach,
 } from "@jest/globals";
 import supertest from "supertest";
 import {
   clearDatabase,
   closeDatabase,
   connectTestDB,
-} from "../setup/dbHandler";
-import Coffee from "../../models/Coffee";
-import User from "../../models/User";
-import { testUser, testUser2, userId } from "../fixtures/Users";
-import { testCoffee } from "../fixtures/Coffees";
-import { orderPayload, stripePayload } from "../fixtures/Orders";
+} from "../setup/dbHandler.js";
+import Coffee from "../../models/Coffee.js";
+import User from "../../models/User.js";
+import { testUser, testUser2, userId } from "../fixtures/Users.js";
+import { testCoffee } from "../fixtures/Coffees.js";
+import { orderPayload, stripePayload } from "../fixtures/Orders.js";
 import jwt from "jsonwebtoken";
-import { ENV } from "../../lib/env";
+import { ENV } from "../../lib/env.js";
+import Stripe from "stripe";
 
-const mockCreate = jest.fn();
+const mockCreate =
+  jest.fn<
+    (
+      params: Stripe.PaymentIntentCreateParams,
+    ) => Promise<Pick<Stripe.PaymentIntent, "id" | "client_secret">>
+  >();
 
 jest.unstable_mockModule("stripe", () => ({
   default: jest.fn().mockImplementation(() => ({
@@ -31,9 +38,9 @@ jest.unstable_mockModule("stripe", () => ({
   })),
 }));
 
-const { default: app } = await import("../../app");
+const { default: app } = await import("../../app.js");
 
-const token = jwt.sign({ userId: testUser._id }, ENV.JWT_SECRET, {
+const token = jwt.sign({ userId: testUser._id }, ENV.JWT_SECRET!, {
   expiresIn: "7d",
 });
 
