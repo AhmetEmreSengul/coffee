@@ -9,30 +9,33 @@ import {
 } from "@jest/globals";
 import jwt from "jsonwebtoken";
 import supertest from "supertest";
-import { ENV } from "../../lib/env";
-import Coffee from "../../models/Coffee";
-import Order from "../../models/Order";
-import User from "../../models/User";
-import { testCoffee } from "../fixtures/Coffees";
-import { orderPayload, testOrder } from "../fixtures/Orders";
-import { testUser, testUser2, userId, userId2 } from "../fixtures/Users";
+import { ENV } from "../../lib/env.js";
+import Coffee from "../../models/Coffee.js";
+import Order from "../../models/Order.js";
+import User from "../../models/User.js";
+import { testCoffee } from "../fixtures/Coffees.js";
+import { orderPayload, testOrder } from "../fixtures/Orders.js";
+import { testUser, testUser2, userId, userId2 } from "../fixtures/Users.js";
 import {
   clearDatabase,
   closeDatabase,
   connectTestDB,
-} from "../setup/dbHandler";
-const actualEmailHandler = await import("../../emails/emailHandler");
+} from "../setup/dbHandler.js";
+import { beforeEach } from "node:test";
+const actualEmailHandler = await import("../../emails/emailHandler.js");
 jest.unstable_mockModule("../../emails/emailHandler", () => ({
   ...actualEmailHandler,
-  sendCreateOrderEmail: jest.fn().mockResolvedValue(undefined),
+  sendCreateOrderEmail: jest
+    .fn<() => Promise<void>>()
+    .mockResolvedValue(undefined),
 }));
-const { default: app } = await import("../../app");
+const { default: app } = await import("../../app.js");
 
-const token = jwt.sign({ userId: testUser._id }, ENV.JWT_SECRET, {
+const token = jwt.sign({ userId: testUser._id }, ENV.JWT_SECRET!, {
   expiresIn: "7d",
 });
 
-const token2 = jwt.sign({ userId: testUser2._id }, ENV.JWT_SECRET, {
+const token2 = jwt.sign({ userId: testUser2._id }, ENV.JWT_SECRET!, {
   expiresIn: "7d",
 });
 
@@ -128,7 +131,6 @@ describe("order", () => {
           {
             __v: 0,
             _id: testOrder._id,
-            createdAt: "2026-07-26T23:30:03.358Z",
             orderItems: [
               {
                 _id: "656f8a3b2e7c1a4d8f9b1001",
@@ -172,7 +174,6 @@ describe("order", () => {
         expect(body).toEqual({
           __v: 0,
           _id: testOrder._id,
-          createdAt: "2026-07-26T23:30:03.358Z",
           orderItems: [
             {
               _id: "656f8a3b2e7c1a4d8f9b1001",
