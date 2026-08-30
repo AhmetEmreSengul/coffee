@@ -1,8 +1,13 @@
 import aj from "../lib/arcjet.js";
 import { isSpoofedBot } from "@arcjet/inspect";
 import { ENV } from "../lib/env.js";
+import type { Request, Response, NextFunction } from "express";
 
-export const arcjetProtection = async (req, res, next) => {
+export const arcjetProtection = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   if (ENV.ARCJET_ENV === "test") {
     return next();
   }

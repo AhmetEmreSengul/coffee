@@ -1,4 +1,6 @@
-export const isBanned = (req, res, next) => {
+import type { Request, Response, NextFunction } from "express";
+
+export const isBanned = (req: Request, res: Response, next: NextFunction) => {
   try {
     if (!req.user) {
       return res.status(401).json({ message: "Unauthorized" });
@@ -10,7 +12,7 @@ export const isBanned = (req, res, next) => {
 
     next();
   } catch (error) {
-    console.error("Error in isBanned middleware:", error.message);
+    console.error("Error in isBanned middleware:", (error as Error).message);
     res.status(500).json({ message: "Internal server error" });
   }
 };
