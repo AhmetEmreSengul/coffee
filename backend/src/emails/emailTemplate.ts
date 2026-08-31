@@ -1,11 +1,12 @@
 import { format } from "date-fns";
 import { ENV } from "../lib/env.js";
+import { CreateOrderBody, OrderItem } from "../controllers/order.controller.js";
 
 export function createBookingEmailTemplate(
-  email,
-  startTime,
-  endTime,
-  tableInfo,
+  email: string,
+  startTime: Date,
+  endTime: Date,
+  tableInfo: number,
 ) {
   const formattedStart = format(
     new Date(startTime),
@@ -93,15 +94,15 @@ export function createBookingEmailTemplate(
 }
 
 export function createOrderEmailTemplate(
-  orderNumber,
-  orderDate,
-  orderTotal,
-  orderItems,
-  orderNote,
+  orderNumber: string,
+  orderDate: string,
+  orderTotal: number,
+  orderItems: OrderItem[],
+  orderNote: string,
 ) {
-  function formatDate(dateString) {
+  function formatDate(dateString: string) {
     const date = new Date(dateString);
-    const options = {
+    const options: Intl.DateTimeFormatOptions = {
       month: "numeric",
       day: "numeric",
       year: "numeric",
@@ -189,7 +190,7 @@ export function createOrderEmailTemplate(
           <div style="display: table; width: 100%;">
             <div style="display: table-row; font-size: 18px;">
               <div style="display: table-cell;"><strong>Total:</strong></div>
-              <div style="display: table-cell; text-align: right;"><strong style="color: #8b5e3c;">${parseFloat(orderTotal).toFixed(2)}₺</strong></div>
+              <div style="display: table-cell; text-align: right;"><strong style="color: #8b5e3c;">${parseFloat(String(orderTotal)).toFixed(2)}₺</strong></div>
             </div>
           </div>
         </div>
@@ -232,7 +233,7 @@ export function createOrderEmailTemplate(
   `;
 }
 
-export function createPasswordResetEmailTemplate(resetToken) {
+export function createPasswordResetEmailTemplate(resetToken: string) {
   const resetUrl = `${ENV.CLIENT_URL}/reset-password/${resetToken}`;
 
   return `
@@ -323,7 +324,7 @@ export function createPasswordResetEmailTemplate(resetToken) {
   `;
 }
 
-export function createPasswordResetSuccessEmailTemplate(userEmail) {
+export function createPasswordResetSuccessEmailTemplate(userEmail: string) {
   return `
   <!DOCTYPE html>
   <html lang="en">

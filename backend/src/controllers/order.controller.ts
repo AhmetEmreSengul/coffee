@@ -4,13 +4,23 @@ import Coffee from "../models/Coffee.js";
 import Order from "../models/Order.js";
 import type { Request, Response } from "express";
 
-export interface OrderPayload {
-  orderItems: { _id: string; quantity: number }[];
+export interface OrderItem {
+  quantity: number;
+  _id?: string;
+  title: string;
+  type: string;
+  price: number;
+  image: string;
+  description: string;
+}
+
+export interface CreateOrderBody {
+  orderItems: OrderItem[];
   orderNote?: string;
 }
 
 export const createOrder = async (
-  req: Request<{}, {}, OrderPayload>,
+  req: Request<{}, {}, CreateOrderBody>,
   res: Response,
 ) => {
   try {
@@ -63,7 +73,7 @@ export const createOrder = async (
       orderNumber,
       order.createdAt,
       totalPrice,
-      { orderItems },
+      orderItems,
       orderNote || "No order note provided.",
     );
 

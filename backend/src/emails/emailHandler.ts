@@ -6,7 +6,7 @@ import {
   createPasswordResetEmailTemplate,
   createPasswordResetSuccessEmailTemplate,
 } from "./emailTemplate.js";
-import { OrderPayload } from "../controllers/order.controller.js";
+import { CreateOrderBody, OrderItem } from "../controllers/order.controller.js";
 
 const apiInstance = new Brevo.TransactionalEmailsApi();
 
@@ -41,12 +41,12 @@ export const sendBookingEmail = async (
 };
 
 export const sendCreateOrderEmail = async (
-  email : string,
-  orderNumber : string,
-  orderDate : string,
-  orderTotal : number,
-  orderItems : Pick<OrderPayload, "orderItems">,
-  orderNote : string,
+  email: string,
+  orderNumber: string,
+  orderDate: string,
+  orderTotal: number,
+  orderItems: OrderItem[],
+  orderNote: string,
 ) => {
   try {
     await apiInstance.sendTransacEmail({
@@ -62,11 +62,17 @@ export const sendCreateOrderEmail = async (
       ),
     });
   } catch (error) {
-    console.error("Error sending order creation email", (error as Error).message);
+    console.error(
+      "Error sending order creation email",
+      (error as Error).message,
+    );
   }
 };
 
-export const sendPasswordResetEmail = async (email : string, resetToken : string) => {
+export const sendPasswordResetEmail = async (
+  email: string,
+  resetToken: string,
+) => {
   try {
     await apiInstance.sendTransacEmail({
       sender: { name: "Time Slot", email: "ahmetemresengul.34@gmail.com" },
@@ -75,11 +81,14 @@ export const sendPasswordResetEmail = async (email : string, resetToken : string
       htmlContent: createPasswordResetEmailTemplate(resetToken),
     });
   } catch (error) {
-    console.error("Error sending password reset email", (error as Error).message);
+    console.error(
+      "Error sending password reset email",
+      (error as Error).message,
+    );
   }
 };
 
-export const sendPasswordResetSuccessEmail = async (email : string) => {
+export const sendPasswordResetSuccessEmail = async (email: string) => {
   try {
     await apiInstance.sendTransacEmail({
       sender: { name: "Time Slot", email: "ahmetemresengul.34@gmail.com" },
@@ -88,6 +97,9 @@ export const sendPasswordResetSuccessEmail = async (email : string) => {
       htmlContent: createPasswordResetSuccessEmailTemplate(email),
     });
   } catch (error) {
-    console.error("Error sending password reset success email", (error as Error).message);
+    console.error(
+      "Error sending password reset success email",
+      (error as Error).message,
+    );
   }
 };
