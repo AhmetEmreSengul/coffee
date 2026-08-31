@@ -50,9 +50,9 @@ test.describe.serial("order", () => {
       .getByRole("textbox")
       .fill("123");
 
-    await expect(page.getByRole("button", { name: "Pay 140₺" })).toBeEnabled();
+    await expect(page.getByRole("button", { name: "Pay 220₺" })).toBeEnabled();
 
-    await page.getByRole("button", { name: "Pay 140₺" }).click();
+    await page.getByRole("button", { name: "Pay 220₺" }).click();
 
     await expect(page.getByText("Order Created")).toBeVisible();
   });
@@ -133,9 +133,9 @@ test.describe.serial("order", () => {
     await expect(page.getByRole("button", { name: "close" })).toBeVisible();
     await page.getByRole("button", { name: "close" }).click();
 
-    await expect(page.getByRole("button", { name: "Pay 140₺" })).toBeEnabled();
+    await expect(page.getByRole("button", { name: "Pay 220₺" })).toBeEnabled();
 
-    await page.getByRole("button", { name: "Pay 140₺" }).click();
+    await page.getByRole("button", { name: "Pay 220₺" }).click();
 
     await expect(page.getByText("Order Created")).toBeVisible();
   });

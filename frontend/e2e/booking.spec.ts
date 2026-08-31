@@ -18,7 +18,7 @@ test.describe.serial("booking", () => {
 
     await page.getByRole("link", { name: "Book a Table" }).nth(1).click();
     await page.getByText("T2").click();
-    await page.getByRole("button", { name: "Thursday, August 6th," }).click();
+  await page.getByRole("button", { name: /September 6th/ }).click();
     await page
       .locator("div")
       .filter({ hasText: /^09:00 \/11:00$/ })
@@ -69,7 +69,7 @@ test.describe.serial("booking", () => {
 
     await page.getByRole("button", { name: "Update" }).first().click();
 
-    await page.getByRole("button", { name: "Thursday, August 6th," }).click();
+    await page.getByRole("button", { name: /September 6th/ }).click();
     await page
       .locator("div")
       .filter({ hasText: /^11:00 \/13:00$/ })
