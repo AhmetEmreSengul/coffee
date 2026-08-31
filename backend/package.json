@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "dev": "tsx src/server.js",
+    "dev": "tsx watch src/server.js",
     "table": "node src/scripts/seedTables.js",
     "start": "node src/server.js",
     "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest",
