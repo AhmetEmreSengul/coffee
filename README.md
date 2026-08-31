@@ -401,7 +401,6 @@ Requires the backend and frontend dev servers running locally, plus a seeded tes
 
 ### Operational / maintenance
 
-- **No containerization** (no Docker config).
 - **No migrations**: Mongo schema changes are manual.
 - **Email template contains a hardcoded link** to the production domain.
 
