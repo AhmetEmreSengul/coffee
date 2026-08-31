@@ -14,3 +14,5 @@ interface CartItem extends Coffee {
 interface OrderItem extends Coffee {
   quantity: number;
 }
+
+const order : OrderItem = {}
