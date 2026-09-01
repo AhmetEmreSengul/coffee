@@ -8,36 +8,20 @@ import User from "../models/User.js";
 import bcryptjs from "bcryptjs";
 import crypto from "crypto";
 import type { Request, Response } from "express";
-
-interface LoginData {
-  email: string;
-  password: string;
-}
-
-interface SignupData extends LoginData {
-  fullName: string;
-}
+import {
+  ForgotPasswordBody,
+  LoginBody,
+  ResetPasswordBody,
+  SignupBody,
+} from "../schemas/auth.schema.js";
 
 export const signup = async (
-  req: Request<{}, {}, SignupData>,
+  req: Request<{}, {}, SignupBody>,
   res: Response,
 ) => {
   const { fullName, email, password } = req.body;
 
   try {
-    if (!fullName || !email || !password) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-    if (password.length < 6) {
-      return res
-        .status(400)
-        .json({ message: "Password must be at least 6 characters" });
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return res.status(400).json({ message: "Invalid email format" });
-    }
-
     const user = await User.findOne({ email });
 
     if (user) return res.status(400).json({ message: "User already exists" });
@@ -68,11 +52,8 @@ export const signup = async (
   }
 };
 
-export const login = async (req: Request<{}, {}, LoginData>, res: Response) => {
+export const login = async (req: Request<{}, {}, LoginBody>, res: Response) => {
   const { email, password } = req.body;
-
-  if (!email || !password)
-    return res.status(400).json({ message: "All fields are required" });
 
   try {
     const user = await User.findOne({ email });
@@ -127,7 +108,7 @@ export const updateProfile = async (
 };
 
 export const forgotPassword = async (
-  req: Request<{}, {}, { email: string }>,
+  req: Request<{}, {}, ForgotPasswordBody>,
   res: Response,
 ) => {
   const { email } = req.body;
@@ -154,7 +135,10 @@ export const forgotPassword = async (
   }
 };
 
-export const resetPassword = async (req: Request, res: Response) => {
+export const resetPassword = async (
+  req: Request<{ token: string }, {}, ResetPasswordBody>,
+  res: Response,
+) => {
   const { token } = req.params;
   const { password } = req.body;
 
