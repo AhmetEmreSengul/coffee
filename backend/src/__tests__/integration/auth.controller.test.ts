@@ -67,7 +67,10 @@ describe("user", () => {
           .send({ ...createUserPayload, fullName: "" });
 
         expect(statusCode).toBe(400);
-        expect(body).toEqual({ message: "All fields are required" });
+        expect(body).toEqual({
+          errors: ["Full name is required"],
+          message: "Validation failed",
+        });
       });
     });
   });
@@ -113,7 +116,10 @@ describe("user", () => {
           .send({ ...loginUserPayload, email: "" });
 
         expect(statusCode).toBe(400);
-        expect(body).toEqual({ message: "All fields are required" });
+        expect(body).toEqual({
+          errors: ["Invalid email address", "Email is required"],
+          message: "Validation failed",
+        });
       });
     });
 
