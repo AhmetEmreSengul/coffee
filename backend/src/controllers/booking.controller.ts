@@ -6,14 +6,10 @@ import crypto from "crypto";
 import qrcode from "qrcode";
 import type { Request, Response } from "express";
 import { IUser } from "../models/User.js";
-
-interface BookingPaylod {
-  tableNumber: string;
-  bookingTime: { start: Date; end: Date };
-}
+import { BookingBody, UpdateBookingBody } from "../schemas/bookings.schema.js";
 
 export const createBooking = async (
-  req: Request<{}, {}, BookingPaylod>,
+  req: Request<{}, {}, BookingBody>,
   res: Response,
 ) => {
   try {
@@ -28,38 +24,22 @@ export const createBooking = async (
       return res.status(401).json({ message: "Unauthorized" });
     }
 
-    if (
-      !bookingTime ||
-      !tableNumber ||
-      !bookingTime.start ||
-      !bookingTime.end
-    ) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
     if (!isValidObjectId(tableNumber)) {
       return res.status(400).json({ message: "Invalid table number" });
     }
 
-    const start = new Date(bookingTime.start);
-    const end = new Date(bookingTime.end);
+    const start = bookingTime.start;
+    const end = bookingTime.end;
     const now = new Date();
 
-    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
-      return res.status(400).json({ message: "Invalid date format" });
-    }
-
-    if (start >= end) {
-      return res
-        .status(400)
-        .json({ message: "End time must be after start time" });
-    }
+    
 
     if (start < now) {
       return res
         .status(400)
         .json({ message: "Start time must be in the future" });
     }
+
     const table = await Table.findById(tableNumber);
 
     if (!table) {
@@ -133,7 +113,7 @@ export const getBookingQrCode = async (
     const userId = req.user._id;
 
     if (!id) {
-      return res.status(400).json({ message: "Booking ID is required" });
+      return res.status(400).json({ message: "Invalid booking ID" });
     }
 
     if (!isValidObjectId(id)) {
@@ -179,10 +159,6 @@ export const cancelBooking = async (
     }
 
     const userId = req.user._id;
-
-    if (!id) {
-      return res.status(400).json({ message: "Booking ID is required" });
-    }
 
     if (!isValidObjectId(id)) {
       return res.status(400).json({ message: "Invalid booking ID" });
@@ -232,7 +208,7 @@ export const getUserBookings = async (req: Request, res: Response) => {
 };
 
 export const updateBooking = async (
-  req: Request<{ id: string }, {}, { bookingTime: { start: Date; end: Date } }>,
+  req: Request<{ id: string }, {}, UpdateBookingBody>,
   res: Response,
 ) => {
   try {
@@ -245,8 +221,8 @@ export const updateBooking = async (
 
     const userId = req.user._id;
 
-    if (!bookingTime || !bookingTime.start || !bookingTime.end) {
-      return res.status(400).json({ message: "All fields are required" });
+    if (!id) {
+      return res.status(400).json({ message: "Invalid booking ID" });
     }
 
     if (!isValidObjectId(id)) {

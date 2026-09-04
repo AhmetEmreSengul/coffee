@@ -151,7 +151,10 @@ describe("booking", () => {
           .send({ ...bookingPayload, bookingTime: null });
 
         expect(statusCode).toBe(400);
-        expect(body).toEqual({ message: "All fields are required" });
+        expect(body).toEqual({
+          errors: ["Invalid input: expected object, received null"],
+          message: "Validation failed",
+        });
       });
     });
 
@@ -170,7 +173,10 @@ describe("booking", () => {
           });
 
         expect(statusCode).toBe(400);
-        expect(body).toEqual({ message: "End time must be after start time" });
+        expect(body).toEqual({
+          errors: ["End time must be after start time"],
+          message: "Validation failed",
+        });
       });
     });
 
@@ -261,7 +267,7 @@ describe("booking", () => {
       });
     });
 
-    describe("given the format is invalid", () => {
+    describe("given the date format is invalid", () => {
       it("should return 400 with a message of 'Invalid date format'", async () => {
         const { statusCode, body } = await supertest(app)
           .post("/book/createBooking")
@@ -276,7 +282,10 @@ describe("booking", () => {
           });
 
         expect(statusCode).toBe(400);
-        expect(body).toEqual({ message: "Invalid date format" });
+        expect(body).toEqual({
+          errors: ["Invalid start time", "Invalid end time"],
+          message: "Validation failed",
+        });
       });
     });
   });
@@ -322,7 +331,10 @@ describe("booking", () => {
           });
 
         expect(statusCode).toBe(400);
-        expect(body).toEqual({ message: "End time must be after start time" });
+        expect(body).toEqual({
+          errors: ["End time must be after start time"],
+          message: "Validation failed",
+        });
       });
     });
 
