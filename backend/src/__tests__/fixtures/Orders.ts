@@ -6,9 +6,10 @@ export const orderPayload = {
     {
       _id: testCoffee._id,
       title: "Latte",
-      type: "Hot Coffee",
+      type: "Hot",
       quantity: 2,
       image: "latte.jpg",
+      description : "Fake description",
       price: 120,
     },
   ],
@@ -22,9 +23,10 @@ export const testOrder = {
     {
       _id: testCoffee._id,
       title: "Latte",
-      type: "Hot Coffee",
+      type: "Hot",
       quantity: 2,
       image: "latte.jpg",
+      description : "Fake description",
       price: 120,
     },
   ],

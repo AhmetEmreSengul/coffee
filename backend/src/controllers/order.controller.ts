@@ -1,23 +1,9 @@
+import type { Request, Response } from "express";
 import { isValidObjectId } from "mongoose";
 import { sendCreateOrderEmail } from "../emails/emailHandler.js";
 import Coffee from "../models/Coffee.js";
 import Order from "../models/Order.js";
-import type { Request, Response } from "express";
-
-export interface OrderItem {
-  quantity: number;
-  _id?: string;
-  title: string;
-  type: string;
-  price: number;
-  image: string;
-  description: string;
-}
-
-export interface CreateOrderBody {
-  orderItems: OrderItem[];
-  orderNote?: string;
-}
+import { CreateOrderBody } from "../schemas/order.schema.js";
 
 export const createOrder = async (
   req: Request<{}, {}, CreateOrderBody>,
@@ -31,10 +17,6 @@ export const createOrder = async (
     const userId = req.user._id;
     const { orderItems, orderNote } = req.body;
 
-    if (!Array.isArray(orderItems) || orderItems.length === 0) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
     const coffees = await Coffee.find({
       _id: { $in: orderItems.map((i) => i._id) },
     });
@@ -44,14 +26,6 @@ export const createOrder = async (
     for (const item of orderItems) {
       const coffee = coffees.find((c) => c._id.toString() === item._id);
       if (!coffee) continue;
-
-      if (item.quantity > 10) {
-        return res.status(400).json({ message: "Quantity limit exceeded" });
-      }
-
-      if (item.quantity < 1) {
-        return res.status(400).json({ message: "Quantity must be at least 1" });
-      }
 
       totalPrice += coffee.price * item.quantity;
     }
@@ -74,7 +48,7 @@ export const createOrder = async (
       order.createdAt,
       totalPrice,
       orderItems,
-      orderNote || "No order note provided.",
+      orderNote,
     );
 
     res.status(201).json(order);

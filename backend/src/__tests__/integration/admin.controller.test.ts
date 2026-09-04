@@ -216,7 +216,7 @@ describe("admin", () => {
                 price: 120,
                 quantity: 2,
                 title: "Latte",
-                type: "Hot Coffee",
+                type: "Hot",
               },
             ],
             orderNote: "Less sugar",

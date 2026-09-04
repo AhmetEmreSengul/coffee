@@ -57,7 +57,7 @@ describe("order", () => {
   describe("create order route", () => {
     describe("given the user is logged in and the input is valid", () => {
       it("should return 201", async () => {
-        const { statusCode } = await supertest(app)
+        const { statusCode, body } = await supertest(app)
           .post("/orders/create-order")
           .set("User-Agent", "jest")
           .set("Cookie", [`jwt=${token}`])
@@ -96,7 +96,10 @@ describe("order", () => {
           });
 
         expect(statusCode).toBe(400);
-        expect(body).toEqual({ message: "Quantity limit exceeded" });
+        expect(body).toEqual({
+          errors: ["Quantity limit exceeded"],
+          message: "Validation failed",
+        });
       });
     });
 
@@ -117,7 +120,10 @@ describe("order", () => {
           });
 
         expect(statusCode).toBe(400);
-        expect(body).toEqual({ message: "Quantity must be at least 1" });
+        expect(body).toEqual({
+          errors: ["Quantity must be at least 1"],
+          message: "Validation failed",
+        });
       });
     });
   });
@@ -142,7 +148,7 @@ describe("order", () => {
                 price: 120,
                 quantity: 2,
                 title: "Latte",
-                type: "Hot Coffee",
+                type: "Hot",
               },
             ],
             orderNote: "Less sugar",
@@ -185,7 +191,7 @@ describe("order", () => {
               price: 120,
               quantity: 2,
               title: "Latte",
-              type: "Hot Coffee",
+              type: "Hot",
             },
           ],
           orderNote: "Less sugar",
