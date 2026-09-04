@@ -1,27 +1,27 @@
 import {
-  jest,
   afterAll,
   afterEach,
   beforeAll,
-  describe,
-  it,
-  expect,
   beforeEach,
+  describe,
+  expect,
+  it,
+  jest,
 } from "@jest/globals";
+import jwt from "jsonwebtoken";
+import Stripe from "stripe";
 import supertest from "supertest";
+import { ENV } from "../../lib/env.js";
+import Coffee from "../../models/Coffee.js";
+import User from "../../models/User.js";
+import { testCoffee } from "../fixtures/Coffees.js";
+import { stripePayload } from "../fixtures/Orders.js";
+import { testUser } from "../fixtures/Users.js";
 import {
   clearDatabase,
   closeDatabase,
   connectTestDB,
 } from "../setup/dbHandler.js";
-import Coffee from "../../models/Coffee.js";
-import User from "../../models/User.js";
-import { testUser, testUser2, userId } from "../fixtures/Users.js";
-import { testCoffee } from "../fixtures/Coffees.js";
-import { orderPayload, stripePayload } from "../fixtures/Orders.js";
-import jwt from "jsonwebtoken";
-import { ENV } from "../../lib/env.js";
-import Stripe from "stripe";
 
 const mockCreate =
   jest.fn<
@@ -107,7 +107,10 @@ describe("stripe", () => {
           .send({});
 
         expect(statusCode).toBe(400);
-        expect(body).toEqual({ message: "Cart is empty" });
+        expect(body).toEqual({
+          errors: ["Invalid input: expected array, received undefined"],
+          message: "Validation failed",
+        });
         expect(mockCreate).not.toHaveBeenCalled();
       });
     });

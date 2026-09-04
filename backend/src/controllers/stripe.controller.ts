@@ -2,13 +2,10 @@ import Stripe from "stripe";
 import { ENV } from "../lib/env.js";
 import Coffee from "../models/Coffee.js";
 import type { Request, Response } from "express";
+import { CreatePaymentBody } from "../schemas/stripe.schema.js";
 
 if (!ENV.STRIPE_SECRET_KEY) {
   throw new Error("STRIPE_SECRET_KEY must be set");
-}
-
-interface CreatePaymentBody {
-  items: { id: string; quantity: number }[];
 }
 
 const stripe = new Stripe(ENV.STRIPE_SECRET_KEY);
@@ -19,17 +16,6 @@ export const createPayment = async (
 ) => {
   try {
     const { items } = req.body;
-
-    if (!items || items.length === 0) {
-      return res.status(400).json({ message: "Cart is empty" });
-    }
-
-    if (
-      items.some((item) => item.quantity > 10) ||
-      items.some((item) => item.quantity < 1)
-    ) {
-      return res.status(400).json({ message: "Invalid quantity" });
-    }
 
     const coffees = await Coffee.find({
       _id: { $in: items.map((i) => i.id) },
