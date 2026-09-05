@@ -12,7 +12,10 @@ import {
   getUserOrdersById,
   verifyBookingQr,
 } from "../controllers/admin.controller.js";
-import { coffeeItemSchema } from "../schemas/admin.schema.js";
+import {
+  coffeeItemSchema,
+  verifyBookingSchema,
+} from "../schemas/admin.schema.js";
 import { validate } from "../middleware/validate.js";
 
 const router = express.Router();
@@ -23,7 +26,7 @@ router.get("/allUsers", getAllUsers);
 router.get("/userBookings/:id", getUserBookingsById);
 router.get("/userOrders/:id", getUserOrdersById);
 router.post("/banUser/:id", banUser);
-router.post("/verifyBooking", verifyBookingQr);
+router.post("/verifyBooking", validate(verifyBookingSchema), verifyBookingQr);
 router.get("/coffee/:id", getCoffeeById);
 router.post("/addCoffee", validate(coffeeItemSchema), addCoffee);
 router.put("/editCoffee/:id", validate(coffeeItemSchema), editCoffee);

@@ -13,7 +13,12 @@ import { arcjetProtection } from "../middleware/arcjet.middleware.js";
 import passport from "passport";
 import { ENV } from "../lib/env.js";
 import { validate } from "../middleware/validate.js";
-import { loginSchema, signupSchema } from "../schemas/auth.schema.js";
+import {
+  forgotPasswordSchema,
+  loginSchema,
+  resetPasswordSchema,
+  signupSchema,
+} from "../schemas/auth.schema.js";
 
 const router = express.Router();
 
@@ -22,8 +27,8 @@ router.use(arcjetProtection);
 router.post("/signup", validate(signupSchema), signup);
 router.post("/login", validate(loginSchema), login);
 router.post("/logout", logout);
-router.post("/forgot-password", forgotPassword);
-router.post("/reset-password/:token", resetPassword);
+router.post("/forgot-password", validate(forgotPasswordSchema), forgotPassword);
+router.post("/reset-password/:token", validate(resetPasswordSchema), resetPassword);
 
 router.put("/update-profile", protectRoute, updateProfile);
 

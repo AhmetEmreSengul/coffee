@@ -22,4 +22,4 @@ export const resetPasswordSchema = z.object({
 export type SignupBody = z.infer<typeof signupSchema>;
 export type LoginBody = z.infer<typeof loginSchema>;
 export type ForgotPasswordBody = z.infer<typeof forgotPasswordSchema>;
-export type ResetPasswordBody = z.infer<typeof resetPasswordSchema>
+export type ResetPasswordBody = z.infer<typeof resetPasswordSchema>;
