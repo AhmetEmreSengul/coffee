@@ -1,17 +1,13 @@
+import type { Request, Response } from "express";
 import { isValidObjectId } from "mongoose";
 import Booking from "../models/Booking.js";
 import Coffee from "../models/Coffee.js";
 import Order from "../models/Order.js";
 import User from "../models/User.js";
-import type { Request, Response } from "express";
-
-interface CoffeeRequestBody {
-  title: string;
-  type: string;
-  price: number;
-  image: string;
-  description: string;
-}
+import {
+  CoffeeRequestBody,
+  VerifyBookingBody,
+} from "../schemas/admin.schema.js";
 
 export const getAllUsers = async (req: Request, res: Response) => {
   try {
@@ -97,11 +93,15 @@ export const banUser = async (req: Request<{ id: string }>, res: Response) => {
 };
 
 export const verifyBookingQr = async (
-  req: Request<{}, {}, { bookingId: string; token: string }>,
+  req: Request<{}, {}, VerifyBookingBody>,
   res: Response,
 ) => {
   try {
     const { bookingId, token } = req.body;
+
+    if (!isValidObjectId(bookingId)) {
+      return res.status(400).json({ message: "Invalid booking ID" });
+    }
 
     const booking = await Booking.findById(bookingId)
       .populate("tableNumber")
@@ -158,11 +158,7 @@ export const addCoffee = async (
   try {
     const { title, type, price, image, description } = req.body;
 
-    if (!title || !type || !price || !image || !description) {
-      return res.status(400).json({ message: "All fields are required" });
-    }
-
-    const coffee = Coffee.create({
+    const coffee = await Coffee.create({
       title,
       type,
       price,
@@ -211,10 +207,6 @@ export const editCoffee = async (
 
     if (!isValidObjectId(id)) {
       return res.status(400).json({ message: "Invalid coffee ID" });
-    }
-
-    if (!title || !type || !price || !image || !description) {
-      return res.status(400).json({ message: "All fields are required" });
     }
 
     const coffee = await Coffee.findById(id);

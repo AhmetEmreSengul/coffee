@@ -12,6 +12,8 @@ import {
   getUserOrdersById,
   verifyBookingQr,
 } from "../controllers/admin.controller.js";
+import { coffeeItemSchema } from "../schemas/admin.schema.js";
+import { validate } from "../middleware/validate.js";
 
 const router = express.Router();
 router.use(protectRoute);
@@ -23,8 +25,8 @@ router.get("/userOrders/:id", getUserOrdersById);
 router.post("/banUser/:id", banUser);
 router.post("/verifyBooking", verifyBookingQr);
 router.get("/coffee/:id", getCoffeeById);
-router.post("/addCoffee", addCoffee);
-router.put("/editCoffee/:id", editCoffee);
-router.delete("/deleteCoffee/:id", deleteCoffee)
+router.post("/addCoffee", validate(coffeeItemSchema), addCoffee);
+router.put("/editCoffee/:id", validate(coffeeItemSchema), editCoffee);
+router.delete("/deleteCoffee/:id", deleteCoffee);
 
 export default router;

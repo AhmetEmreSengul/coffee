@@ -494,7 +494,7 @@ describe("admin", () => {
     });
 
     describe("given the user leaves a field empty", () => {
-      it("should return 400 with a message of 'All fields are required'", async () => {
+      it("should return 400 with a message of missing field.", async () => {
         const { statusCode, body } = await supertest(app)
           .post("/admin/addCoffee")
           .set("User-Agent", "jest")
@@ -502,7 +502,10 @@ describe("admin", () => {
           .send({ ...coffeePayload, title: "" });
 
         expect(statusCode).toBe(400);
-        expect(body).toEqual({ message: "All fields are required" });
+        expect(body).toEqual({
+          errors: ["Title is required"],
+          message: "Validation failed",
+        });
       });
     });
   });
@@ -546,7 +549,7 @@ describe("admin", () => {
     });
 
     describe("given the user leaves a field empty", () => {
-      it("should return 400 with a message of 'All fields are required'", async () => {
+      it("should return 400 with a message of the missing field.", async () => {
         const { statusCode, body } = await supertest(app)
           .put(`/admin/editCoffee/${testCoffee._id}`)
           .set("User-Agent", "jest")
@@ -554,7 +557,10 @@ describe("admin", () => {
           .send({ ...coffeePayload, title: "" });
 
         expect(statusCode).toBe(400);
-        expect(body).toEqual({ message: "All fields are required" });
+        expect(body).toEqual({
+          errors: ["Title is required"],
+          message: "Validation failed",
+        });
       });
     });
 
