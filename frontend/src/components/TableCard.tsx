@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { AiOutlineUser } from "react-icons/ai";
 
 interface Table {
@@ -8,7 +7,7 @@ interface Table {
   status: string;
 }
 
-export interface BookingUIForm {
+interface FormData {
   date: Date | null;
   startTime: string;
   endTime: string;
@@ -17,13 +16,11 @@ export interface BookingUIForm {
 
 interface TableCardProps {
   tableInfo: Table[];
-  formData: BookingUIForm;
-  setFormData: React.Dispatch<React.SetStateAction<BookingUIForm>>;
+  formData: FormData;
+  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
 }
 
-const TableCard = ({ tableInfo, setFormData }: TableCardProps) => {
-  const [selected, setSelected] = useState<Table | null>(null);
-
+const TableCard = ({ formData, tableInfo, setFormData }: TableCardProps) => {
   return (
     <div className="bg-beige-100 rounded-2xl p-2 md:p-20 w-fit mx-auto relative border border-border-light shadow-sm">
       <h1 className="text-xs font-light absolute top-3 left-3/9 md:left-2/5 text-text-tertiary tracking-[0.5em]">
@@ -44,11 +41,9 @@ const TableCard = ({ tableInfo, setFormData }: TableCardProps) => {
                 ...prev,
                 tableNumber: id,
               }));
-
-              setSelected(table);
             }}
             className={`p-4 flex items-center justify-center rounded-3xl group transition cursor-pointer relative border-2 ${
-              selected?._id === table._id
+              table._id === formData.tableNumber
                 ? "bg-caramel-300 border-caramel-400 text-caramel-500 shadow-[0_0_20px_rgba(196,157,111,0.3)] scale-105"
                 : "bg-cream-50 border-border-medium text-text-secondary hover:bg-beige-100 hover:border-caramel-200"
             }`}

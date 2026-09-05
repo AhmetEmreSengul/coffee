@@ -74,7 +74,6 @@ const BookTable = () => {
     });
 
     setFormData({
-      ...formData,
       date: null,
       endTime: "",
       startTime: "",
