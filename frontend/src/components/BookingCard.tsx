@@ -11,6 +11,8 @@ import Countdown from "./Countdown";
 import DateInput from "./DateInput";
 import { useTableStore } from "../store/useTableStore";
 import { format } from "date-fns";
+import { AiOutlineLoading3Quarters } from "react-icons/ai";
+import { MdOutlineReportGmailerrorred } from "react-icons/md";
 
 interface BookingCardProps {
   booking: UserBooking;
@@ -19,7 +21,8 @@ interface BookingCardProps {
 }
 
 const BookingCard = ({ booking, qrCode, setDragActive }: BookingCardProps) => {
-  const { updateUserBooking, deleteUserBooking } = useBookingStore();
+  const { isQrLoading, updateUserBooking, deleteUserBooking } =
+    useBookingStore();
   const { getTableSlots, tableSlots } = useTableStore();
   const { authUser } = useAuthStore();
   const [isRipping, setIsRipping] = useState(false);
@@ -230,21 +233,40 @@ const BookingCard = ({ booking, qrCode, setDragActive }: BookingCardProps) => {
                     : "none",
                 }}
               >
-                {qrCode && (
-                  <div className="p-8 flex flex-col items-center justify-center space-y-4">
-                    <div className="p-3 bg-cream-50 rounded-xl shadow-sm border border-border-light">
-                      <img
-                        src={qrCode}
-                        alt="Entry QR Code"
-                        className="w-40 h-40 mix-blend-multiply opacity-90"
-                      />
-                    </div>
-                    <p className="text-xs text-center text-text-tertiary max-w-[200px]">
-                      Scan this code at the entrance to access your reserved
-                      table.
-                    </p>
+                <div className="p-8 flex flex-col items-center justify-center space-y-4">
+                  <div className="p-3 bg-cream-50 rounded-xl shadow-sm border border-border-light">
+                    {isQrLoading ? (
+                      <div className="flex items-center justify-center">
+                        <AiOutlineLoading3Quarters className="animate-spin size-10" />
+                      </div>
+                    ) : (
+                      <>
+                        <div className="flex items-center justify-center">
+                          {qrCode ? (
+                            <div className="flex flex-col items-center">
+                              <img
+                                src={qrCode}
+                                alt="Entry QR Code"
+                                className="w-40 h-40 mix-blend-multiply opacity-90"
+                              />
+                              <p className="text-xs text-center text-text-tertiary">
+                                Scan this code at the entrance to access your
+                                reserved table.
+                              </p>
+                            </div>
+                          ) : (
+                            <>
+                              <MdOutlineReportGmailerrorred className="size-20" />
+                              <p className="text-center text-text-tertiary">
+                                Error generating QR code
+                              </p>
+                            </>
+                          )}
+                        </div>
+                      </>
+                    )}
                   </div>
-                )}
+                </div>
               </motion.div>
             </>
           )}

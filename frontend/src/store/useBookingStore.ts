@@ -2,7 +2,6 @@ import { create } from "zustand";
 import { axiosInstance } from "../lib/axios";
 import { toast } from "react-toastify";
 
-
 export interface UserBooking {
   _id: string;
   bookingTime: {
@@ -37,6 +36,7 @@ interface BookingStore {
   bookingQR: BookingQR[];
   isLoading: boolean;
   isCreating: boolean;
+  isQrLoading: boolean;
   createBooking: (data: CreateBookingData) => Promise<void>;
   getUserBookings: () => Promise<void>;
   getQRCode: (id: string) => Promise<void>;
@@ -53,6 +53,7 @@ export const useBookingStore = create<BookingStore>((set, get) => ({
   bookingQR: [],
   isLoading: false,
   isCreating: false,
+  isQrLoading: false,
 
   createBooking: async (data) => {
     set({ isCreating: true });
@@ -82,6 +83,7 @@ export const useBookingStore = create<BookingStore>((set, get) => ({
   },
 
   getQRCode: async (id: string) => {
+    set({ isQrLoading: true });
     try {
       const res = await axiosInstance.get<BookingQR>(`/book/bookingQR/${id}`);
 
@@ -96,6 +98,8 @@ export const useBookingStore = create<BookingStore>((set, get) => ({
     } catch (error: any) {
       console.error("Error fetching QR", error);
       toast.error(error?.response?.data?.message);
+    } finally {
+      set({ isQrLoading: false });
     }
   },
 
