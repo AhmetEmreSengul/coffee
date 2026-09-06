@@ -6,7 +6,7 @@ import {
   createPasswordResetEmailTemplate,
   createPasswordResetSuccessEmailTemplate,
 } from "./emailTemplate.js";
-import { CreateOrderBody, OrderItem } from "../controllers/order.controller.js";
+import { OrderItem } from "../schemas/order.schema.js";
 
 const apiInstance = new Brevo.TransactionalEmailsApi();
 

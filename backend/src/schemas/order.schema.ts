@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const orderSchema = z.object({
+export const orderSchema = z.object({
   _id: z.string().optional(),
   title: z.string().min(1, "Title is required"),
   type: z.enum(["Hot", "Cold"]),
@@ -13,9 +13,10 @@ const orderSchema = z.object({
     .max(10, "Quantity limit exceeded"),
 });
 
-export const createOrderBody = z.object({
+export const createOrderBodySchema = z.object({
   orderItems: z.array(orderSchema).min(1, "At least one item is required"),
   orderNote: z.string().optional().default("No order note provided."),
 });
 
-export type CreateOrderBody = z.infer<typeof createOrderBody>;
+export type OrderItem = z.infer<typeof orderSchema>;
+export type CreateOrderBody = z.infer<typeof createOrderBodySchema>;

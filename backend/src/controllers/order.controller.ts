@@ -3,7 +3,9 @@ import { isValidObjectId } from "mongoose";
 import { sendCreateOrderEmail } from "../emails/emailHandler.js";
 import Coffee from "../models/Coffee.js";
 import Order from "../models/Order.js";
-import { CreateOrderBody } from "../schemas/order.schema.js";
+import {
+  CreateOrderBody,
+} from "../schemas/order.schema.js";
 
 export const createOrder = async (
   req: Request<{}, {}, CreateOrderBody>,

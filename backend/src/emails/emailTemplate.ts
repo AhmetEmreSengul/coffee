@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { ENV } from "../lib/env.js";
-import { CreateOrderBody, OrderItem } from "../controllers/order.controller.js";
+import { OrderItem } from "../schemas/order.schema.js";
 
 export function createBookingEmailTemplate(
   email: string,
