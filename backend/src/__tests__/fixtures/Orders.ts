@@ -9,11 +9,12 @@ export const orderPayload = {
       type: "Hot",
       quantity: 2,
       image: "latte.jpg",
-      description : "Fake description",
+      description: "Fake description",
       price: 120,
     },
   ],
   orderNote: "Less sugar",
+  paymentIntentId : "pi_3Lb3Z6Z7Z7Z7Z7Z7Z7Z7Z7Z7",
 };
 
 export const testOrder = {
@@ -26,7 +27,7 @@ export const testOrder = {
       type: "Hot",
       quantity: 2,
       image: "latte.jpg",
-      description : "Fake description",
+      description: "Fake description",
       price: 120,
     },
   ],

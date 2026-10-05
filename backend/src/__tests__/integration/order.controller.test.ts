@@ -16,7 +16,7 @@ import Order from "../../models/Order.js";
 import User from "../../models/User.js";
 import { testCoffee } from "../fixtures/Coffees.js";
 import { orderPayload, testOrder } from "../fixtures/Orders.js";
-import { testUser, testUser2, userId, userId2 } from "../fixtures/Users.js";
+import { testUser, testUser2, userId } from "../fixtures/Users.js";
 import {
   clearDatabase,
   closeDatabase,
@@ -28,6 +28,16 @@ jest.unstable_mockModule("../../emails/emailHandler", () => ({
   sendCreateOrderEmail: jest
     .fn<() => Promise<void>>()
     .mockResolvedValue(undefined),
+}));
+
+const mockRetrieve = jest.fn<(id: string) => Promise<any>>();
+
+jest.unstable_mockModule("stripe", () => ({
+  default: jest.fn().mockImplementation(() => ({
+    paymentIntents: {
+      retrieve: mockRetrieve,
+    },
+  })),
 }));
 const { default: app } = await import("../../app.js");
 
@@ -52,12 +62,19 @@ describe("order", () => {
     await User.create([testUser, testUser2]);
     await Coffee.create(testCoffee);
     await Order.create(testOrder);
+
+    mockRetrieve.mockResolvedValue({
+      id: orderPayload.paymentIntentId,
+      status: "succeeded",
+      amount: Math.round(testCoffee.price * 2 * 100),
+      metadata: { userId: testUser._id.toString() },
+    });
   });
 
   describe("create order route", () => {
     describe("given the user is logged in and the input is valid", () => {
       it("should return 201", async () => {
-        const { statusCode, body } = await supertest(app)
+        const { statusCode } = await supertest(app)
           .post("/orders/create-order")
           .set("User-Agent", "jest")
           .set("Cookie", [`jwt=${token}`])

@@ -80,7 +80,7 @@ const CheckoutForm = ({
         return false;
       }
 
-      return true;
+      return result.paymentIntent.id;
     } catch (err: any) {
       console.error("Payment error:", err);
       toast.error(err.response?.data?.message || "Payment failed");
@@ -92,8 +92,9 @@ const CheckoutForm = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await handlePayment();
-      await createOrder(cart, orderNote);
+      const paymentIntentId = await handlePayment();
+      if (!paymentIntentId) return;
+      await createOrder(cart, orderNote, paymentIntentId);
       if (authUser?.isBanned === false) {
         setView("checkout");
       }
@@ -125,7 +126,10 @@ const CheckoutForm = ({
       </div>
       <div className="flex flex-col gap-1">
         <label className="text-sm font-medium">Card Number</label>
-        <div data-testid="card-number" className="border border-caramel-400 rounded-xl px-4 py-3 bg-white focus-within:ring-2 focus-within:ring-caramel-400 transition">
+        <div
+          data-testid="card-number"
+          className="border border-caramel-400 rounded-xl px-4 py-3 bg-white focus-within:ring-2 focus-within:ring-caramel-400 transition"
+        >
           <CardNumberElement
             onChange={(e) =>
               setCardComplete((prev) => ({ ...prev, number: e.complete }))
@@ -137,7 +141,10 @@ const CheckoutForm = ({
       <div className="flex gap-4">
         <div className="flex flex-col gap-1 w-1/2">
           <label className="text-sm font-medium">Expiry Date</label>
-          <div data-testid="card-expiry" className="border border-caramel-400 rounded-xl px-4 py-3 bg-white focus-within:ring-2 focus-within:ring-caramel-400 transition">
+          <div
+            data-testid="card-expiry"
+            className="border border-caramel-400 rounded-xl px-4 py-3 bg-white focus-within:ring-2 focus-within:ring-caramel-400 transition"
+          >
             <CardExpiryElement
               onChange={(e) =>
                 setCardComplete((prev) => ({ ...prev, expiry: e.complete }))
@@ -148,7 +155,10 @@ const CheckoutForm = ({
 
         <div className="flex flex-col gap-1 w-1/2">
           <label className="text-sm font-medium">CVC</label>
-          <div data-testid="card-cvc" className="border border-caramel-400 rounded-xl px-4 py-3 bg-white focus-within:ring-2 focus-within:ring-caramel-400 transition">
+          <div
+            data-testid="card-cvc"
+            className="border border-caramel-400 rounded-xl px-4 py-3 bg-white focus-within:ring-2 focus-within:ring-caramel-400 transition"
+          >
             <CardCvcElement
               onChange={(e) =>
                 setCardComplete((prev) => ({ ...prev, cvc: e.complete }))

@@ -1,14 +1,7 @@
-import Stripe from "stripe";
-import { ENV } from "../lib/env.js";
 import Coffee from "../models/Coffee.js";
 import type { Request, Response } from "express";
 import { CreatePaymentBody } from "../schemas/stripe.schema.js";
-
-if (!ENV.STRIPE_SECRET_KEY) {
-  throw new Error("STRIPE_SECRET_KEY must be set");
-}
-
-const stripe = new Stripe(ENV.STRIPE_SECRET_KEY);
+import stripe from "../lib/stripe.js";
 
 export const createPayment = async (
   req: Request<{}, {}, CreatePaymentBody>,
@@ -34,9 +27,13 @@ export const createPayment = async (
       amount: Math.round(totalAmount * 100),
       currency: "try",
       automatic_payment_methods: { enabled: true },
+      metadata: { userId: req.user!._id.toString() },
     });
 
-    res.status(200).json({ clientSecret: paymentIntent.client_secret });
+    res.status(200).json({
+      paymentIntentId: paymentIntent.id,
+      clientSecret: paymentIntent.client_secret,
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });

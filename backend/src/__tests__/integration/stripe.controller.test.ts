@@ -74,10 +74,16 @@ describe("stripe", () => {
           .send(stripePayload);
 
         expect(statusCode).toBe(200);
-        expect(body).toEqual({ clientSecret: "test-client-secret" });
+        expect(body).toEqual({
+          paymentIntentId: "pi_test",
+          clientSecret: "test-client-secret",
+        });
         expect(mockCreate).toHaveBeenCalledWith({
           amount: 1198,
           currency: "try",
+          metadata: {
+            userId: testUser._id,
+          },
           automatic_payment_methods: {
             enabled: true,
           },

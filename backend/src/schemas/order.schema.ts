@@ -17,6 +17,7 @@ export const orderSchema = z.object({
 export const createOrderBodySchema = z.object({
   orderItems: z.array(orderSchema).min(1, "At least one item is required"),
   orderNote: z.string().optional().default("No order note provided."),
+  paymentIntentId: z.string(),
 });
 
 export type OrderItem = z.infer<typeof orderSchema>;

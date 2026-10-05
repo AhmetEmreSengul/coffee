@@ -3,9 +3,8 @@ import { isValidObjectId } from "mongoose";
 import { sendCreateOrderEmail } from "../emails/emailHandler.js";
 import Coffee from "../models/Coffee.js";
 import Order from "../models/Order.js";
-import {
-  CreateOrderBody,
-} from "../schemas/order.schema.js";
+import { CreateOrderBody } from "../schemas/order.schema.js";
+import stripe from "../lib/stripe.js";
 
 export const createOrder = async (
   req: Request<{}, {}, CreateOrderBody>,
@@ -17,7 +16,21 @@ export const createOrder = async (
     }
 
     const userId = req.user._id;
-    const { orderItems, orderNote } = req.body;
+    const { orderItems, orderNote, paymentIntentId } = req.body;
+
+    if (!paymentIntentId) {
+      return res.status(400).json({ message: "Payment intent ID is required" });
+    }
+
+    const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+
+    if (paymentIntent.status !== "succeeded") {
+      return res.status(402).json({ message: "Payment failed" });
+    }
+
+    if (paymentIntent.metadata.userId !== userId.toString()) {
+      return res.status(403).json({ message: "Payment mismatch" });
+    }
 
     const coffees = await Coffee.find({
       _id: { $in: orderItems.map((i) => i._id) },
@@ -30,6 +43,10 @@ export const createOrder = async (
       if (!coffee) continue;
 
       totalPrice += coffee.price * item.quantity;
+    }
+
+    if (totalPrice !== paymentIntent.amount / 100) {
+      return res.status(402).json({ message: "Payment amount mismatch" });
     }
 
     const order = await Order.create({

@@ -19,7 +19,11 @@ interface OrderStore {
   lastOrder: Order | null;
   isLoading: boolean;
   isDeleting: boolean;
-  createOrder: (orderItems: OrderItem[], orderNote: string) => Promise<void>;
+  createOrder: (
+    orderItems: OrderItem[],
+    orderNote: string,
+    paymentIntentId: string,
+  ) => Promise<void>;
   getPastOrders: () => Promise<void>;
   getLastOrder: () => Promise<void>;
   deleteOrder: (id: string) => Promise<void>;
@@ -31,11 +35,12 @@ export const useOrderStore = create<OrderStore>((set, get) => ({
   isLoading: false,
   isDeleting: false,
 
-  createOrder: async (orderItems, orderNote) => {
+  createOrder: async (orderItems, orderNote, paymentIntentId) => {
     try {
       await axiosInstance.post("/orders/create-order", {
         orderItems,
         orderNote,
+        paymentIntentId,
       });
       toast.success("Order created");
     } catch (error: any) {
