@@ -9,6 +9,7 @@ export const orderSchema = z.object({
   description: z.string().min(1, "Description is required"),
   quantity: z
     .number()
+    .int()
     .min(1, "Quantity must be at least 1")
     .max(10, "Quantity limit exceeded"),
 });
