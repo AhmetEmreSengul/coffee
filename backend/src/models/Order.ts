@@ -30,6 +30,7 @@ const orderSchema = new mongoose.Schema<IOrder>(
         quantity: { type: Number, required: true },
         image: { type: String, required: true },
         price: { type: Number, required: true },
+        description: { type: String, required: true },
       },
     ],
     totalPrice: {

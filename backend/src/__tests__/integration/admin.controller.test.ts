@@ -217,6 +217,7 @@ describe("admin", () => {
                 quantity: 2,
                 title: "Latte",
                 type: "Hot",
+                description: "Fake description",
               },
             ],
             orderNote: "Less sugar",

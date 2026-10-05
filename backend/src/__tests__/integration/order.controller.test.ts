@@ -166,6 +166,7 @@ describe("order", () => {
                 quantity: 2,
                 title: "Latte",
                 type: "Hot",
+                description: "Fake description",
               },
             ],
             orderNote: "Less sugar",
@@ -189,7 +190,7 @@ describe("order", () => {
       });
     });
   });
-  describe("get users last order route", () => {
+  describe("get users last order", () => {
     describe("given the user is logged in", () => {
       it("should return the user's last order", async () => {
         const { statusCode, body } = await supertest(app)
@@ -209,6 +210,7 @@ describe("order", () => {
               quantity: 2,
               title: "Latte",
               type: "Hot",
+              description: "Fake description",
             },
           ],
           orderNote: "Less sugar",
