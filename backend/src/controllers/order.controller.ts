@@ -45,7 +45,9 @@ export const createOrder = async (
       totalPrice += coffee.price * item.quantity;
     }
 
-    if (totalPrice !== paymentIntent.amount / 100) {
+    const totalAmount = Math.round(totalPrice * 100);
+
+    if (totalAmount !== paymentIntent.amount) {
       return res.status(402).json({ message: "Payment amount mismatch" });
     }
 
