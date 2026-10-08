@@ -1,4 +1,4 @@
-import { AiFillClockCircle, AiOutlineArrowRight } from "react-icons/ai";
+import { AiOutlineArrowRight } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { useAuthStore } from "../store/useAuthStore";
 import { toast } from "react-toastify";
@@ -7,71 +7,69 @@ import { motion } from "framer-motion";
 const Hero = () => {
   const { authUser } = useAuthStore();
 
-  const titleText = "The Time Slot";
-  const cafeText = "Café";
-  const descriptionText =
-    "A sanctuary for productivity and peace. Book your specific table,receive your digital key, and enter a world where time is respected.";
-
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center gap-5 p-3 pt-30">
-      <div className="inline-flex items-center space-x-2 px-4 py-2 rounded-full border-2 border-caramel-200 text-caramel-500 bg-cream-100 text-sm uppercase tracking-tighter md:tracking-widest">
-        <AiFillClockCircle size={14} />
-        <span>Reservation Only • Exclusive Access</span>
-      </div>
-      <div>
-        <h1 className="text-6xl md:text-8xl font-medium tracking-tight text-text-primary leading-tight font-serif text-center">
-          {titleText.split("").map((char, i) => (
-            <motion.span
-              key={i}
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: i * 0.05 }}
+    <section className="mx-auto max-w-screen-2xl px-4 pb-12 pt-28 sm:px-6 md:px-10 md:pb-16 md:pt-32">
+      <div className="grid items-center gap-9 md:grid-cols-[0.9fr_1.1fr] md:gap-12 lg:gap-20">
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65, ease: "easeOut" }}
+          className="order-0 max-w-xl py-4 md:py-10"
+        >
+          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.2em] text-caramel-500 sm:text-sm">
+            A little more room to slow down
+          </p>
+          <h1 className="font-serif text-[clamp(3.25rem,7vw,6.5rem)] leading-[0.98] tracking-tight text-text-primary">
+            Good coffee.
+            <br />
+            <span className="italic text-caramel-500">Time that’s yours.</span>
+          </h1>
+          <p className="mt-6 max-w-lg text-base leading-7 text-text-secondary sm:text-lg sm:leading-8">
+            A calm corner to sip, focus, or catch up. Choose a table, settle in,
+            and make a little space for yourself.
+          </p>
+          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+            <Link
+              to="/menu"
+              className="group inline-flex min-h-12 items-center justify-center gap-3 rounded-lg bg-caramel-500 px-6 py-3 font-medium text-cream-50 transition-colors hover:bg-text-primary focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-caramel-500"
             >
-              {char}
-            </motion.span>
-          ))}{" "}
-          <br />
-          <span className="text-transparent bg-clip-text bg-linear-to-r from-caramel-400 to-caramel-500 text-center italic">
-            {cafeText.split("").map((char, i) => (
-              <motion.span
-                key={i}
-                initial={{ y: "100%", opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: i * 0.05 }}
-              >
-                {char}
-              </motion.span>
-            ))}
-          </span>
-        </h1>
-        <p className="text-xl text-center my-5 text-text-secondary max-w-2xl mx-auto font-light">
-          {descriptionText.split(" ").map((char, i) => (
-            <motion.span
-              key={i}
-              initial={{ y: "50%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ delay: i * 0.09 }}
-              className="inline-flex"
+              Explore the menu
+              <AiOutlineArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <Link
+              to="/book-table"
+              onClick={() =>
+                !authUser && toast.error("Please log in to book a table")
+              }
+              className="inline-flex min-h-12 items-center justify-center rounded-lg border border-caramel-400 px-6 py-3 font-medium text-text-primary transition-colors hover:bg-caramel-100 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-caramel-500"
             >
-              {char}
-              <span>&nbsp;</span>
-            </motion.span>
-          ))}
-        </p>
+              Book a table
+            </Link>
+          </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.75, delay: 0.12, ease: "easeOut" }}
+          className="relative order-1"
+        >
+          <div className="overflow-hidden rounded-2xl border border-border-light bg-beige-100 shadow-lg shadow-text-primary/10">
+            <img
+              className="h-[clamp(18rem,48vw,39rem)] w-full object-cover object-center"
+              src="/shop.png"
+              alt="A bright café with window-side tables and a leafy green wall"
+              fetchPriority="high"
+            />
+          </div>
+          <div className="absolute -bottom-4 left-4 rounded-lg border border-border-light bg-cream-50 px-4 py-3 shadow-md sm:bottom-5 sm:left-5 sm:px-5">
+            <p className="font-serif text-lg italic text-text-primary sm:text-xl">
+              Find your moment away.
+            </p>
+          </div>
+        </motion.div>
       </div>
-      <Link
-        to={"/book-table"}
-        className="p-3 rounded-lg bg-caramel-200 border border-caramel-300 text-caramel-500 hover:bg-caramel-300 hover:border-caramel-400 transition cursor-pointer"
-        onClick={() =>
-          !authUser && toast.error("Please log in to book a table")
-        }
-      >
-        <span className="inline-flex gap-3 items-center group">
-          Book a Table
-          <AiOutlineArrowRight className="size-6 transform transition-transform group-hover:translate-x-2" />
-        </span>
-      </Link>
-    </div>
+    </section>
   );
 };
 
