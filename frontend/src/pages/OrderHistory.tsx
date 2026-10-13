@@ -40,6 +40,16 @@ const OrderHistory = () => {
     );
   }
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex flex-col gap-3 pt-40 items-center">
+        <div className="skeleton w-4xl h-20 container bg-caramel-200"></div>
+        <div className="skeleton w-4xl h-20 container bg-caramel-200"></div>
+        <div className="skeleton w-4xl h-20 container bg-caramel-200"></div>
+      </div>
+    );
+  }
+
   if (pastOrders.length === 0) {
     return (
       <div className="h-screen w-screen flex items-center justify-center">
@@ -69,16 +79,6 @@ const OrderHistory = () => {
       year: "numeric",
     };
     return date.toLocaleString("en-US", options);
-  }
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex flex-col gap-3 pt-40 items-center">
-        <div className="skeleton w-4xl h-20 container bg-caramel-200"></div>
-        <div className="skeleton w-4xl h-20 container bg-caramel-200"></div>
-        <div className="skeleton w-4xl h-20 container bg-caramel-200"></div>
-      </div>
-    );
   }
 
   return (
