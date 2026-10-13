@@ -101,7 +101,7 @@ const Login = () => {
                       onChange={(e) => field.handleChange(e.target.value)}
                       onBlur={field.handleBlur}
                       className="p-4 w-full border border-border-medium rounded-lg bg-cream-50 text-text-primary placeholder:text-text-tertiary hover:border-caramel-300 focus:border-caramel-400 focus:outline-none transition"
-                      type="text"
+                      type={visible ? "text" : "password"}
                       placeholder="Password"
                     />
 
